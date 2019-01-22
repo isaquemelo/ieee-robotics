@@ -156,31 +156,9 @@ while True:
                 robot.motors.right.run_forever(speed_sp=1000)
 
 
-            # elif search[0] == "White" and (search[1] == "Undefined" or search[1] == "Brown"):
-            #     print("ENTROUUUuu")
-            #     ev3.Sound.beep()
-            #     while search[1] != "White":
-            #         robot.motors.left.run_forever(speed_sp=-400)
-            #         robot.motors.right.run_forever(speed_sp=-400)
-            #         search = robot.sensor_data("ColorSensor")
-            #         robot.rotate(-3, axis="singular")
-            #
-            #
-            #     robot.motors.left.stop()
-            #     robot.motors.right.stop()
-            #
-            # elif search[1] == "White" and (search[0] == "Undefined" or search[0] == "Brown"):
-            #     print("ENTROUUUuu")
-            #     ev3.Sound.beep()
-            #     while search[0] != "White":
-            #         robot.motors.left.run_forever(speed_sp=-400)
-            #         robot.motors.right.run_forever(speed_sp=-400)
-            #         search = robot.sensor_data("ColorSensor")
-            #         robot.rotate(3, axis="singular")
-            #
-            #
-            #     robot.motors.left.stop()
-            #     robot.motors.right.stop()
+
+
+
 
 
 
