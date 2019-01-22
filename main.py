@@ -1,5 +1,6 @@
 import ev3dev.ev3 as ev3
 import math
+from datetime import datetime, timedelta
 
 # class robot
 # - sensors
@@ -72,10 +73,10 @@ class Robot:
 
         pass
 
-    def rotate(self, angle, speed=DEFAULT_SPEED):
+    def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
 
         if angle < 30:
-            speed = map_values(math.fabs(angle), 0, 30, 0, 500)
+            speed = map_values(math.fabs(angle), 0, 30, 100, 1000)
 
         reverse = False
         if angle < 0:
@@ -86,22 +87,30 @@ class Robot:
         self.gyroscope_sensor.mode = 'GYRO-ANG'
 
         start_angle = self.sensor_data('GyroSensor')
-        print("start_angle:", start_angle)
+        # print("start_angle:", start_angle)
         now_angle = start_angle
 
         self.motors.left.stop()
         self.motors.right.stop()
 
+
         while now_angle < angle + start_angle:
-            print("now angle:", now_angle, "goal: |", angle + start_angle, "|")
+            # print("now angle:", now_angle, "goal: |", angle + start_angle, "|")
 
             if reverse:
-                self.motors.left.run_forever(speed_sp=-speed)
-                self.motors.right.run_forever(speed_sp=speed)
+                if axis == "own":
+                    self.motors.left.run_forever(speed_sp=-speed)
+                    self.motors.right.run_forever(speed_sp=speed)
+                else:
+                    self.motors.right.run_forever(speed_sp=speed)
+
                 now_angle = self.sensor_data('GyroSensor') * -1
             else:
-                self.motors.left.run_forever(speed_sp=speed)
-                self.motors.right.run_forever(speed_sp=-speed)
+                if axis == "own":
+                    self.motors.left.run_forever(speed_sp=speed)
+                    self.motors.right.run_forever(speed_sp=-speed)
+                else:
+                    self.motors.left.run_forever(speed_sp=speed)
                 now_angle = self.sensor_data('GyroSensor')
 
         self.motors.left.stop()
@@ -115,15 +124,43 @@ robot = Robot()
 while True:
 
     while True:
-        if robot.sensor_data("ColorSensor") != ('White', 'White'):
+
+        search = robot.sensor_data("ColorSensor")
+
+        # if search != ('White', 'White'):
+        #     robot.motors.left.stop()
+        #     robot.motors.right.stop()
+        #     break
+
+        if search == ('Black', 'White'):
+            while search[1] != 'Black':
+                print("Black and white")
+                robot.rotate(-3, axis="rato")
+                search = robot.sensor_data("ColorSensor")
+
+        elif search == ('White', 'Black'):
+            while search[0] != 'Black':
+                print("White and Black ")
+                robot.rotate(3, axis="rato")
+                search = robot.sensor_data("ColorSensor")
+
+        elif search == ('Black', 'Black'):
+            end_time = datetime.now() + timedelta(seconds=0.2)
+            while datetime.now() < end_time:
+                robot.motors.left.run_forever(speed_sp=-400)
+                robot.motors.right.run_forever(speed_sp=-400)
+
             robot.motors.left.stop()
             robot.motors.right.stop()
-            break
-        else:
-            robot.motors.left.run_forever(400)
-            robot.motors.right.run_forever(400)
 
-    
+
+
+        else:
+            robot.motors.left.run_forever(speed_sp=400)
+            robot.motors.right.run_forever(speed_sp=400)
+
+    robot.motors.left.stop()
+    robot.motors.right.stop()
+    break
 
     print(robot.sensor_data("ColorSensor"))
-    #print(robot.sensor_data("ColorSensor"))
