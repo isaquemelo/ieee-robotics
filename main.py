@@ -1,6 +1,8 @@
 import ev3dev.ev3 as ev3
 import math
 from datetime import datetime, timedelta
+import time
+
 
 # class robot
 # - sensors
@@ -10,8 +12,7 @@ from datetime import datetime, timedelta
 # - history
 
 def map_values(n, start1, stop1, start2, stop2):
-    return ((n-start1)/(stop1-start1))*(stop2-start2)+start2
-
+    return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2
 
 
 class Duo:
@@ -67,7 +68,8 @@ class Robot:
                 6: 'White',
                 7: 'Brown'
             }
-            return dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]
+            print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
+            return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
 
     def move(self, time, speed=DEFAULT_SPEED):
 
@@ -76,7 +78,7 @@ class Robot:
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
 
         if angle < 30:
-            speed = map_values(math.fabs(angle), 0, 30, 100, 1000)
+            speed = map_values(math.fabs(angle), 0, 90, 100, 1000)
 
         reverse = False
         if angle < 0:
@@ -122,45 +124,66 @@ class Robot:
 
 robot = Robot()
 while True:
-
+    count = 0
+    start_time = 0
     while True:
 
         search = robot.sensor_data("ColorSensor")
 
-        # if search != ('White', 'White'):
-        #     robot.motors.left.stop()
-        #     robot.motors.right.stop()
-        #     break
-
-        if search == ('Black', 'White'):
-            while search[1] != 'Black':
-                print("Black and white")
+        if search[1] == "White" and search[0] != "White" and not (search[0] == "Undefined" or search[0] == "Brown"):
+            while search[1] != search[0]:
                 robot.rotate(-3, axis="rato")
                 search = robot.sensor_data("ColorSensor")
 
-        elif search == ('White', 'Black'):
-            while search[0] != 'Black':
-                print("White and Black ")
+        elif search[0] == "White" and search[1] != "White" and not (search[1] == "Undefined" or search[1] == "Brown"):
+            while search[0] != search[1]:
                 robot.rotate(3, axis="rato")
                 search = robot.sensor_data("ColorSensor")
 
-        elif search == ('Black', 'Black'):
+        elif search[0] == search[1] and search[0] != "White":
             end_time = datetime.now() + timedelta(seconds=0.2)
+            print("Starting time!")
             while datetime.now() < end_time:
                 robot.motors.left.run_forever(speed_sp=-400)
                 robot.motors.right.run_forever(speed_sp=-400)
-
+            print("Time is over!")
             robot.motors.left.stop()
             robot.motors.right.stop()
 
-
-
         else:
-            robot.motors.left.run_forever(speed_sp=400)
-            robot.motors.right.run_forever(speed_sp=400)
+            if search == ["White", "White"]:
+                robot.motors.left.run_forever(speed_sp=1000)
+                robot.motors.right.run_forever(speed_sp=1000)
+
+
+            # elif search[0] == "White" and (search[1] == "Undefined" or search[1] == "Brown"):
+            #     print("ENTROUUUuu")
+            #     ev3.Sound.beep()
+            #     while search[1] != "White":
+            #         robot.motors.left.run_forever(speed_sp=-400)
+            #         robot.motors.right.run_forever(speed_sp=-400)
+            #         search = robot.sensor_data("ColorSensor")
+            #         robot.rotate(-3, axis="singular")
+            #
+            #
+            #     robot.motors.left.stop()
+            #     robot.motors.right.stop()
+            #
+            # elif search[1] == "White" and (search[0] == "Undefined" or search[0] == "Brown"):
+            #     print("ENTROUUUuu")
+            #     ev3.Sound.beep()
+            #     while search[0] != "White":
+            #         robot.motors.left.run_forever(speed_sp=-400)
+            #         robot.motors.right.run_forever(speed_sp=-400)
+            #         search = robot.sensor_data("ColorSensor")
+            #         robot.rotate(3, axis="singular")
+            #
+            #
+            #     robot.motors.left.stop()
+            #     robot.motors.right.stop()
+
+
 
     robot.motors.left.stop()
     robot.motors.right.stop()
     break
-
-    print(robot.sensor_data("ColorSensor"))
