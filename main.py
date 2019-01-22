@@ -1,5 +1,5 @@
 import ev3dev.ev3 as ev3
-
+import math
 
 # class robot
 # - sensors
@@ -7,6 +7,11 @@ import ev3dev.ev3 as ev3
 # - rotate
 # - atual pos
 # - history
+
+def map_values(n, start1, stop1, start2, stop2):
+    return ((n-start1)/(stop1-start1))*(stop2-start2)+start2
+
+
 
 class Duo:
     def __init__(self, sensor_left, sensor_right):
@@ -64,9 +69,13 @@ class Robot:
             return dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]
 
     def move(self, time, speed=DEFAULT_SPEED):
+
         pass
 
     def rotate(self, angle, speed=DEFAULT_SPEED):
+
+        if angle < 30:
+            speed = map_values(math.fabs(angle), 0, 30, 0, 500)
 
         reverse = False
         if angle < 0:
@@ -89,11 +98,11 @@ class Robot:
             if reverse:
                 self.motors.left.run_forever(speed_sp=-speed)
                 self.motors.right.run_forever(speed_sp=speed)
+                now_angle = self.sensor_data('GyroSensor') * -1
             else:
                 self.motors.left.run_forever(speed_sp=speed)
                 self.motors.right.run_forever(speed_sp=-speed)
-
-            now_angle = self.sensor_data('GyroSensor')
+                now_angle = self.sensor_data('GyroSensor')
 
         self.motors.left.stop()
         self.motors.right.stop()
@@ -104,6 +113,17 @@ class Robot:
 
 robot = Robot()
 while True:
-    valor = int(input())
-    robot.rotate(valor)
+
+    while True:
+        if robot.sensor_data("ColorSensor") != ('White', 'White'):
+            robot.motors.left.stop()
+            robot.motors.right.stop()
+            break
+        else:
+            robot.motors.left.run_forever(400)
+            robot.motors.right.run_forever(400)
+
+    
+
+    print(robot.sensor_data("ColorSensor"))
     #print(robot.sensor_data("ColorSensor"))
