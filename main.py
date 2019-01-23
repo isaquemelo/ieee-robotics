@@ -133,96 +133,136 @@ class Robot:
 
 
 robot = Robot()
-# while True:
-#     count = 0
-#     start_time = 0
-#     while True:
-#
-#         search = robot.sensor_data("ColorSensor")
-#
-#         if search[1] == "White" and search[0] != "White" and not (search[0] == "Undefined" or search[0] == "Brown"):
-#             while search[1] != search[0]:
-#                 robot.rotate(-3, axis="rato")
-#                 search = robot.sensor_data("ColorSensor")
-#
-#         elif search[0] == "White" and search[1] != "White" and not (search[1] == "Undefined" or search[1] == "Brown"):
-#             while search[0] != search[1]:
-#                 robot.rotate(3, axis="rato")
-#                 search = robot.sensor_data("ColorSensor")
-#
-#         elif search[0] == search[1] and search[0] != "White":
 
-#         else:
-#             if search == ["White", "White"]:
-#                 robot.motors.left.run_forever(speed_sp=1000)
-#                 robot.motors.right.run_forever(speed_sp=1000)
+# while True:
 #
-#     robot.motors.left.stop()
-#     robot.motors.right.stop()
-#     break
+#     search = robot.sensor_data("ColorSensor")
+#
+#     if search[0] == search[1]:
+#         robot.motors.left.run_forever(speed_sp=800)
+#         robot.motors.right.run_forever(speed_sp=800)
+#         last_same_color = search
+#
+#     if last_same_color[0] == "White" and last_same_color[1] == "White":
+#
+#         if search[0] == "White" and search[1] != "White":
+#             print("A")
+#             robot.motors.left.stop()
+#             robot.motors.right.stop()
+#             counter = 0
+#
+#             while search[0] != search[1] or counter < 5:
+#                 counter += 1
+#                 robot.motors.left.run_forever(speed_sp=800)
+#                 search = robot.sensor_data("ColorSensor")
+#
+#             robot.move_back_timed()
+#             robot.motors.left.stop()
+#
+#         elif search[0] != "White" and search[1] == "White":
+#             print("B")
+#             robot.motors.left.stop()
+#             robot.motors.right.stop()
+#
+#             while search[0] != search[1]:
+#                 robot.motors.right.run_forever(speed_sp=800)
+#                 search = robot.sensor_data("ColorSensor")
+#
+#             robot.move_back_timed()
+#             robot.motors.right.stop()
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#     else:
+#
+#         if search[0] == "White" and search[1] != "White":
+#             print("A")
+#             robot.motors.left.stop()
+#             robot.motors.right.stop()
+#             counter = 0
+#             while search[0] != search[1] or counter < 5:
+#                 counter += 1
+#                 robot.motors.right.run_forever(speed_sp=800)
+#                 search = robot.sensor_data("ColorSensor")
+#
+#             robot.move_back_timed()
+#             robot.motors.right.stop()
+#
+#         elif search[0] != "White" and search[1] == "White":
+#             print("B")
+#             robot.motors.left.stop()
+#             robot.motors.right.stop()
+#             while search[0] != search[1]:
+#                 robot.motors.left.run_forever(speed_sp=800)
+#                 search = robot.sensor_data("ColorSensor")
+#
+#             robot.move_back_timed()
+#             robot.motors.left.stop()
+#
+#     if search[0] == "Undefined" and search[1] == "Undefined":
+#         robot.motors.left.stop()
+#         robot.motors.right.stop()
 
 while True:
 
     search = robot.sensor_data("ColorSensor")
+    reverse = False
 
     if search[0] == search[1]:
         robot.motors.left.run_forever(speed_sp=800)
         robot.motors.right.run_forever(speed_sp=800)
         last_same_color = search
 
-    if last_same_color[0] == "White" and var[1] == "White":
-
-        if search[0] == "White" and search[1] != "White":
-            print("A")
-            robot.motors.left.stop()
-            robot.motors.right.stop()
-            counter = 0
-
-            while search[0] != search[1] or counter < 5:
-                counter += 1
-                robot.motors.left.run_forever(speed_sp=800)
-                search = robot.sensor_data("ColorSensor")
-
-            robot.move_back_timed()
-            robot.motors.left.stop()
-
-        elif search[0] != "White" and search[1] == "White":
-            print("B")
-            robot.motors.left.stop()
-            robot.motors.right.stop()
-
-            while search[0] != search[1]:
-                robot.motors.right.run_forever(speed_sp=800)
-                search = robot.sensor_data("ColorSensor")
-
-            robot.move_back_timed()
-            robot.motors.right.stop()
-
+    if last_same_color[0] == "White" and last_same_color[1] == "White":
+        reverse = True
     else:
+        reverse = False
 
-        if search[0] == "White" and search[1] != "White":
-            print("A")
-            robot.motors.left.stop()
-            robot.motors.right.stop()
-            counter = 0
-            while search[0] != search[1] or counter < 5:
-                counter += 1
-                robot.motors.right.run_forever(speed_sp=800)
-                search = robot.sensor_data("ColorSensor")
+    if search[0] == "White" and search[1] != "White":
+        robot.motors.left.stop()
+        robot.motors.right.stop()
+        counter = 0
 
-            robot.move_back_timed()
-            robot.motors.left.stop()
-
-        elif search[0] != "White" and search[1] == "White":
-            print("B")
-            robot.motors.left.stop()
-            robot.motors.right.stop()
-            while search[0] != search[1]:
+        while search[0] != search[1] or counter < 5:
+            counter += 1
+            if reverse:
                 robot.motors.left.run_forever(speed_sp=800)
-                search = robot.sensor_data("ColorSensor")
+            else:
+                robot.motors.right.run_forever(speed_sp=800)
 
-            robot.move_back_timed()
+            search = robot.sensor_data("ColorSensor")
+
+        robot.move_back_timed()
+
+        if reverse:
+            robot.motors.left.stop()
+        else:
             robot.motors.right.stop()
+
+    elif search[0] != "White" and search[1] == "White":
+        robot.motors.left.stop()
+        robot.motors.right.stop()
+
+        while search[0] != search[1]:
+            if reverse:
+                robot.motors.right.run_forever(speed_sp=800)
+            else:
+                robot.motors.left.run_forever(speed_sp=800)
+
+            search = robot.sensor_data("ColorSensor")
+
+        robot.move_back_timed()
+        if reverse:
+            robot.motors.right.stop()
+        else:
+            robot.motors.left.stop()
 
     if search[0] == "Undefined" and search[1] == "Undefined":
         robot.motors.left.stop()
