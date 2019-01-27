@@ -16,14 +16,18 @@ def map_values(n, start1, stop1, start2, stop2):
 
 
 class Duo:
-    def __init__(self, sensor_left, sensor_right):
+    def __init__(self, sensor_left, sensor_right, sensor_back=None):
         self.left = sensor_left
         self.right = sensor_right
+
+        if sensor_back is not None:
+            self.back = sensor_back
+
         self.values = (self.left, self.right)
 
 
 class Robot:
-    DEFAULT_SPEED = 1000
+    DEFAULT_SPEED = 500
     print("robot")
 
     def __init__(self):
@@ -31,6 +35,7 @@ class Robot:
         self.gyroscope_sensor = ev3.GyroSensor('in1')
         self.gyroscope_sensor.mode = 'GYRO-ANG'
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
+        #, ev3.ColorSensor('in4')) it does not have the back color sensor anymore
         # self.infrared_sensors = Duo(ev3.InfraredSensor('in3'), ev3.InfraredSensor('in4'))
 
         # self.ultrasonic_sensors = Duo(ev3.UltrasonicSensor('in'), ev3.UltrasonicSensor('in'))
@@ -70,11 +75,15 @@ class Robot:
                 7: 'Brown'
             }
             print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
+
+            """
+            if self.color_sensors.back is not None: não vai mais entrar no if porqu agora só tem dois sensores de cor que estão na frente
+                return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color], dict_colors[self.color_sensors.back.color]]
+            else:
+                return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
+            """
+
             return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
-
-    def move(self, time, speed=DEFAULT_SPEED):
-
-        pass
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
 
@@ -210,20 +219,23 @@ robot = Robot()
 #         robot.motors.left.stop()
 #         robot.motors.right.stop()
 
-while True:
 
-    search = robot.sensor_data("ColorSensor")
+def color_realignment(color_sensor_data):
     reverse = False
+
+    last_same_color = None
+    search = color_sensor_data
 
     if search[0] == search[1]:
         robot.motors.left.run_forever(speed_sp=800)
         robot.motors.right.run_forever(speed_sp=800)
         last_same_color = search
 
-    if last_same_color[0] == "White" and last_same_color[1] == "White":
-        reverse = True
-    else:
-        reverse = False
+    if last_same_color is not None:
+        if last_same_color[0] == "White" and last_same_color[1] == "White":
+            reverse = True
+        else:
+            reverse = False
 
     if search[0] == "White" and search[1] != "White":
         robot.motors.left.stop()
@@ -263,6 +275,12 @@ while True:
             robot.motors.right.stop()
         else:
             robot.motors.left.stop()
+
+
+while True:
+
+    search = robot.sensor_data("ColorSensor")
+    color_realignment(search)
 
     if search[0] == "Undefined" and search[1] == "Undefined":
         robot.motors.left.stop()
