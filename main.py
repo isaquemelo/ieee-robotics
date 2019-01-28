@@ -26,7 +26,7 @@ class Duo:
         self.values = (self.left, self.right)
 
 
-DEFAULT_SPEED = 300
+DEFAULT_SPEED = 800
 
 
 class Robot:
@@ -37,7 +37,7 @@ class Robot:
         self.gyroscope_sensor = ev3.GyroSensor('in1')
         self.gyroscope_sensor.mode = 'GYRO-ANG'
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
-        #, ev3.ColorSensor('in4')) it does not have the back color sensor anymore
+        # , ev3.ColorSensor('in4')) it does not have the back color sensor anymore
 
         # self.ultrasonic_sensors = Duo(ev3.UltrasonicSensor('in'), ev3.UltrasonicSensor('in'))
 
@@ -75,7 +75,7 @@ class Robot:
                 6: 'White',
                 7: 'Brown'
             }
-            print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
+            # print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
             return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
@@ -125,11 +125,11 @@ class Robot:
 
     def move_back_timed(self, how_long=0.3):
         end_time = datetime.now() + timedelta(seconds=how_long)
-        #print("Starting time!")
+        # print("Starting time!")
         while datetime.now() < end_time:
             robot.motors.left.run_forever(speed_sp=-400)
             robot.motors.right.run_forever(speed_sp=-400)
-        #print("Time is over!")
+        # print("Time is over!")
         robot.motors.left.stop()
         robot.motors.right.stop()
 
@@ -151,11 +151,11 @@ def undefined_dealing(color_sensor):
 
 
 last_same_color = None
-count = 0
+color = 0
 
 
 def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
-    global last_same_color, count
+    global last_same_color, color
     reverse = False
 
     search = color_sensor_data
@@ -164,6 +164,21 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
         robot.motors.left.run_forever(speed_sp=speed)
         robot.motors.right.run_forever(speed_sp=speed)
         last_same_color = search
+
+        # if search[1] == "Green":
+        #    counters[] += 1
+
+        if search[1] not in ["White", "Undefined"]:
+            color += 1
+
+        if color > 20:
+            print("cor > que 20\n\n")
+            if search[0] == "White":
+                cor = 0
+                robot.motors.left.stop()
+                robot.motors.right.stop()
+                robot.move_back_timed(0.3)
+                time.sleep(3)
 
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
@@ -186,10 +201,6 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
 
         robot.move_back_timed()
 
-        #print("\nDone", count, "\n")
-        #count += 1
-
-
         if reverse:
             robot.motors.left.stop()
         else:
@@ -209,6 +220,7 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             undefined_dealing(search)
 
         robot.move_back_timed()
+
         if reverse:
             robot.motors.right.stop()
         else:
