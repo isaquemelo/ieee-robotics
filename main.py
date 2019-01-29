@@ -179,7 +179,7 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
                 robot.motors.left.stop()
                 robot.motors.right.stop()
                 robot.move_back_timed(0.3)
-                ev3.Sound.speak("Aligned").wait()
+                ev3.Sound.speak("Robot Aligned...").wait()
 
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
