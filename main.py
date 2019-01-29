@@ -26,7 +26,7 @@ class Duo:
         self.values = (self.left, self.right)
 
 
-DEFAULT_SPEED = 800
+DEFAULT_SPEED = 500
 
 
 class Robot:
@@ -75,7 +75,7 @@ class Robot:
                 6: 'White',
                 7: 'Brown'
             }
-            # print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
+            print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
             return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
@@ -123,12 +123,18 @@ class Robot:
         self.gyroscope_sensor.mode = 'GYRO-RATE'
         self.gyroscope_sensor.mode = 'GYRO-ANG'
 
-    def move_back_timed(self, how_long=0.3):
+    def move_timed(self, how_long=0.3, direction="forward", speed=DEFAULT_SPEED):
         end_time = datetime.now() + timedelta(seconds=how_long)
+
+        vel = speed
+
+        if direction != "forward":
+            vel = -speed
+
         # print("Starting time!")
         while datetime.now() < end_time:
-            robot.motors.left.run_forever(speed_sp=-400)
-            robot.motors.right.run_forever(speed_sp=-400)
+            robot.motors.left.run_forever(speed_sp=vel)
+            robot.motors.right.run_forever(speed_sp=vel)
         # print("Time is over!")
         robot.motors.left.stop()
         robot.motors.right.stop()
@@ -141,21 +147,22 @@ def undefined_dealing(color_sensor):
     sensor_color = color_sensor
     if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":
         if sensor_color[0] == "Undefined":
-            robot.move_back_timed(0.6)
+            robot.move_timed(how_long=0.6, direction="back")
             robot.rotate(30, axis="diferente")
             print("sensor_color[0]")
         elif sensor_color[1] == "Undefined":
-            robot.move_back_timed(0.6)
+            robot.move_timed(how_long=0.6, direction="back")
             robot.rotate(-30, axis="diferente")
             print("sensor_color[1]")
 
 
-last_same_color = None
+last_same_color = []
 color = 0
+realignment_counter = 0
 
 
 def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
-    global last_same_color, color
+    global last_same_color, color, realignment_counter
     reverse = False
 
     search = color_sensor_data
@@ -168,17 +175,17 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
         # if search[1] == "Green":
         #    counters[] += 1
 
-        if search[1] not in ["White", "Undefined"]:
+        if search[1] not in ["White", "Undefined", "Brown"]:
             color += 1
 
         if color > 20:
             print("cor > que 20\n\n")
             if search[0] == "White":
-                cor = 0
+                color = 0
                 robot.motors.left.stop()
                 robot.motors.right.stop()
-                robot.move_back_timed(0.3)
-                time.sleep(3)
+                robot.move_timed(how_long=0.3, direction="back")
+                ev3.Sound.speak("Robot Aligned...").wait()
 
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
@@ -199,7 +206,14 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             search = robot.sensor_data("ColorSensor")
             undefined_dealing(search)
 
-        robot.move_back_timed()
+        robot.move_timed(direction="back")
+        realignment_counter += 1
+
+        if realignment_counter > 6:
+            ev3.Sound.beep().wait()
+            ev3.Sound.beep().wait()
+            realignment_counter = 0
+            robot.move_timed(direction="forward", how_long=0.5)
 
         if reverse:
             robot.motors.left.stop()
@@ -219,7 +233,14 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             search = robot.sensor_data("ColorSensor")
             undefined_dealing(search)
 
-        robot.move_back_timed()
+        robot.move_timed(direction="back")
+        realignment_counter += 1
+
+        if realignment_counter > 6:
+            ev3.Sound.beep().wait()
+            ev3.Sound.beep().wait()
+            realignment_counter = 0
+            robot.move_timed(direction="forward", how_long=0.5)
 
         if reverse:
             robot.motors.right.stop()
