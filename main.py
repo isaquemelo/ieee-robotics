@@ -2,6 +2,9 @@ import ev3dev.ev3 as ev3
 import math
 from datetime import datetime, timedelta
 import time
+import paho.mqtt.client as mqtt
+from struct import *
+import datetime
 
 
 # class robot
@@ -10,6 +13,7 @@ import time
 # - rotate
 # - atual pos
 # - history
+
 
 def map_values(n, start1, stop1, start2, stop2):
     return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2
@@ -75,7 +79,7 @@ class Robot:
                 6: 'White',
                 7: 'Brown'
             }
-            print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
+            #print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
             return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
@@ -139,8 +143,6 @@ class Robot:
         robot.motors.left.stop()
         robot.motors.right.stop()
 
-
-robot = Robot()
 
 
 def undefined_dealing(color_sensor):
@@ -248,11 +250,31 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             robot.motors.left.stop()
 
 
+def on_message(client, userdata, message):
+    print("Received message:", unpack("iid", message.payload)[:2], time.time() - float(unpack("iid", message.payload)[2]))
+
+
+def on_connect(client, userdata, flags, rc):
+    print("The robots are connected with result code", str(rc))
+    client.subscribe("topic/test")
+
+
+robot = Robot()
+client = mqtt.Client()
+client.connect("169.254.20.22", 1883, 60)
+
+client.on_connect = on_connect
+client.on_message = on_message
+
+
 while True:
 
-    search = robot.sensor_data("ColorSensor")
-    color_realignment(robot, search)
+    #search = robot.sensor_data("ColorSensor")
 
-    if search[0] == "Undefined" and search[1] == "Undefined":
-        robot.motors.left.stop()
-        robot.motors.right.stop()
+    client.loop()
+
+    # color_realignment(robot, search)
+
+    # if search[0] == "Undefined" and search[1] == "Undefined":
+    #     robot.motors.left.stop()
+    #     robot.motors.right.stop()
