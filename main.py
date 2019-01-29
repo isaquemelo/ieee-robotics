@@ -150,7 +150,7 @@ def undefined_dealing(color_sensor):
             print("sensor_color[1]")
 
 
-last_same_color = None
+last_same_color = []
 color = 0
 
 
@@ -168,17 +168,18 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
         # if search[1] == "Green":
         #    counters[] += 1
 
-        if search[1] not in ["White", "Undefined"]:
+        if search[1] not in ["White", "Undefined", "Brown"]:
+            print(color, "++")
             color += 1
 
         if color > 20:
             print("cor > que 20\n\n")
             if search[0] == "White":
-                cor = 0
+                color = 0
                 robot.motors.left.stop()
                 robot.motors.right.stop()
                 robot.move_back_timed(0.3)
-                time.sleep(3)
+                ev3.Sound.speak("Aligned").wait()
 
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
