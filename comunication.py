@@ -21,7 +21,7 @@ client.loop_start()
 try:
     while True:
         message = pack("iid", infrared_sensor.left.value(), infrared_sensor.right.value(), time.time())
-        client.publish("topic/test", message, qos=2)
+        client.publish("topic/test", message, qos=0)
         print(unpack("iid", message))
 
 except KeyboardInterrupt:

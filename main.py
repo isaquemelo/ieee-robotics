@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import time
 import paho.mqtt.client as mqtt
 from struct import *
-import datetime
 
 
 # class robot
@@ -208,14 +207,15 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             search = robot.sensor_data("ColorSensor")
             undefined_dealing(search)
 
+        time.sleep(0.15)
         robot.move_timed(direction="back")
         realignment_counter += 1
 
-        if realignment_counter > 6:
+        if realignment_counter > 7:
             ev3.Sound.beep().wait()
             ev3.Sound.beep().wait()
             realignment_counter = 0
-            robot.move_timed(direction="forward", how_long=0.5)
+            robot.move_timed(direction="forward", how_long=0.6)
 
         if reverse:
             robot.motors.left.stop()
@@ -235,14 +235,15 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             search = robot.sensor_data("ColorSensor")
             undefined_dealing(search)
 
+        time.sleep(0.15)
         robot.move_timed(direction="back")
         realignment_counter += 1
 
-        if realignment_counter > 6:
+        if realignment_counter > 7:
             ev3.Sound.beep().wait()
             ev3.Sound.beep().wait()
             realignment_counter = 0
-            robot.move_timed(direction="forward", how_long=0.5)
+            robot.move_timed(direction="forward", how_long=0.6)
 
         if reverse:
             robot.motors.right.stop()
@@ -267,14 +268,19 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 
-while True:
+try:
+    while True:
 
-    #search = robot.sensor_data("ColorSensor")
+        search = robot.sensor_data("ColorSensor")
 
-    client.loop()
+        #client.loop()
 
-    # color_realignment(robot, search)
+        color_realignment(robot, search)
 
-    # if search[0] == "Undefined" and search[1] == "Undefined":
-    #     robot.motors.left.stop()
-    #     robot.motors.right.stop()
+        if search[0] == "Undefined" and search[1] == "Undefined":
+            robot.motors.left.stop()
+            robot.motors.right.stop()
+
+except KeyboardInterrupt:
+    robot.motors.right.stop()
+    robot.motors.left.stop()
