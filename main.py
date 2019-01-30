@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import time
 import paho.mqtt.client as mqtt
 from struct import *
-
+import _thread
 
 # class robot
 # - sensors
@@ -252,16 +252,20 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
 
 
 def on_message(client, userdata, message):
-    print("Received message:", unpack("iid", message.payload)[:2], time.time() - float(unpack("iid", message.payload)[2]))
+    carga = unpack("iid", message.payload)
+    print("Received message:", carga[:2], time.time() - float(carga[2]))
 
 
 def on_connect(client, userdata, flags, rc):
     print("The robots are connected with result code", str(rc))
-    client.subscribe("topic/test")
+    client.subscribe("topic/sensors")
+
 
 
 robot = Robot()
 client = mqtt.Client()
+
+
 client.connect("169.254.38.111", 1883, 60)
 
 client.on_connect = on_connect
@@ -269,18 +273,27 @@ client.on_message = on_message
 
 client.loop_start()
 
-try:
-    while True:
 
-        search = robot.sensor_data("ColorSensor")
-        color_realignment(robot, search)
+def main():
+    try:
+        while True:
+            search = robot.sensor_data("ColorSensor")
+            color_realignment(robot, search)
 
-        if search[0] == "Undefined" and search[1] == "Undefined":
-            robot.motors.left.stop()
-            robot.motors.right.stop()
+            if search[0] == "Undefined" and search[1] == "Undefined":
+                robot.motors.left.stop()
+                robot.motors.right.stop()
 
-except KeyboardInterrupt:
-    robot.motors.right.stop()
-    robot.motors.left.stop()
-    client.loop_end()
-    client.disconnect()
+    except KeyboardInterrupt:
+        robot.motors.right.stop()
+        robot.motors.left.stop()
+        client.loop_stop()
+        client.disconnect()
+
+
+def exchange():     client.loop_forever()
+
+
+if __name__ == '__main__':
+    main()
+
