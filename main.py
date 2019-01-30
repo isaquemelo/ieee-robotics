@@ -163,9 +163,13 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
     search = color_sensor_data
 
     if robot.in_rect:
-        print("COISOISOSUUDASUDUASD\n\n\n")
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
-            ev3.Sound.speak("I'm not inside a rectangle.").wait()
+            ev3.Sound.beep()
+            ev3.Sound.beep()
+            ev3.Sound.beep()
+            ev3.Sound.beep()
+            ev3.Sound.beep()
+            print("Saiuuuuuuu\n\n\n")
             robot.rect_color = "Undefined"
             robot.in_rect = False
             return None
@@ -198,7 +202,6 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
         reverse = True
     else:
         reverse = False
-
 
     if search[0] == "White" and search[1] != "White":
 
