@@ -262,19 +262,17 @@ def on_connect(client, userdata, flags, rc):
 
 robot = Robot()
 client = mqtt.Client()
-client.connect("169.254.20.22", 1883, 60)
+client.connect("169.254.38.111", 1883, 60)
 
 client.on_connect = on_connect
 client.on_message = on_message
 
+client.loop_start()
 
 try:
     while True:
 
         search = robot.sensor_data("ColorSensor")
-
-        #client.loop()
-
         color_realignment(robot, search)
 
         if search[0] == "Undefined" and search[1] == "Undefined":
@@ -284,3 +282,5 @@ try:
 except KeyboardInterrupt:
     robot.motors.right.stop()
     robot.motors.left.stop()
+    client.loop_end()
+    client.disconnect()
