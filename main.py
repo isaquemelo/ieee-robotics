@@ -4,14 +4,6 @@ from datetime import datetime, timedelta
 import time
 import paho.mqtt.client as mqtt
 from struct import *
-import _thread
-
-# class robot
-# - sensors
-# - move
-# - rotate
-# - atual pos
-# - history
 
 
 def map_values(n, start1, stop1, start2, stop2):
@@ -33,23 +25,24 @@ DEFAULT_SPEED = 500
 
 
 class Robot:
-    print("robot")
+    ev3.Sound.speak("Robot started...")
 
     def __init__(self):
         # define sensors
         self.gyroscope_sensor = ev3.GyroSensor('in1')
         self.gyroscope_sensor.mode = 'GYRO-ANG'
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
-        # , ev3.ColorSensor('in4')) it does not have the back color sensor anymore
-
-        # self.ultrasonic_sensors = Duo(ev3.UltrasonicSensor('in'), ev3.UltrasonicSensor('in'))
+        # self.ultrasonic_sensors = ev3.UltrasonicSensor('in4')
 
         # define motors
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'))
-        # define history
-        # define position
+        self.handler = ev3.LargeMotor('outC')
 
-        pass
+        # define status
+        self.in_rect = False
+        self.rect_color = "Undefined"
+
+        # define position
 
     def update(self):
         # sensors update
@@ -78,7 +71,8 @@ class Robot:
                 6: 'White',
                 7: 'Brown'
             }
-            #print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
+
+            # print([dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]])
             return [dict_colors[self.color_sensors.left.color], dict_colors[self.color_sensors.right.color]]
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
@@ -143,7 +137,6 @@ class Robot:
         robot.motors.right.stop()
 
 
-
 def undefined_dealing(color_sensor):
     sensor_color = color_sensor
     if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":
@@ -160,21 +153,27 @@ def undefined_dealing(color_sensor):
 last_same_color = []
 color = 0
 realignment_counter = 0
+rect_check = False
 
 
 def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
-    global last_same_color, color, realignment_counter
+    global last_same_color, color, realignment_counter, rect_check
     reverse = False
 
     search = color_sensor_data
+
+    if robot.in_rect:
+        print("COISOISOSUUDASUDUASD\n\n\n")
+        if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
+            ev3.Sound.speak("I'm not inside a rectangle.").wait()
+            robot.rect_color = "Undefined"
+            robot.in_rect = False
+            return None
 
     if search[0] == search[1]:
         robot.motors.left.run_forever(speed_sp=speed)
         robot.motors.right.run_forever(speed_sp=speed)
         last_same_color = search
-
-        # if search[1] == "Green":
-        #    counters[] += 1
 
         if search[1] not in ["White", "Undefined", "Brown"]:
             color += 1
@@ -183,15 +182,23 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             print("cor > que 20\n\n")
             if search[0] == "White":
                 color = 0
+
                 robot.motors.left.stop()
                 robot.motors.right.stop()
+
                 robot.move_timed(how_long=0.3, direction="back")
-                ev3.Sound.speak("Robot Aligned...").wait()
+
+                ev3.Sound.speak("Robot aligned...").wait()
+                robot.in_rect = True
+                robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                rect_check = True
+                ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
 
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
     else:
         reverse = False
+
 
     if search[0] == "White" and search[1] != "White":
 
@@ -212,8 +219,7 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
         realignment_counter += 1
 
         if realignment_counter > 7:
-            ev3.Sound.beep().wait()
-            ev3.Sound.beep().wait()
+            ev3.Sound.speak("Robot has exceed correction numbers...").wait()
             realignment_counter = 0
             robot.move_timed(direction="forward", how_long=0.6)
 
@@ -261,17 +267,15 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("topic/sensors")
 
 
-
 robot = Robot()
-client = mqtt.Client()
-
-
-client.connect("169.254.38.111", 1883, 60)
-
-client.on_connect = on_connect
-client.on_message = on_message
-
-client.loop_start()
+# client = mqtt.Client()
+#
+# client.connect("169.254.38.111", 1883, 60)
+#
+# client.on_connect = on_connect
+# client.on_message = on_message
+#
+# client.loop_start()
 
 
 def main():
@@ -287,13 +291,9 @@ def main():
     except KeyboardInterrupt:
         robot.motors.right.stop()
         robot.motors.left.stop()
-        client.loop_stop()
-        client.disconnect()
-
-
-def exchange():     client.loop_forever()
+        # client.loop_stop()
+        # client.disconnect()
 
 
 if __name__ == '__main__':
     main()
-
