@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import time
 import paho.mqtt.client as mqtt
 from struct import *
+from simple_pid import PID
 
 
 def map_values(n, start1, stop1, start2, stop2):
@@ -43,6 +44,7 @@ class Robot:
         self.rect_color = "Undefined"
 
         # define position
+        self.infrared_sensors = (0, 0)
 
     def update(self):
         # sensors update
@@ -155,17 +157,25 @@ color = 0
 realignment_counter = 0
 rect_check = False
 
+# 22 direita
+# 13
 
-def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
+
+def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_SPEED):
     global last_same_color, color, realignment_counter, rect_check
     reverse = False
 
     search = color_sensor_data
+    if True:
+        print(math.fabs(infrared_sensor[0] - infrared_sensor[1]))
+
+        if math.fabs(infrared_sensor[0] - infrared_sensor[1]) > 6:
+            robot.rotate(90)
+            return None
+        return None
 
     if robot.in_rect:
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
-            ev3.Sound.beep()
-            ev3.Sound.beep()
             ev3.Sound.beep()
             ev3.Sound.beep()
             ev3.Sound.beep()
@@ -260,9 +270,17 @@ def color_realignment(robot, color_sensor_data, speed=DEFAULT_SPEED):
             robot.motors.left.stop()
 
 
+robot = Robot()
+
+
+client = mqtt.Client()
+client.connect("169.254.232.232", 1883, 60)
+
+
 def on_message(client, userdata, message):
     carga = unpack("iid", message.payload)
-    print("Received message:", carga[:2], time.time() - float(carga[2]))
+    robot.infrared_sensors = carga[:2]
+    # print("Received message:", carga[:2], time.time() - float(carga[2]))
 
 
 def on_connect(client, userdata, flags, rc):
@@ -270,22 +288,19 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("topic/sensors")
 
 
-robot = Robot()
-# client = mqtt.Client()
-#
-# client.connect("169.254.38.111", 1883, 60)
-#
-# client.on_connect = on_connect
-# client.on_message = on_message
-#
-# client.loop_start()
+client.on_connect = on_connect
+client.on_message = on_message
+
+client.loop_start()
 
 
 def main():
     try:
         while True:
             search = robot.sensor_data("ColorSensor")
-            color_realignment(robot, search)
+
+            color_realignment(robot, search, robot.infrared_sensors)
+
 
             if search[0] == "Undefined" and search[1] == "Undefined":
                 robot.motors.left.stop()
@@ -294,8 +309,12 @@ def main():
     except KeyboardInterrupt:
         robot.motors.right.stop()
         robot.motors.left.stop()
-        # client.loop_stop()
-        # client.disconnect()
+        client.loop_stop()
+        client.disconnect()
+
+
+# 23
+# 18
 
 
 if __name__ == '__main__':
