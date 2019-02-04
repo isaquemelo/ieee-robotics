@@ -17,7 +17,7 @@ client = mqtt.Client()
 client.connect("localhost", 1883, 60)
 
 infrared_sensor = Duo(ev3.InfraredSensor('in1'), ev3.InfraredSensor('in2'))
-infrared_sensor.left.
+#infrared_sensor.left.
 
 client.loop_start()
 

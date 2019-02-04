@@ -161,18 +161,85 @@ rect_check = False
 # 13
 
 
+def infrared_sensor_correction(robot, pos, infrared_sensor):
+    if pos == "right":
+        inicial_pos = robot.motors.right.position
+    elif pos == "left":
+        inicial_pos = robot.motors.left.position
+
+    abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
+
+    while abs > 4:
+        infrared_sensor[0] = robot.infrared_sensors[0]
+        infrared_sensor[1] = robot.infrared_sensors[1]
+
+        abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
+
+        if pos == "right":
+            robot.motors.right.run_forever()
+        elif pos == "left":
+            robot.motors.left.run_forever()
+
+    if pos == "right":
+        final_pos = robot.motors.right.position
+        delta_pos = final_pos - inicial_pos
+
+        inicial_pos = robot.motors.left.position
+        new_delta = 0
+
+        robot.motors.right.stop()
+
+    elif pos == "left":
+        final_pos = robot.motors.left.position
+        delta_pos = final_pos - inicial_pos
+
+        inicial_pos = robot.motors.right.position
+        new_delta = 0
+
+        robot.motors.left.stop()
+
+    while new_delta <= delta_pos:
+        if pos == "right":
+            robot.motors.left.run_forever()
+            new_delta = robot.motors.left.position - inicial_pos
+        elif pos == "left":
+            robot.motors.right.run_forever()
+            new_delta = robot.motors.right.position - inicial_pos
+
+    if pos == "right":
+        robot.motors.left.stop()
+    elif pos == "left":
+        robot.motors.right.stop()
+
+    robot.motors.left.stop()
+    robot.motors.right.stop()
+
+
 def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_SPEED):
     global last_same_color, color, realignment_counter, rect_check
     reverse = False
 
     search = color_sensor_data
-    if True:
-        print(math.fabs(infrared_sensor[0] - infrared_sensor[1]))
+    infrared_sensor = list(infrared_sensor)
 
-        if math.fabs(infrared_sensor[0] - infrared_sensor[1]) > 6:
-            robot.rotate(90)
-            return None
-        return None
+    # abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
+    # print(abs, infrared_sensor[0], infrared_sensor[1])
+    # if infrared_sensor[0] > infrared_sensor[1]:
+    #     # muito a esquerda da pista
+    #     print("A")
+    #     infrared_sensor_correction(robot, "left", infrared_sensor)
+    #     robot.motors.right.stop()
+    #     robot.motors.left.stop()
+    #
+    # elif infrared_sensor[0] < infrared_sensor[1]:
+    #     # muito a direita da pista
+    #     print("B")
+    #     infrared_sensor_correction(robot, "right", infrared_sensor)
+    #     robot.motors.right.stop()
+    #     robot.motors.left.stop()
+    #
+    # robot.motors.right.stop()
+    # robot.motors.left.stop()
 
     if robot.in_rect:
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
@@ -274,7 +341,7 @@ robot = Robot()
 
 
 client = mqtt.Client()
-client.connect("169.254.232.232", 1883, 60)
+client.connect("169.254.89.129", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -300,7 +367,6 @@ def main():
             search = robot.sensor_data("ColorSensor")
 
             color_realignment(robot, search, robot.infrared_sensors)
-
 
             if search[0] == "Undefined" and search[1] == "Undefined":
                 robot.motors.left.stop()
