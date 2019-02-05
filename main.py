@@ -328,29 +328,41 @@ def main():
 
             if result == "On square":
                 print("On square")
-                if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
-                    learned_colors[being_learned] = learning_dic[being_learned][0]
-                    im_learning = False
-                    being_learned = "Undefined"
-                    print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
+                #     learned_colors[being_learned] = learning_dic[being_learned][0]
+                #     im_learning = False
+                #     being_learned = "Undefined"
+                #     print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
 
                 if not im_learning:
-                    try:
-                        print("Tentando executar acao para a cor:", robot.rect_color)
-                        if learned_colors[robot.rect_color]:
-                            robot.run_action(learned_colors[robot.rect_color])
-                    except KeyError:
-                        print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
-                        being_learned = robot.rect_color
-                        learning_dic[being_learned] = ["left", "right", "forward"]
-                        im_learning = True
+                    if robot.rect_color != "White":
+                        try:
+                            print("Tentando executar acao para a cor:", robot.rect_color)
+                            print("Aprendidos ate agora:", learned_colors)
+
+                            if learned_colors[robot.rect_color]:
+                                robot.run_action(learned_colors[robot.rect_color])
+                        except:
+                            print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
+                            being_learned = robot.rect_color
+                            learning_dic[being_learned] = ["left", "right", "forward"]
+                            im_learning = True
 
                 if im_learning:
                     robot.run_action(learning_dic[being_learned][0])
                     while True:
-                        print("Loop secundario")
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
+
+                        if result == "On square":
+                            print("On square secundario")
+                            if robot.rect_color != being_learned and robot.rect_color not in ["White", "Undefined"]:
+                                learned_colors[being_learned] = learning_dic[being_learned][0]
+                                im_learning = False
+                                being_learned = "Undefined"
+                                print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                                break
+
                         if search[0] == "Black" and search[1] == "Black":
                             print("DIRECAO ERRADA")
                             del learning_dic[being_learned][0]
