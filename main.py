@@ -169,7 +169,7 @@ rect_check = False
 pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 
-def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_SPEED):
+def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     global last_same_color, color, realignment_counter, rect_check
     reverse = False
 
@@ -182,43 +182,44 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
             robot.in_rect = False
             return None
 
-    if search[0] == search[1]:
-        pid.output_limits = (-600, 600)
-        control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
-        n_speed = 400
+    if move_forward:
+        if search[0] == search[1]:
+            pid.output_limits = (-600, 600)
+            control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
+            n_speed = 400
 
-        if control > 600:
-            control = 600
-        if control < -600:
-            control = -600
+            if control > 600:
+                control = 600
+            if control < -600:
+                control = -600
 
-        if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
-            robot.motors.left.run_forever(speed_sp=speed)
-            robot.motors.right.run_forever(speed_sp=speed)
-        else:
-            robot.motors.left.run_forever(speed_sp=n_speed + control)
-            robot.motors.right.run_forever(speed_sp=n_speed - control)
+            if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
+                robot.motors.left.run_forever(speed_sp=speed)
+                robot.motors.right.run_forever(speed_sp=speed)
+            else:
+                robot.motors.left.run_forever(speed_sp=n_speed + control)
+                robot.motors.right.run_forever(speed_sp=n_speed - control)
 
-        last_same_color = search
+            last_same_color = search
 
-        if search[1] not in ["White", "Undefined", "Brown"]:
-            color += 1
+            if search[1] not in ["White", "Undefined", "Brown"]:
+                color += 1
 
-        if color > 20:
-            if search[0] == "White":
-                color = 0
+            if color > 20:
+                if search[0] == "White":
+                    color = 0
 
-                robot.motors.left.stop()
-                robot.motors.right.stop()
+                    robot.motors.left.stop()
+                    robot.motors.right.stop()
 
-                robot.move_timed(how_long=0.4, direction="back")
+                    robot.move_timed(how_long=0.4, direction="back")
 
-                # ev3.Sound.speak("Robot aligned...").wait()
-                robot.in_rect = True
-                robot.rect_color = robot.sensor_data("ColorSensor")[0]
-                rect_check = True
-                # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
-                return "On square"
+                    # ev3.Sound.speak("Robot aligned...").wait()
+                    robot.in_rect = True
+                    robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                    rect_check = True
+                    # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
+                    return "On square"
     
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
@@ -320,6 +321,8 @@ def main():
         # learning_dic = {"Green": ["left", "right", "forward"]}
         learning_dic = {}
         im_learning = False
+        result = None
+
 
         while True:
             search = robot.sensor_data("ColorSensor")
@@ -354,18 +357,27 @@ def main():
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
 
-                        if result == "On square":
-                            print("On square secundario")
-                            if robot.rect_color != being_learned and robot.rect_color not in ["White", "Undefined"]:
-                                learned_colors[being_learned] = learning_dic[being_learned][0]
-                                im_learning = False
-                                being_learned = "Undefined"
-                                print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
-                                break
+                        #print("On square loop secundario")
+                        if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and robot.sensor_data("ColorSensor")[0] != being_learned and robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"] and robot.sensor_data("ColorSensor")[0] != "Black":
+                            learned_colors[being_learned] = learning_dic[being_learned][0]
+                            im_learning = False
+                            being_learned = "Undefined"
+                            learning_dic = {}
+                            print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                            break
 
                         if search[0] == "Black" and search[1] == "Black":
                             print("DIRECAO ERRADA")
                             del learning_dic[being_learned][0]
+
+                            if len(learning_dic[being_learned]) == 1:
+                                learned_colors[being_learned] = learning_dic[being_learned][0]
+                                im_learning = False
+                                being_learned = "Undefined"
+                                learning_dic = {}
+                                cooisa = False
+                                print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
+
                             print(learning_dic)
                             break
 
