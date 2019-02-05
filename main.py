@@ -155,63 +155,7 @@ color = 0
 realignment_counter = 0
 rect_check = False
 
-
-def infrared_sensor_correction(robot, pos, infrared_sensor):
-    if pos == "right":
-        inicial_pos = robot.motors.right.position
-    elif pos == "left":
-        inicial_pos = robot.motors.left.position
-
-    abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
-
-    while abs > 4:
-        infrared_sensor[0] = robot.infrared_sensors[0]
-        infrared_sensor[1] = robot.infrared_sensors[1]
-
-        abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
-
-        if pos == "right":
-            robot.motors.right.run_forever()
-        elif pos == "left":
-            robot.motors.left.run_forever()
-
-    if pos == "right":
-        final_pos = robot.motors.right.position
-        delta_pos = final_pos - inicial_pos
-
-        inicial_pos = robot.motors.left.position
-        new_delta = 0
-
-        robot.motors.right.stop()
-
-    elif pos == "left":
-        final_pos = robot.motors.left.position
-        delta_pos = final_pos - inicial_pos
-
-        inicial_pos = robot.motors.right.position
-        new_delta = 0
-
-        robot.motors.left.stop()
-
-    while new_delta <= delta_pos:
-        if pos == "right":
-            robot.motors.left.run_forever()
-            new_delta = robot.motors.left.position - inicial_pos
-        elif pos == "left":
-            robot.motors.right.run_forever()
-            new_delta = robot.motors.right.position - inicial_pos
-
-    if pos == "right":
-        robot.motors.left.stop()
-    elif pos == "left":
-        robot.motors.right.stop()
-
-    robot.motors.left.stop()
-    robot.motors.right.stop()
-
 # 15.6 0 4.8
-
-
 pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 
@@ -220,11 +164,10 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
     reverse = False
 
     search = color_sensor_data
-    infrared_sensor = list(infrared_sensor)
 
     if robot.in_rect:
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
-            print("Saiuuuuuuu\n\n\n")
+            #print("Saiuuuuuuu\n\n\n")
             robot.rect_color = "Undefined"
             robot.in_rect = False
             return None
@@ -233,21 +176,25 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
         pid.output_limits = (-600, 600)
         control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
         n_speed = 400
+
         if control > 600:
             control = 600
         if control < -600:
             control = -600
 
-        print(robot.infrared_sensors[1] - robot.infrared_sensors[0], control, n_speed + control, n_speed - control)
-        robot.motors.left.run_forever(speed_sp=n_speed + control)
-        robot.motors.right.run_forever(speed_sp=n_speed - control)
+        if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
+            robot.motors.left.run_forever(speed_sp=speed)
+            robot.motors.right.run_forever(speed_sp=speed)
+        else:
+            robot.motors.left.run_forever(speed_sp=n_speed + control)
+            robot.motors.right.run_forever(speed_sp=n_speed - control)
+
         last_same_color = search
 
         if search[1] not in ["White", "Undefined", "Brown"]:
             color += 1
 
         if color > 20:
-            print("cor > que 20\n\n")
             if search[0] == "White":
                 color = 0
 
@@ -271,9 +218,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
 
         robot.motors.left.stop()
         robot.motors.right.stop()
-
-        start_angle = robot.sensor_data("GyroSensor")
-        now_angle = 0
 
         while search[0] != search[1]:
             if reverse:
@@ -302,8 +246,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
         robot.motors.left.stop()
         robot.motors.right.stop()
 
-        start_angle = robot.sensor_data("GyroSensor")
-        now_angle = 0
 
         while search[0] != search[1]:
             if reverse:
@@ -363,9 +305,9 @@ def main():
 
             color_realignment(robot, search, robot.infrared_sensors)
 
-            # if search[0] == "Undefined" and search[1] == "Undefined":
-            #     robot.motors.left.stop()
-            #     robot.motors.right.stop()
+            if search[0] == "Undefined" and search[1] == "Undefined":
+                robot.motors.left.stop()
+                robot.motors.right.stop()
 
     except KeyboardInterrupt:
         robot.motors.right.stop()
