@@ -201,7 +201,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
                 robot.motors.left.stop()
                 robot.motors.right.stop()
 
-                robot.move_timed(how_long=0.3, direction="back")
+                robot.move_timed(how_long=0.4, direction="back")
 
                 ev3.Sound.speak("Robot aligned...").wait()
                 robot.in_rect = True
