@@ -296,7 +296,7 @@ def return_last_color(robot, square_color, last_choice):
                 robot.in_rect = True
                 break
 
-        print("\n\nENtregue\n\n")
+        print("\n\nEntregue\n\n")
 
 
 robot = Robot()
@@ -325,8 +325,8 @@ client.loop_start()
 
 def main():
     try:
-        learned_colors = {'Green': 'right', 'Red': 'left', 'Blue': 'forward'}
-        #learned_colors = {}
+        #learned_colors = {'Green': 'right', 'Red': 'left', 'Blue': 'forward'}
+        learned_colors = {}
 
 
         being_learned = "Undefined"

@@ -172,6 +172,21 @@ rect_check = False
 pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 
+def return_last_color(robot, square_color, last_choice):
+    robot.rotate(180)
+    while True:
+        search = robot.sensor_data("ColorSensor")
+        result = color_realignment(robot, search, robot.infrared_sensors)
+
+        if result == "On square":
+            print("TERMNOU IF")
+            robot.rotate(90)
+            robot.in_rect = True
+            break
+
+    print("\n\nEntregue\n\n")
+
+
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     global last_same_color, color, realignment_counter, rect_check
     reverse = False
@@ -208,8 +223,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             if search[1] not in ["White", "Undefined", "Brown"]:
                 color += 1
 
-            if color > 20:
-                if search[0] == "White":
+            if color > 15:
+                if search[0] == "White" or search[1] == "White":
                     color = 0
 
                     robot.motors.left.stop()
@@ -358,8 +373,8 @@ def main():
                         # print("On square loop secundario")
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
                                 robot.sensor_data("ColorSensor")[0] != being_learned and \
-                                robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"] and \
-                                robot.sensor_data("ColorSensor")[0] != "Black":
+                                robot.sensor_data("ColorSensor")[0] not in \
+                                ["White", "Undefined"] and robot.sensor_data("ColorSensor")[0] != "Black":
                             learned_colors[being_learned] = learning_dic[being_learned][0]
                             im_learning = False
                             being_learned = "Undefined"
@@ -369,7 +384,10 @@ def main():
 
                         if search[0] == "Black" and search[1] == "Black":
                             print("DIRECAO ERRADA")
-                            robot.rotate(180, "own")
+                            robot.motors.left.stop()
+                            robot.motors.right.stop()
+                            #robot.rotate(180, "own")
+                            return_last_color(robot, robot.rect_color, "left")
                             del learning_dic[being_learned][0]
 
                             if len(learning_dic[being_learned]) == 1:
