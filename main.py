@@ -205,8 +205,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             if search[1] not in ["White", "Undefined", "Brown"]:
                 color += 1
 
-            if color > 20:
-                if search[0] == "White":
+            if color > 15:
+                if search[0] == "White" or search[0] == "White":
                     color = 0
 
                     robot.motors.left.stop()
@@ -284,12 +284,26 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.motors.left.stop()
 
 
+def return_last_color(robot, square_color, last_choice):
+        robot.rotate(180)
+        while True:
+            search = robot.sensor_data("ColorSensor")
+            result = color_realignment(robot, search, robot.infrared_sensors)
+
+            if result == "On square" and robot.rect_color == square_color:
+                print("TERMNOU IF")
+                robot.rotate(-90)
+                robot.in_rect = True
+                break
+
+        print("\n\nENtregue\n\n")
+
 
 robot = Robot()
 
 
 client = mqtt.Client()
-client.connect("169.254.163.247", 1883, 60)
+client.connect("169.254.137.74", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -309,12 +323,11 @@ client.on_message = on_message
 client.loop_start()
 
 
-
 def main():
     try:
+        learned_colors = {'Green': 'right', 'Red': 'left', 'Blue': 'forward'}
+        #learned_colors = {}
 
-        # learned_colors = {"Green": "left"}
-        learned_colors = {}
 
         being_learned = "Undefined"
 
@@ -328,8 +341,8 @@ def main():
             search = robot.sensor_data("ColorSensor")
 
             result = color_realignment(robot, search, robot.infrared_sensors)
-
-            if result == "On square":
+            print(color)
+            if result == "On square" or robot.in_rect:
                 print("On square")
                 # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
                 #     learned_colors[being_learned] = learning_dic[being_learned][0]
@@ -345,6 +358,7 @@ def main():
 
                             if learned_colors[robot.rect_color]:
                                 robot.run_action(learned_colors[robot.rect_color])
+                                robot.move_timed(how_long=0.4)
                         except:
                             print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
@@ -368,7 +382,14 @@ def main():
 
                         if search[0] == "Black" and search[1] == "Black":
                             print("DIRECAO ERRADA")
+
+                            last_choise = learning_dic[being_learned][0]
                             del learning_dic[being_learned][0]
+
+                            return_last_color(robot, being_learned, last_choise)
+
+
+                            # inicia processo de retorno
 
                             if len(learning_dic[being_learned]) == 1:
                                 learned_colors[being_learned] = learning_dic[being_learned][0]

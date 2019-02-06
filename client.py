@@ -22,7 +22,7 @@ class Duo:
         self.values = (self.left, self.right)
 
 
-DEFAULT_SPEED = 500
+DEFAULT_SPEED = 400
 
 
 class Robot:
@@ -138,6 +138,19 @@ class Robot:
         robot.motors.left.stop()
         robot.motors.right.stop()
 
+    def run_action(self, direction, still_learning=True):
+        if not still_learning:
+            if direction == "forward":
+                pass
+            elif direction == "left":
+                self.rotate(-90, axis="own")
+            elif direction == "right":
+                self.rotate(90, axis="own")
+        # if robot still learning allways turn to the right
+        else:
+            self.rotate(90, axis="own")
+        return None
+
 
 def undefined_dealing(color_sensor):
     sensor_color = color_sensor
@@ -145,11 +158,9 @@ def undefined_dealing(color_sensor):
         if sensor_color[0] == "Undefined":
             robot.move_timed(how_long=0.6, direction="back")
             robot.rotate(30, axis="diferente")
-            print("sensor_color[0]")
         elif sensor_color[1] == "Undefined":
             robot.move_timed(how_long=0.6, direction="back")
             robot.rotate(-30, axis="diferente")
-            print("sensor_color[1]")
 
 
 last_same_color = []
@@ -157,123 +168,61 @@ color = 0
 realignment_counter = 0
 rect_check = False
 
-# 22 direita
-# 13
+# 15.6 0 4.8
+pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 
-def infrared_sensor_correction(robot, pos, infrared_sensor):
-    if pos == "right":
-        inicial_pos = robot.motors.right.position
-    elif pos == "left":
-        inicial_pos = robot.motors.left.position
-
-    abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
-
-    while abs > 4:
-        infrared_sensor[0] = robot.infrared_sensors[0]
-        infrared_sensor[1] = robot.infrared_sensors[1]
-
-        abs = (math.fabs(infrared_sensor[0] - infrared_sensor[1]))
-
-        if pos == "right":
-            robot.motors.right.run_forever()
-        elif pos == "left":
-            robot.motors.left.run_forever()
-
-    if pos == "right":
-        robot.motors.right.stop()
-        final_pos = robot.motors.right.position
-        delta_pos = final_pos - inicial_pos
-
-        inicial_pos = robot.motors.left.position
-        new_delta = 0
-
-
-    elif pos == "left":
-        robot.motors.left.stop()
-        final_pos = robot.motors.left.position
-        delta_pos = final_pos - inicial_pos
-
-        inicial_pos = robot.motors.right.position
-        new_delta = 0
-
-
-    while new_delta <= delta_pos:
-        if pos == "right":
-            robot.motors.left.run_forever()
-            new_delta = robot.motors.left.position - inicial_pos
-        elif pos == "left":
-            robot.motors.right.run_forever()
-            new_delta = robot.motors.right.position - inicial_pos
-
-    if pos == "right":
-        robot.motors.left.stop()
-    elif pos == "left":
-        robot.motors.right.stop()
-
-    robot.motors.left.stop()
-    robot.motors.right.stop()
-
-
-def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_SPEED):
+def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     global last_same_color, color, realignment_counter, rect_check
     reverse = False
 
     search = color_sensor_data
-    infrared_sensor_var = list(infrared_sensor)
-
-    abs = (math.fabs(infrared_sensor_var[0] - infrared_sensor_var[1]))
-    #print(abs, infrared_sensor_var[0], infrared_sensor_var[1])
-    if infrared_sensor_var[0] > infrared_sensor_var[1]:
-        # muito a esquerda da pista
-        print("A")
-        robot.motors.right.stop()
-        robot.motors.left.stop()
-        infrared_sensor_correction(robot, "left", infrared_sensor_var)
-
-    elif infrared_sensor_var[0] < infrared_sensor_var[1]:
-        # muito a direita da pista
-        print("B")
-        robot.motors.right.stop()
-        robot.motors.left.stop()
-        infrared_sensor_correction(robot, "right", infrared_sensor_var)
-
-    robot.motors.right.stop()
-    robot.motors.left.stop()
 
     if robot.in_rect:
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
-            ev3.Sound.beep()
-            ev3.Sound.beep()
-            ev3.Sound.beep()
-            print("Saiuuuuuuu\n\n\n")
+            # print("Saiuuuuuuu\n\n\n")
             robot.rect_color = "Undefined"
             robot.in_rect = False
             return None
 
-    if search[0] == search[1]:
-        robot.motors.left.run_forever(speed_sp=speed)
-        robot.motors.right.run_forever(speed_sp=speed)
-        last_same_color = search
+    if move_forward:
+        if search[0] == search[1]:
+            pid.output_limits = (-600, 600)
+            control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
+            n_speed = 400
 
-        if search[1] not in ["White", "Undefined", "Brown"]:
-            color += 1
+            if control > 600:
+                control = 600
+            if control < -600:
+                control = -600
 
-        if color > 20:
-            print("cor > que 20\n\n")
-            if search[0] == "White":
-                color = 0
+            if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
+                robot.motors.left.run_forever(speed_sp=speed)
+                robot.motors.right.run_forever(speed_sp=speed)
+            else:
+                robot.motors.left.run_forever(speed_sp=n_speed + control)
+                robot.motors.right.run_forever(speed_sp=n_speed - control)
 
-                robot.motors.left.stop()
-                robot.motors.right.stop()
+            last_same_color = search
 
-                robot.move_timed(how_long=0.3, direction="back")
+            if search[1] not in ["White", "Undefined", "Brown"]:
+                color += 1
 
-                ev3.Sound.speak("Robot aligned...").wait()
-                robot.in_rect = True
-                robot.rect_color = robot.sensor_data("ColorSensor")[0]
-                rect_check = True
-                ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
+            if color > 20:
+                if search[0] == "White":
+                    color = 0
+
+                    robot.motors.left.stop()
+                    robot.motors.right.stop()
+
+                    robot.move_timed(how_long=0.4, direction="back")
+
+                    # ev3.Sound.speak("Robot aligned...").wait()
+                    robot.in_rect = True
+                    robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                    rect_check = True
+                    # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
+                    return "On square"
 
     if last_same_color[0] == "White" and last_same_color[1] == "White":
         reverse = True
@@ -339,9 +288,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, speed=DEFAULT_S
 
 robot = Robot()
 
-
 client = mqtt.Client()
-client.connect("169.254.89.129", 1883, 60)
+client.connect("169.254.137.74", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -363,10 +311,77 @@ client.loop_start()
 
 def main():
     try:
+
+        # learned_colors = {"Green": "left"}
+        learned_colors = {}
+
+        being_learned = "Undefined"
+
+        # learning_dic = {"Green": ["left", "right", "forward"]}
+        learning_dic = {}
+        im_learning = False
+        result = None
+
         while True:
             search = robot.sensor_data("ColorSensor")
 
-            color_realignment(robot, search, robot.infrared_sensors)
+            result = color_realignment(robot, search, robot.infrared_sensors)
+
+            if result == "On square":
+                print("On square")
+                # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
+                #     learned_colors[being_learned] = learning_dic[being_learned][0]
+                #     im_learning = False
+                #     being_learned = "Undefined"
+                #     print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+
+                if not im_learning:
+                    if robot.rect_color != "White":
+                        try:
+                            print("Tentando executar acao para a cor:", robot.rect_color)
+                            print("Aprendidos ate agora:", learned_colors)
+
+                            if learned_colors[robot.rect_color]:
+                                robot.run_action(learned_colors[robot.rect_color], im_learning)
+                        except:
+                            print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
+                            being_learned = robot.rect_color
+                            learning_dic[being_learned] = ["right", "forward", "left"]
+                            im_learning = True
+
+                if im_learning:
+                    robot.run_action(learning_dic[being_learned][0], im_learning)
+                    while True:
+                        search = robot.sensor_data("ColorSensor")
+                        result = color_realignment(robot, search, robot.infrared_sensors)
+
+                        # print("On square loop secundario")
+                        if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
+                                robot.sensor_data("ColorSensor")[0] != being_learned and \
+                                robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"] and \
+                                robot.sensor_data("ColorSensor")[0] != "Black":
+                            learned_colors[being_learned] = learning_dic[being_learned][0]
+                            im_learning = False
+                            being_learned = "Undefined"
+                            learning_dic = {}
+                            print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                            break
+
+                        if search[0] == "Black" and search[1] == "Black":
+                            print("DIRECAO ERRADA")
+                            robot.rotate(180, "own")
+                            del learning_dic[being_learned][0]
+
+                            if len(learning_dic[being_learned]) == 1:
+                                learned_colors[being_learned] = learning_dic[being_learned][0]
+                                im_learning = False
+                                being_learned = "Undefined"
+                                learning_dic = {}
+                                cooisa = False
+                                print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
+
+                            print(learning_dic)
+                            break
 
             if search[0] == "Undefined" and search[1] == "Undefined":
                 robot.motors.left.stop()
