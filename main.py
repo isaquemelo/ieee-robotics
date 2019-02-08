@@ -208,7 +208,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 color += 1
 
             if color > 15:
-                if search[0] == "White" or search[0] == "White":
+                if search[0] in ["White", "Undefined"] or search[0] in ["White", "Undefined"]:
                     color = 0
 
                     robot.motors.left.stop()
@@ -242,9 +242,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             search = robot.sensor_data("ColorSensor")
             undefined_dealing(search)
 
-        time.sleep(0.2
-
-                   )
+        time.sleep(0.15)
         robot.move_timed(direction="back")
         realignment_counter += 1
 
@@ -404,10 +402,11 @@ def main():
 
                             print(learning_dic)
                             break
-
+            """
             if search[0] == "Undefined" and search[1] == "Undefined":
                 robot.motors.left.stop()
                 robot.motors.right.stop()
+            """
 
     except KeyboardInterrupt:
         robot.motors.right.stop()
