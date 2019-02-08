@@ -138,14 +138,16 @@ class Robot:
         robot.motors.left.stop()
         robot.motors.right.stop()
 
-    def run_action(self, direction):
-        if direction == "forward":
-            pass
-        elif direction == "left":
-            self.rotate(-90, axis="own")
-        elif direction == "right":
+    def run_action(self, direction, still_learning=True):
+        if not still_learning:
+            if direction == "forward":
+                pass
+            elif direction == "left":
+                self.rotate(-90, axis="own")
+            elif direction == "right":
+                self.rotate(90, axis="own")
+        else:
             self.rotate(90, axis="own")
-
         return None
 
 
@@ -240,7 +242,9 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             search = robot.sensor_data("ColorSensor")
             undefined_dealing(search)
 
-        time.sleep(0.15)
+        time.sleep(0.2
+
+                   )
         robot.move_timed(direction="back")
         realignment_counter += 1
 
@@ -291,7 +295,6 @@ def return_last_color(robot, square_color, last_choice):
 
         if result == "On square" and robot.rect_color == square_color:
             print("TERMNOU IF")
-            robot.rotate(-90)
             robot.in_rect = True
             break
 
@@ -353,16 +356,16 @@ def main():
                             print("Aprendidos ate agora:", learned_colors)
 
                             if learned_colors[robot.rect_color]:
-                                robot.run_action(learned_colors[robot.rect_color])
+                                robot.run_action(learned_colors[robot.rect_color], im_learning)
                                 robot.move_timed(how_long=0.4)
                         except:
                             print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
-                            learning_dic[being_learned] = ["left", "right", "forward"]
+                            learning_dic[being_learned] = ["right", "forward", "left"]
                             im_learning = True
 
-                if im_learning:
-                    robot.run_action(learning_dic[being_learned][0])
+                elif im_learning:
+                    robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
@@ -389,13 +392,15 @@ def main():
 
                             # inicia processo de retorno
 
-                            if len(learning_dic[being_learned]) == 1:
+                            """
+                                if len(learning_dic[being_learned]) == 1:
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
                                 im_learning = False
                                 being_learned = "Undefined"
                                 learning_dic = {}
                                 cooisa = False
                                 print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
+                            """
 
                             print(learning_dic)
                             break
