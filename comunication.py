@@ -1,9 +1,9 @@
+#!/usr/bin/python3
 import paho.mqtt.client as mqtt
 import ev3dev.ev3 as ev3
 from struct import *
 from datetime import datetime, timedelta
 import time
-
 class Duo:
     def __init__(self, sensor_left, sensor_right, sensor_back=None):
         self.left = sensor_left

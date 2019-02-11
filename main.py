@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import ev3dev.ev3 as ev3
 import math
 from datetime import datetime, timedelta
@@ -138,14 +140,16 @@ class Robot:
         robot.motors.left.stop()
         robot.motors.right.stop()
 
-    def run_action(self, direction):
-        if direction == "forward":
-            pass
-        elif direction == "left":
-            self.rotate(-90, axis="own")
-        elif direction == "right":
+    def run_action(self, direction, still_learning=True):
+        if not still_learning:
+            if direction == "forward":
+                pass
+            elif direction == "left":
+                self.rotate(-90, axis="own")
+            elif direction == "right":
+                self.rotate(90, axis="own")
+        else:
             self.rotate(90, axis="own")
-
         return None
 
 
@@ -206,7 +210,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 color += 1
 
             if color > 15:
-                if search[0] == "White" or search[0] == "White":
+                if search[0] in ["White", "Undefined"] or search[0] in ["White", "Undefined"]:
                     color = 0
 
                     robot.motors.left.stop()
@@ -286,12 +290,12 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 def return_last_color(robot, square_color, last_choice):
     robot.rotate(180)
     while True:
+        print("realignment_counter:", realignment_counter)
         search = robot.sensor_data("ColorSensor")
         result = color_realignment(robot, search, robot.infrared_sensors)
 
         if result == "On square" and robot.rect_color == square_color:
             print("TERMNOU IF")
-            robot.rotate(-90)
             robot.in_rect = True
             break
 
@@ -301,7 +305,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.137.74", 1883, 60)
+client.connect("169.254.31.51", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -332,12 +336,13 @@ def main():
         learning_dic = {}
         im_learning = False
         result = None
-
+        global realignment_counter
         while True:
+            print("realignment_counter:", realignment_counter)
             search = robot.sensor_data("ColorSensor")
 
             result = color_realignment(robot, search, robot.infrared_sensors)
-            print(color)
+            # print(color)
             if result == "On square" or robot.in_rect:
                 print("On square")
                 # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
@@ -351,19 +356,22 @@ def main():
                         try:
                             print("Tentando executar acao para a cor:", robot.rect_color)
                             print("Aprendidos ate agora:", learned_colors)
+                            realignment_counter = 0
 
                             if learned_colors[robot.rect_color]:
-                                robot.run_action(learned_colors[robot.rect_color])
+                                robot.run_action(learned_colors[robot.rect_color], im_learning)
                                 robot.move_timed(how_long=0.4)
                         except:
                             print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
-                            learning_dic[being_learned] = ["left", "right", "forward"]
+                            learning_dic[being_learned] = ["right", "forward", "left"]
                             im_learning = True
+                            realignment_counter = 0
 
-                if im_learning:
-                    robot.run_action(learning_dic[being_learned][0])
+                elif im_learning:
+                    robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
+                        print("realignment_counter:", realignment_counter)
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
 
@@ -381,7 +389,7 @@ def main():
 
                         if search[0] == "Black" and search[1] == "Black":
                             print("DIRECAO ERRADA")
-
+                            realignment_counter = 0
                             last_choise = learning_dic[being_learned][0]
                             del learning_dic[being_learned][0]
 
@@ -389,20 +397,23 @@ def main():
 
                             # inicia processo de retorno
 
-                            if len(learning_dic[being_learned]) == 1:
+                            """
+                                if len(learning_dic[being_learned]) == 1:
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
                                 im_learning = False
                                 being_learned = "Undefined"
                                 learning_dic = {}
                                 cooisa = False
                                 print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
+                            """
 
                             print(learning_dic)
                             break
-
+            """
             if search[0] == "Undefined" and search[1] == "Undefined":
                 robot.motors.left.stop()
                 robot.motors.right.stop()
+            """
 
     except KeyboardInterrupt:
         robot.motors.right.stop()
