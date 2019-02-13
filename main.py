@@ -210,7 +210,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 color += 1
 
             if color > 15:
-                if search[0] in ["White", "Undefined"] or search[0] in ["White", "Undefined"]:
+                if search[0] in ["White", "Undefined"] or search[1] in ["White", "Undefined"]:
                     color = 0
 
                     robot.motors.left.stop()
@@ -305,7 +305,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.31.51", 1883, 60)
+client.connect("169.254.37.66", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -327,7 +327,7 @@ client.loop_start()
 
 def main():
     try:
-        # learned_colors = {'Green': 'right', 'Red': 'left', 'Blue': 'forward'}
+        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
         learned_colors = {}
 
         being_learned = "Undefined"
@@ -338,7 +338,7 @@ def main():
         result = None
         global realignment_counter
         while True:
-            print("realignment_counter:", realignment_counter)
+            # print("realignment_counter:", realignment_counter)
             search = robot.sensor_data("ColorSensor")
 
             result = color_realignment(robot, search, robot.infrared_sensors)
@@ -392,6 +392,11 @@ def main():
                             realignment_counter = 0
                             last_choise = learning_dic[being_learned][0]
                             del learning_dic[being_learned][0]
+
+                            robot.motors.right.stop()
+                            robot.motors.left.stop()
+
+                            time.sleep(0.6)
 
                             return_last_color(robot, being_learned, last_choise)
 
