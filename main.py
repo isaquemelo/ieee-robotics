@@ -52,7 +52,7 @@ class Robot:
 
     def update(self):
         # sensors update
-        if self.color_sensors.left.color == "White" and self.color_sensors.right.color == "White":
+        if self.color_sensors.left.color == 6 and self.color_sensors.right.color == 6:
             self.white_counter += 1
         if self.white_counter > 20:
             global realignment_counter
@@ -172,7 +172,7 @@ def undefined_dealing(color_sensor):
             robot.rotate(-30, axis="diferente")
 
 
-last_same_color = []
+last_same_color = [None, ""]
 color = 0
 realignment_counter = 0
 rect_check = False
@@ -215,7 +215,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
             last_same_color = search
 
-            if search[1] not in ["White", "Undefined", "Brown"]:
+            if search[1] not in ["White", "Undefined", "Brown", "Black"]:
                 color += 1
 
             if color > 13:
@@ -229,7 +229,9 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
                     # ev3.Sound.speak("Robot aligned...").wait()
                     robot.in_rect = True
+                    #time.sleep(3) Tempo para verificar se ele está voltando de fato para dentro do quadrado com os sensores de cor.
                     robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                    print("Estou num quadrado: ", robot.rect_color)
                     rect_check = True
                     # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
                     return "On square"
@@ -336,8 +338,8 @@ client.loop_start()
 
 def main():
     try:
-        # learned_colors = {'Green': 'right', 'Red': 'left', 'Blue': 'forward'}
-        learned_colors = {}
+        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        #learned_colors = {}
 
         being_learned = "Undefined"
 
@@ -351,7 +353,7 @@ def main():
             search = robot.sensor_data("ColorSensor")
 
             result = color_realignment(robot, search, robot.infrared_sensors)
-            print(color)
+            #print(color)
             if result == "On square" or robot.in_rect:
                 print("On square")
                 # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
@@ -361,14 +363,17 @@ def main():
                 #     print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
 
                 if not im_learning:
-                    if robot.rect_color != "White":
+                    if robot.rect_color not in ["White", "Undefined", "Black"]:
                         try:
                             print("Tentando executar acao para a cor:", robot.rect_color)
                             print("Aprendidos ate agora:", learned_colors)
 
-                            if learned_colors[robot.rect_color]:
+                            if learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor") not in ["Black", "Brown", "Undefined"]:
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
                                 robot.move_timed(how_long=0.4)
+                                color = 0
+                                time.sleep(0.5)
+
                         except:
                             print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
