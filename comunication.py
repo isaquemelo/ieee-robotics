@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-#!/usr/bin/python3
-=======
-#!usr/bin/python3
-
->>>>>>> 215b45ad2227ff50d0efdca234336660d5197c65
 import paho.mqtt.client as mqtt
 import ev3dev.ev3 as ev3
 from struct import *
