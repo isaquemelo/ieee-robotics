@@ -230,7 +230,12 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                     # ev3.Sound.speak("Robot aligned...").wait()
                     robot.in_rect = True
                     #time.sleep(3) Tempo para verificar se ele está voltando de fato para dentro do quadrado com os sensores de cor.
-                    robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                    if robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"]:
+                        robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                    elif robot.sensor_data("ColorSensor")[1] not in ["White", "Undefined"]:
+                        robot.rect_color = robot.sensor_data("ColorSensor")[1]
+
+
                     print("Estou num quadrado: ", robot.rect_color)
                     rect_check = True
                     # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
@@ -316,7 +321,8 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.61.252", 1883, 60)
+client.connect("169.254.96.118", 1883, 60)
+
 
 
 def on_message(client, userdata, message):
@@ -338,8 +344,8 @@ client.loop_start()
 
 def main():
     try:
-        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        #learned_colors = {}
+        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        learned_colors = {}
 
         being_learned = "Undefined"
 
