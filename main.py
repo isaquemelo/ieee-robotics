@@ -188,6 +188,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
     search = color_sensor_data
 
+
     if robot.in_rect:
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
             # print("Saiuuuuuuu\n\n\n")
@@ -199,12 +200,19 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if search[0] == search[1]:
             pid.output_limits = (-600, 600)
             control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
-            n_speed = 400
+            n_speed = 600
 
-            if control > 600:
-                control = 600
-            if control < -600:
-                control = -600
+            if control > 400:
+                control = 400
+            if control < -400:
+                control = -400
+
+            # n_speed = 400
+            #
+            # if control > 600:
+            #     control = 600
+            # if control < -600:
+            #     control = -600
 
             if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
                 robot.motors.left.run_forever(speed_sp=speed)
