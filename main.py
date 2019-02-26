@@ -453,9 +453,6 @@ def main():
         client.disconnect()
 
 
-# 23
-# 18
-
 
 if __name__ == '__main__':
     main()
