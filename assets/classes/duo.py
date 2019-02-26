@@ -4,6 +4,7 @@ class Duo:
         self.right = sensor_right
 
         if sensor_back is not None:
-            self.back = sensor_back
-
-        self.values = (self.left, self.right)
+            self.alternative = sensor_back
+            self.values = (self.left, self.right, self.alternative)
+        else:
+            self.values = (self.left, self.right)

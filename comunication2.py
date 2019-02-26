@@ -23,9 +23,9 @@ client.loop_start()
 try:
     while True:
 
-        message = pack("iiid", infrared_sensor.left.value(), infrared_sensor.right.value(), ultrasonic_sensor.value(), time.time())
+        message = pack("iidd", infrared_sensor.left.value(), infrared_sensor.right.value(), ultrasonic_sensor.value()/10, time.time())
         client.publish("topic/sensors", message, qos=0)
-        print(unpack("iiid", message))
+        print(unpack("iidd", message))
         time.sleep(0.1)
 
 except KeyboardInterrupt:

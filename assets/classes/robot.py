@@ -1,6 +1,13 @@
-from duo import Duo
+from .duo import Duo
+import ev3dev.ev3 as ev3
+import math
 
 DEFAULT_SPEED = 400
+
+
+def map_values(n, start1, stop1, start2, stop2):
+    return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2
+
 
 class Robot:
     ev3.Sound.speak("Robot started...")
@@ -9,12 +16,13 @@ class Robot:
         # define sensors
         self.gyroscope_sensor = ev3.GyroSensor('in1')
         self.gyroscope_sensor.mode = 'GYRO-ANG'
+        self.DEFAULT_SPEED = DEFAULT_SPEED
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
         # self.ultrasonic_sensors = ev3.UltrasonicSensor('in4')
 
         # define motors
-        self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'))
-        self.handler = ev3.LargeMotor('outC')
+        self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
+        # self.handler = ev3.LargeMotor('outC')
 
         # define status
         self.in_rect = False
@@ -134,3 +142,7 @@ class Robot:
         else:
             self.rotate(90, axis="own")
         return None
+
+    def stop_motors(self):
+        self.motors.left.stop()
+        self.motors.right.stop()

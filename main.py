@@ -329,7 +329,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.96.118", 1883, 60)
+client.connect("169.254.142.94", 1883, 60)
 
 
 
@@ -363,6 +363,8 @@ def main():
         result = None
 
         while True:
+            print("LOOP PRIMARIO")
+            print("TA APRENDENDO = {}".format(im_learning))
             robot.update()
             search = robot.sensor_data("ColorSensor")
 
@@ -377,7 +379,9 @@ def main():
                 #     print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
 
                 if not im_learning:
+                    print("SE O ROBO DEU O BUG ESPERADO JA SEI QUE TEM QUE MEXER COM A robot.rect_colors")
                     if robot.rect_color not in ["White", "Undefined", "Black"]:
+                        print("ENTROU NO IF LOGO NAO DEU O BUG")
                         try:
                             print("Tentando executar acao para a cor:", robot.rect_color)
                             print("Aprendidos ate agora:", learned_colors)
@@ -389,6 +393,7 @@ def main():
                                 time.sleep(0.5)
 
                         except:
+                            print("ENTROU NO EXCEPT")
                             print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
                             learning_dic[being_learned] = ["right", "forward", "left"]
@@ -397,6 +402,7 @@ def main():
                 elif im_learning:
                     robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
+                        print("LOOP SECUNDARIO")
                         robot.update()
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
@@ -426,19 +432,20 @@ def main():
 
                             return_last_color(robot, being_learned, last_choise)
 
+                            print("learned_dic = {}".format(learning_dic))
+                            break
+
                             # inicia processo de retorno
 
-                            """
-                                if len(learning_dic[being_learned]) == 1:
-                                learned_colors[being_learned] = learning_dic[being_learned][0]
-                                im_learning = False
-                                being_learned = "Undefined"
-                                learning_dic = {}
-                                cooisa = False
-                                print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
-                            """
+                        if len(learning_dic[being_learned]) == 1:
+                            learned_colors[being_learned] = learning_dic[being_learned][0]
+                            im_learning = False
+                            being_learned = "Undefined"
+                            learning_dic = {}
+                            cooisa = False
+                            print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
 
-                            print(learning_dic)
+                            print("learned_dic = {}".format(learning_dic))
                             break
             """
             if search[0] == "Undefined" and search[1] == "Undefined":
