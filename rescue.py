@@ -33,13 +33,34 @@ DEFAULT_SPEED = 400
 def rescue(robot, speed=DEFAULT_SPEED):
     robot.motors.left.stop()
     robot.motors.right.stop()
-    robot.rotate(-90, speed=400)
+    robot.rotate(-90, speed=300)
 
     while True:
         search = robot.sensor_data("ColorSensor")
-        if search[0] == "Undefined" or search[1] == "Undefined":
-            robot.motors.alternative.run_forever(speed_sp=speed)
+        if search[0] == "Undefined" and search[1] == "Undefined":
+            robot.motors.alternative.run_forever(speed_sp=800)
             robot.stop_motors()
+            robot.move_timed(how_long=0.3, direction="back", speed=speed)
+            robot.rotate(180, speed=1000)
+
+            while True:
+                search = robot.sensor_data("ColorSensor")
+                robot.motors.right.run_forever(speed_sp=speed)
+                robot.motors.left.run_forever(speed_sp=speed)
+                if search[0] == "Undefined" and search[1] == "Undefined":
+                    robot.stop_motors()
+                    robot.move_timed(how_long=0.3, direction="back", speed=speed)
+                    robot.rotate(-90, speed=300)
+
+                    # remover dps
+                    robot.motors.alternative.stop()
+                    robot.motors.alternative.run_forever(speed_sp=-speed)
+                    robot.move_timed(how_long=1.2, direction="back", speed=speed)
+                    robot.motors.alternative.stop()
+
+                    return
+
+
             break
 
         robot.motors.right.run_forever(speed_sp=speed)
@@ -59,11 +80,11 @@ def main():
                 pass
 
     except KeyboardInterrupt:
-        client.loop_stop()
-        client.disconnect()
-        robot.motors.right.stop()
-        robot.motors.left.stop()
+        #client.loop_stop()
+        #client.disconnect()
+        robot.stop_motors()
         robot.motors.alternative.stop()
+
 
 if __name__ == '__main__':
     main()

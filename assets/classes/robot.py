@@ -1,6 +1,7 @@
 from .duo import Duo
 import ev3dev.ev3 as ev3
 import math
+from datetime import datetime, timedelta
 
 DEFAULT_SPEED = 400
 
@@ -72,7 +73,7 @@ class Robot:
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
 
-        if angle < 30:
+        if angle < 30 and angle > 0:
             speed = map_values(math.fabs(angle), 0, 90, 100, 1000)
 
         reverse = False
@@ -125,11 +126,11 @@ class Robot:
 
         # print("Starting time!")
         while datetime.now() < end_time:
-            robot.motors.left.run_forever(speed_sp=vel)
-            robot.motors.right.run_forever(speed_sp=vel)
+            self.motors.left.run_forever(speed_sp=vel)
+            self.motors.right.run_forever(speed_sp=vel)
         # print("Time is over!")
-        robot.motors.left.stop()
-        robot.motors.right.stop()
+        self.motors.left.stop()
+        self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
         if not still_learning:
