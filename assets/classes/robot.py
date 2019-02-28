@@ -13,6 +13,7 @@ def map_values(n, start1, stop1, start2, stop2):
 class Robot:
     ev3.Sound.speak("Robot started...")
 
+
     def __init__(self):
         # define sensors
         self.gyroscope_sensor = ev3.GyroSensor('in1')
@@ -23,15 +24,18 @@ class Robot:
 
         # define motors
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
+        self.motors.alternative.run_forever(speed_sp=-100)
         # self.handler = ev3.LargeMotor('outC')
 
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
+        self.reverse_path = False
+        self.dor_open = True
 
-        # define position
+        # define network sensors
         self.infrared_sensors = (0, 0)
-
+        self.ultrasonic_sensor = 0
         self.white_counter = 0
 
     def update(self):
@@ -133,16 +137,30 @@ class Robot:
         self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
-        if not still_learning:
-            if direction == "forward":
-                pass
-            elif direction == "left":
+        if self.reverse_path:
+            if not still_learning:
+                if direction == "forward":
+                    pass
+                elif direction == "left":
+                    self.rotate(90, axis="own")
+                elif direction == "right":
+                    self.rotate(-90, axis="own")
+            else:
                 self.rotate(-90, axis="own")
-            elif direction == "right":
-                self.rotate(90, axis="own")
+            return None
+
+
         else:
-            self.rotate(90, axis="own")
-        return None
+            if not still_learning:
+                if direction == "forward":
+                    pass
+                elif direction == "left":
+                    self.rotate(-90, axis="own")
+                elif direction == "right":
+                    self.rotate(90, axis="own")
+            else:
+                self.rotate(90, axis="own")
+            return None
 
     def stop_motors(self):
         self.motors.left.stop()

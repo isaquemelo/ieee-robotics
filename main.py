@@ -142,11 +142,11 @@ class Robot:
 
         # print("Starting time!")
         while datetime.now() < end_time:
-            robot.motors.left.run_forever(speed_sp=vel)
-            robot.motors.right.run_forever(speed_sp=vel)
+            self.motors.left.run_forever(speed_sp=vel)
+            self.motors.right.run_forever(speed_sp=vel)
         # print("Time is over!")
-        robot.motors.left.stop()
-        robot.motors.right.stop()
+        self.motors.left.stop()
+        self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
         if not still_learning:
@@ -329,7 +329,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.3.46", 1883, 60)
+client.connect("169.254.51.126", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -351,7 +351,7 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
         learned_colors = {}
 
         being_learned = "Undefined"
@@ -406,6 +406,7 @@ def main():
                         robot.update()
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
+
 
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and robot.sensor_data("ColorSensor")[1] == "White":
                             white_counter += 1
