@@ -50,7 +50,64 @@ class Robot:
 
         self.white_counter = 0
 
+        # coisas para identificar o final da pista
+        self.plataforma_de_entrega_entrado = None
+        self.fila_para_registro_do_fim = ["White", "White"]
+        # contador de tempo para o identificar de fim de pista
+        self.kon = 0
+
+    def update_no_status_de_registro_de_fim_do_percursso(self):
+        # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
+        # pra o lado esquerdo
+        # cores_sensores = self.sensor_data("ColorSensor").copy()
+        if self.sensor_data("ColorSensor")[0] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != self.sensor_data("ColorSensor")[0]:
+            del self.fila_para_registro_do_fim[0]
+            self.fila_para_registro_do_fim.append(self.sensor_data("ColorSensor")[0])
+            #print("Entrou no if pelo lado esquerdo que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+        # pra o lado direito
+        elif self.sensor_data("ColorSensor")[1] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != self.sensor_data("ColorSensor")[1]:
+            del self.fila_para_registro_do_fim[0]
+            self.fila_para_registro_do_fim.append(self.sensor_data("ColorSensor")[1])
+            #print("Entrou no if pelo lado pra direito que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+
+        # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
+        if self.kon > 13:
+            if "White" not in self.fila_para_registro_do_fim:
+                #print("---------------------------------------------------------------------------------------------------")
+                if self.plataforma_de_entrega_entrado in [None, "saindo"]:
+                    self.plataforma_de_entrega_entrado = "entrando"
+                elif self.plataforma_de_entrega_entrado in [None, "entrando"]:
+                    self.plataforma_de_entrega_entrado = "saindo"
+
+                self.kon = 0
+
+        # ou seja so ira realizar a verificacao depois de um certo tempo e seta a variavel de interesse corretamente
+        # este contador foi realmente necessario posi nao foi possivel fazer a fila armazenar as 3 cores do fim de pista
+        # por isso teve que ser feito uma fila que armazenace apenas dois so as vezes o robo pela as 3 cores
+        # (as vezes por causa do color realigment que nao podia ser retirado) e ai
+        # comutava entre entrando e saindo ao mesmo tempo isso fazia a self.plataforma_de_entrega_entrando ficar louca
+        # so que com o contador para restringir a comutacao desta ele ficou bem melhor mesmo o robo identificando as 3 ou as
+        # duas cores do fim da pista ele so comutara a variavel na hora certa
+        elif self.kon <= 13:
+            self.kon += 1
+
+
+        # parte de debugg
+        #print("self.plataforma_de_entrega = {}".format(self.plataforma_de_entrega_entrado))
+        if self.plataforma_de_entrega_entrado == None:
+            print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONE")
+        elif self.plataforma_de_entrega_entrado == "entrando":
+            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ENTRANDO")
+        elif self.plataforma_de_entrega_entrado == "saindo":
+            print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}SAINDO")
+        print("fila = {}".format(self.fila_para_registro_do_fim))
+
+
     def update(self):
+        # dis se o robo esta entrando ou saindo na plataforma de entrega
+        self.update_no_status_de_registro_de_fim_do_percursso()
         # sensors update
         if self.color_sensors.left.color == 6 and self.color_sensors.right.color == 6:
             self.white_counter += 1
@@ -244,7 +301,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                         robot.rect_color = robot.sensor_data("ColorSensor")[1]
 
 
-                    print("Estou num quadrado: ", robot.rect_color)
+                    #print("Estou num quadrado: ", robot.rect_color)
                     rect_check = True
                     # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
                     return "On square"
@@ -319,17 +376,17 @@ def return_last_color(robot, square_color, last_choice):
         result = color_realignment(robot, search, robot.infrared_sensors)
 
         if result == "On square" and robot.rect_color == square_color:
-            print("TERMNOU IF")
+            #print("TERMNOU IF")
             robot.in_rect = True
             break
 
-    print("\n\nEntregue\n\n")
+    #print("\n\nEntregue\n\n")
 
 
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.51.126", 1883, 60)
+client.connect("169.254.173.223", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -339,7 +396,7 @@ def on_message(client, userdata, message):
 
 
 def on_connect(client, userdata, flags, rc):
-    print("The robots are connected with result code", str(rc))
+    #print("The robots are connected with result code", str(rc))
     client.subscribe("topic/sensors")
 
 
@@ -347,7 +404,6 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 client.loop_start()
-
 
 def main():
     try:
@@ -366,12 +422,11 @@ def main():
             # print("TA APRENDENDO = {}".format(im_learning))
             robot.update()
             search = robot.sensor_data("ColorSensor")
-
             result = color_realignment(robot, search, robot.infrared_sensors)
             white_counter = 0
 
             if result == "On square" or robot.in_rect:
-                print("On square")
+                #print("On square")
                 # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
                 #     learned_colors[being_learned] = learning_dic[being_learned][0]
                 #     im_learning = False
@@ -383,8 +438,8 @@ def main():
                     if robot.rect_color not in ["White", "Undefined", "Black"]:
                         # print("ENTROU NO IF LOGO NAO DEU O BUG")
                         try:
-                            print("Tentando executar acao para a cor:", robot.rect_color)
-                            print("Aprendidos ate agora:", learned_colors)
+                            #print("Tentando executar acao para a cor:", robot.rect_color)
+                            #print("Aprendidos ate agora:", learned_colors)
 
                             if learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor") not in ["Black", "Brown", "Undefined"]:
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
@@ -394,7 +449,7 @@ def main():
 
                         except:
                             # print("ENTROU NO EXCEPT")
-                            print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
+                            #print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
                             learning_dic[being_learned] = ["right", "forward", "left"]
                             im_learning = True
@@ -421,11 +476,11 @@ def main():
                                 im_learning = False
                                 being_learned = "Undefined"
                                 learning_dic = {}
-                                print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                                #print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
                                 break
 
                         if search[0] == "Black" and search[1] == "Black":
-                            print("DIRECAO ERRADA")
+                            #print("DIRECAO ERRADA")
                             global realignment_counter
                             robot.motors.left.stop()
                             robot.motors.right.stop()
@@ -437,7 +492,7 @@ def main():
 
                             return_last_color(robot, being_learned, last_choise)
 
-                            print("learned_dic =", learning_dic)
+                            #print("learned_dic =", learning_dic)
                             break
 
 
