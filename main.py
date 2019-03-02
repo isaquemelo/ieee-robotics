@@ -55,7 +55,6 @@ class Robot:
         self.fila_para_registro_do_fim = ["White", "White"]
         # contador de tempo para o identificar de fim de pista
         self.kon = 14
-        self.wait_until_activate_kon = True
 
     def update_no_status_de_registro_de_fim_do_percursso(self):
         # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
@@ -75,17 +74,15 @@ class Robot:
 
         # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
         if self.kon > 13:
-            self.wait_until_activate_kon = True
+            if "White" not in self.fila_para_registro_do_fim:
+                #print("---------------------------------------------------------------------------------------------------")
+                if self.plataforma_de_entrega_entrado in [None, "saindo"]:
+                    self.plataforma_de_entrega_entrado = "entrando"
+                elif self.plataforma_de_entrega_entrado in [None, "entrando"]:
+                    self.plataforma_de_entrega_entrado = "saindo"
 
-        if "White" not in self.fila_para_registro_do_fim and self.wait_until_activate_kon == True:
-            #print("---------------------------------------------------------------------------------------------------")
-            if self.plataforma_de_entrega_entrado in [None, "saindo"]:
-                self.plataforma_de_entrega_entrado = "entrando"
-            elif self.plataforma_de_entrega_entrado in [None, "entrando"]:
-                self.plataforma_de_entrega_entrado = "saindo"
+                self.kon = 0
 
-            self.kon = 0
-            self.wait_until_activate_kon = False
 
         # ou seja so ira realizar a verificacao depois de um certo tempo e seta a variavel de interesse corretamente
         # este contador foi realmente necessario posi nao foi possivel fazer a fila armazenar as 3 cores do fim de pista
@@ -94,9 +91,8 @@ class Robot:
         # comutava entre entrando e saindo ao mesmo tempo isso fazia a self.plataforma_de_entrega_entrando ficar louca
         # so que com o contador para restringir a comutacao desta ele ficou bem melhor mesmo o robo identificando as 3 ou as
         # duas cores do fim da pista ele so comutara a variavel na hora certa
-        if self.wait_until_activate_kon == False:
-            if self.kon <= 13:
-                self.kon += 1
+        elif self.kon <= 13:
+            self.kon += 1
 
 
 
