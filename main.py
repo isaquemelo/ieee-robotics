@@ -7,6 +7,7 @@ import time
 import paho.mqtt.client as mqtt
 from struct import *
 from simple_pid import PID
+from rescue import rescue
 
 
 def map_values(n, start1, stop1, start2, stop2):
@@ -19,9 +20,10 @@ class Duo:
         self.right = sensor_right
 
         if sensor_back is not None:
-            self.back = sensor_back
-
-        self.values = (self.left, self.right)
+            self.alternative = sensor_back
+            self.values = (self.left, self.right, self.alternative)
+        else:
+            self.values = (self.left, self.right)
 
 
 DEFAULT_SPEED = 400
@@ -35,23 +37,27 @@ class Robot:
         self.gyroscope_sensor = ev3.GyroSensor('in1')
         self.gyroscope_sensor.mode = 'GYRO-ANG'
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
-        # self.ultrasonic_sensors = ev3.UltrasonicSensor('in4')
+        self.ultrasonic_sensor = ev3.UltrasonicSensor('in4')
+        self.ultrasonic_sensor.mode = 'US-DIST-CM'
 
         # define motors
-        self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'))
-        self.handler = ev3.LargeMotor('outC')
+        self.motors = Duo(ev3.LargeMotor('outD'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
+        #self.motors.alternative.run_forever(speed_sp=-100)
+        #self.handler = ev3.LargeMotor('outC')
 
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
+        self.reverse_path = None
+        self.dor_open = True
+        self.captura = False
 
-        # define position
+        # define network sensors
         self.infrared_sensors = (0, 0)
-
+        #self.ultrasonic_sensor = 255
         self.white_counter = 0
 
         # coisas para identificar o final da pista
-        self.plataforma_de_entrega_entrado = None
         self.fila_para_registro_do_fim = ["White", "White"]
         # contador de tempo para o identificar de fim de pista
         self.kon = 14
@@ -60,26 +66,29 @@ class Robot:
         # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
         # pra o lado esquerdo
         # cores_sensores = self.sensor_data("ColorSensor").copy()
-        if self.sensor_data("ColorSensor")[0] not in ["Black", "Undefined", "Brown"] and \
-                self.fila_para_registro_do_fim[-1] != self.sensor_data("ColorSensor")[0]:
+        cor_do_sensor = self.sensor_data("ColorSensor")
+        if cor_do_sensor[0] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != cor_do_sensor[0]:
             del self.fila_para_registro_do_fim[0]
-            self.fila_para_registro_do_fim.append(self.sensor_data("ColorSensor")[0])
-            #print("Entrou no if pelo lado esquerdo que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+            self.fila_para_registro_do_fim.append(cor_do_sensor[0])
+            # print("Entrou no if pelo lado esquerdo que armazena na fila = {}".format(self.fila_para_registro_do_fim))
         # pra o lado direito
-        elif self.sensor_data("ColorSensor")[1] not in ["Black", "Undefined", "Brown"] and \
-                self.fila_para_registro_do_fim[-1] != self.sensor_data("ColorSensor")[1]:
+
+        elif cor_do_sensor[1] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != cor_do_sensor[1]:
             del self.fila_para_registro_do_fim[0]
-            self.fila_para_registro_do_fim.append(self.sensor_data("ColorSensor")[1])
-            #print("Entrou no if pelo lado pra direito que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+            self.fila_para_registro_do_fim.append(cor_do_sensor[1])
+            # print("Entrou no if pelo lado pra direito que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+
 
         # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
         if self.kon > 13:
             if "White" not in self.fila_para_registro_do_fim:
-                #print("---------------------------------------------------------------------------------------------------")
-                if self.plataforma_de_entrega_entrado in [None, "saindo"]:
-                    self.plataforma_de_entrega_entrado = "entrando"
-                elif self.plataforma_de_entrega_entrado in [None, "entrando"]:
-                    self.plataforma_de_entrega_entrado = "saindo"
+                # print("---------------------------------------------------------------------------------------------------")
+                if self.reverse_path in [True, None]:
+                    self.reverse_path = False
+                else:
+                    self.reverse_path = True
 
                 self.kon = 0
 
@@ -94,21 +103,19 @@ class Robot:
         elif self.kon <= 13:
             self.kon += 1
 
-
-
         # parte de debugg
-        #print("self.plataforma_de_entrega = {}".format(self.plataforma_de_entrega_entrado))
-        if self.plataforma_de_entrega_entrado == None:
+        # print("self.plataforma_de_entrega = {}".format(self.plataforma_de_entrega_entrado))
+
+        if self.reverse_path == None:
             print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONE")
-        elif self.plataforma_de_entrega_entrado == "entrando":
+        elif self.reverse_path == False:
             print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ENTRANDO")
-        elif self.plataforma_de_entrega_entrado == "saindo":
+        elif self.reverse_path == True:
             print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}SAINDO")
         print("fila = {}".format(self.fila_para_registro_do_fim))
 
 
     def update(self):
-        # dis se o robo esta entrando ou saindo na plataforma de entrega
         self.update_no_status_de_registro_de_fim_do_percursso()
         # sensors update
         if self.color_sensors.left.color == 6 and self.color_sensors.right.color == 6:
@@ -129,6 +136,9 @@ class Robot:
 
         elif sensor_name == "GyroSensor":
             return self.gyroscope_sensor.angle
+
+        elif sensor_name == "Ultrasom":
+            return self.ultrasonic_sensor.value()/10
 
         elif sensor_name == "ColorSensor":
             dict_colors = {
@@ -208,19 +218,38 @@ class Robot:
         self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
-        if not still_learning:
-            if direction == "forward":
-                pass
-            elif direction == "left":
-                self.rotate(-90, axis="own")
-            elif direction == "right":
+        if self.reverse_path == True:
+            if not still_learning:
+                if direction == "forward":
+                    pass
+                elif direction == "left":
+                    self.rotate(90, axis="own")
+                elif direction == "right":
+                    self.rotate(-90, axis="own")
+            else:
                 self.rotate(90, axis="own")
+            return None
+
+
         else:
-            self.rotate(90, axis="own")
-        return None
+            if not still_learning:
+                if direction == "forward":
+                    pass
+                elif direction == "left":
+                    self.rotate(-90, axis="own")
+                elif direction == "right":
+                    self.rotate(90, axis="own")
+            else:
+                self.rotate(90, axis="own")
+            return None
+
+    def stop_motors(self):
+        self.motors.left.stop()
+        self.motors.right.stop()
 
 
 def undefined_dealing(color_sensor):
+    print("undefined dealing ><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><")
     sensor_color = color_sensor
     if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":
         if sensor_color[0] == "Undefined":
@@ -256,6 +285,13 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             return None
 
     if move_forward:
+        print (robot.sensor_data("Ultrasom"))
+        if robot.sensor_data("Ultrasom") < 30:
+            print("Entrei no rescue")
+            robot.stop_motors()
+            rescue(robot)
+            time.sleep(3)
+
         if search[0] == search[1]:
             pid.output_limits = (-600, 600)
             control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
@@ -285,13 +321,14 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             if search[1] not in ["White", "Undefined", "Brown", "Black"]:
                 color += 1
 
-            if color > 13:
+            if color > 9: # saiu de 13 pra nove porque o contador nao tava chegando a 13
+                print("color > 9")
                 if search[0] in ["White", "Undefined"] or search[1] in ["White", "Undefined"]:
                     color = 0
 
                     robot.motors.left.stop()
                     robot.motors.right.stop()
-
+                    print("Entrei no color = 0")
                     robot.move_timed(how_long=0.4, direction="back")
 
                     # ev3.Sound.speak("Robot aligned...").wait()
@@ -388,12 +425,13 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.173.223", 1883, 60)
+client.connect("169.254.103.46", 1883, 60)
 
 
 def on_message(client, userdata, message):
     carga = unpack("iid", message.payload)
     robot.infrared_sensors = carga[:2]
+    # robot.ultrasonic_sensor = carga[2]
     # print("Received message:", carga[:2], time.time() - float(carga[2]))
 
 
@@ -407,9 +445,10 @@ client.on_message = on_message
 
 client.loop_start()
 
+
 def main():
     try:
-        learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
+        #learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
         learned_colors = {}
 
         being_learned = "Undefined"
@@ -424,7 +463,9 @@ def main():
             # print("TA APRENDENDO = {}".format(im_learning))
             robot.update()
             search = robot.sensor_data("ColorSensor")
+
             result = color_realignment(robot, search, robot.infrared_sensors)
+
             white_counter = 0
 
             if result == "On square" or robot.in_rect:
@@ -440,18 +481,18 @@ def main():
                     if robot.rect_color not in ["White", "Undefined", "Black"]:
                         # print("ENTROU NO IF LOGO NAO DEU O BUG")
                         try:
-                            #print("Tentando executar acao para a cor:", robot.rect_color)
-                            #print("Aprendidos ate agora:", learned_colors)
+                            print("Tentando executar acao para a cor:", robot.rect_color)
+                            print("Aprendidos ate agora:", learned_colors)
 
-                            if learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor") not in ["Black", "Brown", "Undefined"]:
+                            if learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor")[0] not in ["Black", "Brown", "Undefined"]:
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
                                 robot.move_timed(how_long=0.4)
                                 color = 0
                                 time.sleep(0.5)
 
                         except:
-                            # print("ENTROU NO EXCEPT")
-                            #print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
+                            print("ENTROU NO EXCEPT")
+                            print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
                             learning_dic[being_learned] = ["right", "forward", "left"]
                             im_learning = True
@@ -459,7 +500,7 @@ def main():
                 elif im_learning:
                     robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
-                        # print("LOOP SECUNDARIO")
+                        print("LOOP SECUNDARIO")
                         robot.update()
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
@@ -468,7 +509,7 @@ def main():
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and robot.sensor_data("ColorSensor")[1] == "White":
                             white_counter += 1
 
-                        print(white_counter)
+                        #print(white_counter)
 
                         # print("On square loop secundario")
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
@@ -478,11 +519,11 @@ def main():
                                 im_learning = False
                                 being_learned = "Undefined"
                                 learning_dic = {}
-                                #print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                                print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
                                 break
 
                         if search[0] == "Black" and search[1] == "Black":
-                            #print("DIRECAO ERRADA")
+                            print("DIRECAO ERRADA")
                             global realignment_counter
                             robot.motors.left.stop()
                             robot.motors.right.stop()
@@ -506,7 +547,6 @@ def main():
                             learning_dic = {}
                             cooisa = False
                             print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
-
                             print("learned_dic = {}".format(learning_dic))
                             break
                         """
@@ -518,12 +558,13 @@ def main():
                 robot.motors.right.stop()
 
 
+
     except KeyboardInterrupt:
         robot.motors.right.stop()
         robot.motors.left.stop()
+        robot.motors.alternative.stop()
         client.loop_stop()
         client.disconnect()
-
 
 
 if __name__ == '__main__':

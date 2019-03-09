@@ -13,32 +13,91 @@ def map_values(n, start1, stop1, start2, stop2):
 class Robot:
     ev3.Sound.speak("Robot started...")
 
-
     def __init__(self):
         # define sensors
         self.gyroscope_sensor = ev3.GyroSensor('in1')
         self.gyroscope_sensor.mode = 'GYRO-ANG'
-        self.DEFAULT_SPEED = DEFAULT_SPEED
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
-        # self.ultrasonic_sensors = ev3.UltrasonicSensor('in4')
+        self.ultrasonic_sensor = ev3.UltrasonicSensor('in4')
+        self.ultrasonic_sensor.mode = 'US-DIST-CM'
 
         # define motors
-        self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
-        self.motors.alternative.run_forever(speed_sp=-100)
-        # self.handler = ev3.LargeMotor('outC')
+        self.motors = Duo(ev3.LargeMotor('outD'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
+        #self.motors.alternative.run_forever(speed_sp=-100)
+        #self.handler = ev3.LargeMotor('outC')
 
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
-        self.reverse_path = True
+        self.reverse_path = None
         self.dor_open = True
+        self.captura = False
 
         # define network sensors
         self.infrared_sensors = (0, 0)
-        self.ultrasonic_sensor = 0
+        #self.ultrasonic_sensor = 255
         self.white_counter = 0
 
+        # coisas para identificar o final da pista
+        self.fila_para_registro_do_fim = ["White", "White"]
+        # contador de tempo para o identificar de fim de pista
+        self.kon = 14
+
+    def update_no_status_de_registro_de_fim_do_percursso(self):
+        # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
+        # pra o lado esquerdo
+        # cores_sensores = self.sensor_data("ColorSensor").copy()
+        cor_do_sensor = self.sensor_data("ColorSensor")
+        if cor_do_sensor[0] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != cor_do_sensor[0]:
+            del self.fila_para_registro_do_fim[0]
+            self.fila_para_registro_do_fim.append(cor_do_sensor[0])
+            # print("Entrou no if pelo lado esquerdo que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+        # pra o lado direito
+
+        elif cor_do_sensor[1] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != cor_do_sensor[1]:
+            del self.fila_para_registro_do_fim[0]
+            self.fila_para_registro_do_fim.append(cor_do_sensor[1])
+            # print("Entrou no if pelo lado pra direito que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+
+
+        # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
+        if self.kon > 13:
+            if "White" not in self.fila_para_registro_do_fim:
+                # print("---------------------------------------------------------------------------------------------------")
+                if self.reverse_path in [True, None]:
+                    self.reverse_path = False
+                else:
+                    self.reverse_path = True
+
+                self.kon = 0
+
+
+        # ou seja so ira realizar a verificacao depois de um certo tempo e seta a variavel de interesse corretamente
+        # este contador foi realmente necessario posi nao foi possivel fazer a fila armazenar as 3 cores do fim de pista
+        # por isso teve que ser feito uma fila que armazenace apenas dois so as vezes o robo pela as 3 cores
+        # (as vezes por causa do color realigment que nao podia ser retirado) e ai
+        # comutava entre entrando e saindo ao mesmo tempo isso fazia a self.plataforma_de_entrega_entrando ficar louca
+        # so que com o contador para restringir a comutacao desta ele ficou bem melhor mesmo o robo identificando as 3 ou as
+        # duas cores do fim da pista ele so comutara a variavel na hora certa
+        elif self.kon <= 13:
+            self.kon += 1
+
+        # parte de debugg
+        # print("self.plataforma_de_entrega = {}".format(self.plataforma_de_entrega_entrado))
+
+        if self.reverse_path == None:
+            print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONE")
+        elif self.reverse_path == False:
+            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ENTRANDO")
+        elif self.reverse_path == True:
+            print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}SAINDO")
+        print("fila = {}".format(self.fila_para_registro_do_fim))
+
+
     def update(self):
+        self.update_no_status_de_registro_de_fim_do_percursso()
         # sensors update
         if self.color_sensors.left.color == 6 and self.color_sensors.right.color == 6:
             self.white_counter += 1
@@ -59,6 +118,9 @@ class Robot:
         elif sensor_name == "GyroSensor":
             return self.gyroscope_sensor.angle
 
+        elif sensor_name == "Ultrasom":
+            return self.ultrasonic_sensor.value()/10
+
         elif sensor_name == "ColorSensor":
             dict_colors = {
 
@@ -77,7 +139,7 @@ class Robot:
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
 
-        if angle < 30 and angle > 0:
+        if angle < 30:
             speed = map_values(math.fabs(angle), 0, 90, 100, 1000)
 
         reverse = False
@@ -137,7 +199,7 @@ class Robot:
         self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
-        if self.reverse_path:
+        if self.reverse_path == True:
             if not still_learning:
                 if direction == "forward":
                     pass
@@ -146,7 +208,7 @@ class Robot:
                 elif direction == "right":
                     self.rotate(-90, axis="own")
             else:
-                self.rotate(-90, axis="own")
+                self.rotate(90, axis="own")
             return None
 
 

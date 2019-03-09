@@ -18,16 +18,16 @@ client = mqtt.Client()
 client.connect("localhost", 1883, 60)
 
 infrared_sensor = Duo(ev3.InfraredSensor('in1'), ev3.InfraredSensor('in2'))
-ultrasonic_sensor = ev3.UltrasonicSensor('in3')
-ultrasonic_sensor.mode = 'US-DIST-CM'
+# ultrasonic_sensor = ev3.UltrasonicSensor('in3')
+# ultrasonic_sensor.mode = 'US-DIST-CM'
 client.loop_start()
 
 try:
     while True:
 
-        message = pack("iidd", infrared_sensor.left.value(), infrared_sensor.right.value(), ultrasonic_sensor.value()/10, time.time())
+        message = pack("iid", infrared_sensor.left.value(), infrared_sensor.right.value(), time.time())
         client.publish("topic/sensors", message, qos=0)
-        print(unpack("iidd", message))
+        print(unpack("iid", message))
         time.sleep(0.1)
 
 except KeyboardInterrupt:
