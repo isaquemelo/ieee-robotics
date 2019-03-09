@@ -49,13 +49,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             return None
 
     if move_forward:
-        print (robot.sensor_data("Ultrasom"))
-        if robot.sensor_data("Ultrasom") < 30:
-            print("Entrei no rescue")
-            robot.stop_motors()
-            rescue(robot)
-            time.sleep(3)
-
         if search[0] == search[1]:
             pid.output_limits = (-600, 600)
             control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
@@ -187,13 +180,13 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.103.46", 1883, 60)
+client.connect("169.254.149.253", 1883, 60)
 
 
 def on_message(client, userdata, message):
-    carga = unpack("iid", message.payload)
+    carga = unpack("iidd", message.payload)
     robot.infrared_sensors = carga[:2]
-    #robot.ultrasonic_sensor = carga[2]
+    robot.ultrasonic_sensor = carga[2]
     # print("Received message:", carga[:2], time.time() - float(carga[2]))
 
 
@@ -227,6 +220,11 @@ def main():
             search = robot.sensor_data("ColorSensor")
 
             result = color_realignment(robot, search, robot.infrared_sensors)
+
+            if robot.ultrasonic_sensor < 30:
+                robot.stop_motors()
+                rescue(robot)
+                time.sleep(3)
 
             white_counter = 0
 
