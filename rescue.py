@@ -44,7 +44,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
             robot.motors.alternative.run_timed(time_sp=1000, speed_sp=-1000)
             robot.dor_open = True
 
-        if search[0] == "Undefined" or search[1] == "Undefined":
+        if search[0] == "Undefined" and search[1] == "Undefined":
             robot.motors.alternative.run_forever(speed_sp=800)
             robot.stop_motors()
             robot.move_timed(how_long=0.3, direction="back", speed=speed)

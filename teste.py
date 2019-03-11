@@ -1,13 +1,11 @@
-from .duo import Duo
+import ev3dev.ev3 as ev3
+from assets.classes.duo import Duo
 import ev3dev.ev3 as ev3
 import math
 from datetime import datetime, timedelta
-
+from simple_pid import PID
+import time
 DEFAULT_SPEED = 400
-
-
-def map_values(n, start1, stop1, start2, stop2):
-    return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2
 
 
 class Robot:
@@ -167,3 +165,62 @@ class Robot:
     def stop_motors(self):
         self.motors.left.stop()
         self.motors.right.stop()
+
+
+def rescue(robot, speed=DEFAULT_SPEED):
+    robot.motors.left.stop()
+    robot.motors.right.stop()
+    robot.rotate(-90, speed=300)
+
+    while True:
+        search = robot.sensor_data("ColorSensor")
+
+        if robot.dor_open == False:
+            robot.motors.alternative.run_timed(time_sp=1000, speed_sp=-1000)
+            robot.dor_open = True
+
+        if search[0] == "Undefined" and search[1] == "Undefined":
+            robot.motors.alternative.run_forever(speed_sp=800)
+            robot.stop_motors()
+            robot.move_timed(how_long=0.3, direction="back", speed=speed)
+            robot.rotate(180, speed=1000)
+
+            while True:
+                search = robot.sensor_data("ColorSensor")
+                robot.motors.right.run_forever(speed_sp=speed)
+                robot.motors.left.run_forever(speed_sp=speed)
+                if search[0] == "Undefined" or search[1] == "Undefined":
+                    robot.stop_motors()
+                    robot.move_timed(how_long=0.3, direction="back", speed=speed)
+                    robot.rotate(-90, speed=300)
+
+                    # remover dps
+                    robot.motors.alternative.stop()
+                    robot.motors.alternative.run_forever(speed_sp=-speed)
+                    robot.move_timed(how_long=1.4, direction="back", speed=speed)
+                    robot.motors.alternative.stop()
+                    robot.dor_open = False
+
+                    return
+
+
+            break
+
+        robot.motors.right.run_forever(speed_sp=speed)
+        robot.motors.left.run_forever(speed_sp=speed)
+
+
+
+robot = Robot()
+
+
+ultrasonic_sensor = ev3.UltrasonicSensor('in4')
+
+while True:
+    robot.motors.left.run_forever(speed_sp=325)
+    robot.motors.right.run_forever(speed_sp=325)
+
+    if ultrasonic_sensor.value()/10 < 20:
+        robot.stop_motors()
+        rescue(robot)
+        time.sleep(3)

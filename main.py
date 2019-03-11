@@ -52,19 +52,19 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if search[0] == search[1]:
             pid.output_limits = (-600, 600)
             control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
-            n_speed = 600
+            n_speed = 280
 
-            if control > 400:
-                control = 400
-            if control < -400:
-                control = -400
+            # if control > 400:
+            #     control = 400
+            # if control < -400:
+            #     control = -400
 
             # n_speed = 400
             #
-            # if control > 600:
-            #     control = 600
-            # if control < -600:
-            #     control = -600
+            if control > 60:
+                control = 60
+            if control < -60:
+                control = -60
 
             if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
                 robot.motors.left.run_forever(speed_sp=speed)
@@ -72,6 +72,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             else:
                 robot.motors.left.run_forever(speed_sp=n_speed + control)
                 robot.motors.right.run_forever(speed_sp=n_speed - control)
+                # robot.motors.left.run_forever(speed_sp=n_speed)
+                # robot.motors.right.run_forever(speed_sp=n_speed)
 
             last_same_color = search
 
@@ -180,7 +182,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.150.209", 1883, 60)
+client.connect("169.254.6.78", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -202,8 +204,8 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
-        learned_colors = {}
+        learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
+        #learned_colors = {}
 
         being_learned = "Undefined"
 
@@ -220,7 +222,8 @@ def main():
 
             result = color_realignment(robot, search, robot.infrared_sensors)
 
-            if robot.sensor_data("Ultrasonic") < 30:
+            print("ULTRASOM", robot.sensor_data("Ultrasonic"))
+            if robot.sensor_data("Ultrasonic") < 20:
                 robot.stop_motors()
                 rescue(robot)
                 time.sleep(3)
@@ -261,6 +264,12 @@ def main():
                 elif im_learning:
                     robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
+                        print("ULTRASOM", robot.sensor_data("Ultrasonic"))
+                        if robot.sensor_data("Ultrasonic") < 20:
+                            robot.stop_motors()
+                            rescue(robot)
+                            time.sleep(3)
+
                         # print("LOOP SECUNDARIO")
                         robot.update()
                         search = robot.sensor_data("ColorSensor")
@@ -299,18 +308,6 @@ def main():
 
                             print("learned_dic =", learning_dic)
                             break
-
-                        """
-                        if len(learning_dic[being_learned]) == 1:
-                            learned_colors[being_learned] = learning_dic[being_learned][0]
-                            im_learning = False
-                            being_learned = "Undefined"
-                            learning_dic = {}
-                            cooisa = False
-                            print("Aprendi uma nova cor, segue o dicionario (POR EXCLUSSAO):", learned_colors)
-                            print("learned_dic = {}".format(learning_dic))
-                            break
-                        """
 
                     white_counter = 0
 
