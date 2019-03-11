@@ -58,13 +58,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     robot.stop_motors()
                     robot.move_timed(how_long=0.3, direction="back", speed=speed)
                     robot.rotate(-90, speed=300)
-
-                    # remover dps
-                    robot.motors.alternative.stop()
-                    robot.motors.alternative.run_forever(speed_sp=-speed)
-                    robot.move_timed(how_long=1.4, direction="back", speed=speed)
-                    robot.motors.alternative.stop()
-                    robot.dor_open = False
+                    robot.has_doll = True
 
                     return
 
@@ -75,38 +69,27 @@ def rescue(robot, speed=DEFAULT_SPEED):
         robot.motors.left.run_forever(speed_sp=speed)
 
 
-# robot = Robot()
+def drop_doll(robot, speed=DEFAULT_SPEED):
+    # remover dps
+    robot.motors.alternative.stop()
+    robot.motors.alternative.run_forever(speed_sp=-speed)
+    robot.move_timed(how_long=1.4, direction="back", speed=speed)
+    robot.motors.alternative.stop()
+    robot.dor_open = False
+    robot.has_doll = False
 
 
-# def main():
-#     try:
-#         atual = 0
-#         anterior = 0
-#         while True:
-#             search = robot.sensor_data("ColorSensor")
-#             atual = carga[2]
-#             if search[0] == search[1]:
-#                 robot.motors.right.run_forever(speed_sp=450)
-#                 robot.motors.left.run_forever(speed_sp=450)
-#
-#
-#             print(atual)
-#             #print(atual - anterior)
-#
-#             if atual < 30:
-#                 print("agora")
-#                 robot.stop_motors()
-#                 rescue(robot)
-#                 time.sleep(3)
-#
-#             anterior = atual
-#
-#     except KeyboardInterrupt:
-#         #client.loop_stop()
-#         #client.disconnect()
-#         robot.stop_motors()
-#         robot.motors.alternative.stop()
-#
-#
-# if __name__ == '__main__':
-#     main()
+def bounding_box(robot, speed=DEFAULT_SPEED):
+    while True:
+        print("BOUNDING BOX")
+        search = robot.sensor_data("ColorSensor")
+        if search[0] == "Black" and search[1] == "Black":
+            robot.move_timed(how_long=1.3, direction="forward", speed=speed)
+            drop_doll(robot)
+            robot.rotate(180)
+            robot.reverse_path = True
+            robot.move_timed(how_long=5.3, direction="forward", speed=speed)
+            break
+
+    return
+

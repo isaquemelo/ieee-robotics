@@ -8,8 +8,7 @@ import paho.mqtt.client as mqtt
 from struct import *
 from simple_pid import PID
 from assets.classes.robot import Robot
-from rescue import rescue
-
+from rescue import rescue, bounding_box
 
 DEFAULT_SPEED = 400
 
@@ -52,19 +51,27 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if search[0] == search[1]:
             pid.output_limits = (-600, 600)
             control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
-            n_speed = 280
 
-            # if control > 400:
-            #     control = 400
-            # if control < -400:
-            #     control = -400
+            if robot.reverse_path == None:
+                n_speed = 600
+                if control > 400:
+                    control = 400
+                if control < -400:
+                    control = -400
+            else:
+                n_speed = 280
+
+                if control > 60:
+                    control = 60
+                if control < -60:
+                    control = -60
+
 
             # n_speed = 400
             #
-            if control > 60:
-                control = 60
-            if control < -60:
-                control = -60
+
+
+
 
             if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
                 robot.motors.left.run_forever(speed_sp=speed)
@@ -182,7 +189,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.6.78", 1883, 60)
+client.connect("169.254.111.181", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -205,7 +212,7 @@ client.loop_start()
 def main():
     try:
         learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
-        #learned_colors = {}
+        # learned_colors = {}
 
         being_learned = "Undefined"
 
@@ -218,15 +225,21 @@ def main():
             # print("LOOP PRIMARIO")
             # print("TA APRENDENDO = {}".format(im_learning))
             robot.update()
+
+            if robot.reverse_path == False:
+                print("INICCIANDO BOUDING BOX")
+                bounding_box(robot)
+                continue
+
             search = robot.sensor_data("ColorSensor")
 
             result = color_realignment(robot, search, robot.infrared_sensors)
 
-            print("ULTRASOM", robot.sensor_data("Ultrasonic"))
+            # print("ULTRASOM", robot.sensor_data("Ultrasonic"))
             if robot.sensor_data("Ultrasonic") < 20:
                 robot.stop_motors()
                 rescue(robot)
-                time.sleep(3)
+                time.sleep(1)
 
             white_counter = 0
 
@@ -268,7 +281,7 @@ def main():
                         if robot.sensor_data("Ultrasonic") < 20:
                             robot.stop_motors()
                             rescue(robot)
-                            time.sleep(3)
+                            time.sleep(1)
 
                         # print("LOOP SECUNDARIO")
                         robot.update()

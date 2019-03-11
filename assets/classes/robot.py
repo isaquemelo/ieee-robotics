@@ -29,13 +29,72 @@ class Robot:
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
-        self.reverse_path = False
+        self.reverse_path = None
         self.dor_open = True
+        self.has_doll = False
 
         # define network sensors
         self.infrared_sensors = (0, 0)
         #self.ultrasonic_sensor = 255
         self.white_counter = 0
+
+        # coisas para identificar o final da pista
+        self.fila_para_registro_do_fim = ["White", "White"]
+        # contador de tempo para o identificar de fim de pista
+        self.kon_const = 25
+        self.kon = self.kon_const + 1
+
+    def update_no_status_de_registro_de_fim_do_percursso(self):
+        # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
+        # pra o lado esquerdo
+        # cores_sensores = self.sensor_data("ColorSensor").copy()
+        cor_do_sensor = self.sensor_data("ColorSensor")
+        if cor_do_sensor[0] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != cor_do_sensor[0]:
+            del self.fila_para_registro_do_fim[0]
+            self.fila_para_registro_do_fim.append(cor_do_sensor[0])
+            # print("Entrou no if pelo lado esquerdo que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+        # pra o lado direito
+
+        elif cor_do_sensor[1] not in ["Black", "Undefined", "Brown"] and \
+                self.fila_para_registro_do_fim[-1] != cor_do_sensor[1]:
+            del self.fila_para_registro_do_fim[0]
+            self.fila_para_registro_do_fim.append(cor_do_sensor[1])
+            # print("Entrou no if pelo lado pra direito que armazena na fila = {}".format(self.fila_para_registro_do_fim))
+
+        # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
+        if self.kon > self.kon_const:
+            if "White" not in self.fila_para_registro_do_fim:
+                # print("---------------------------------------------------------------------------------------------------")
+                if self.reverse_path in [True, None]:
+                    self.reverse_path = False
+                else:
+                    self.reverse_path = True
+
+                self.kon = 0
+
+
+        # ou seja so ira realizar a verificacao depois de um certo tempo e seta a variavel de interesse corretamente
+        # este contador foi realmente necessario posi nao foi possivel fazer a fila armazenar as 3 cores do fim de pista
+        # por isso teve que ser feito uma fila que armazenace apenas dois so as vezes o robo pela as 3 cores
+        # (as vezes por causa do color realigment que nao podia ser retirado) e ai
+        # comutava entre entrando e saindo ao mesmo tempo isso fazia a self.plataforma_de_entrega_entrando ficar louca
+        # so que com o contador para restringir a comutacao desta ele ficou bem melhor mesmo o robo identificando as 3 ou as
+        # duas cores do fim da pista ele so comutara a variavel na hora certa
+        elif self.kon <= self.kon_const:
+            self.kon += 1
+
+        # parte de debugg
+        # print("self.plataforma_de_entrega = {}".format(self.plataforma_de_entrega_entrado))
+        """
+        if self.reverse_path == None:
+            print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONE")
+        elif self.reverse_path == False:
+            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ENTRANDO")
+        elif self.reverse_path == True:
+            print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}SAINDO")
+        print("fila = {}".format(self.fila_para_registro_do_fim))
+        """
 
     def update(self):
         # sensors update
@@ -47,6 +106,7 @@ class Robot:
             self.white_counter = 0
         # history update
         # position update
+        self.update_no_status_de_registro_de_fim_do_percursso()
         pass
 
     def sensor_data(self, sensor_name):
