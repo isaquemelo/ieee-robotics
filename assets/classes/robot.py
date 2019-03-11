@@ -20,22 +20,22 @@ class Robot:
         self.gyroscope_sensor.mode = 'GYRO-ANG'
         self.DEFAULT_SPEED = DEFAULT_SPEED
         self.color_sensors = Duo(ev3.ColorSensor('in2'), ev3.ColorSensor('in3'))
-        # self.ultrasonic_sensors = ev3.UltrasonicSensor('in4')
+        self.ultrasonic_sensors = ev3.UltrasonicSensor('in4')
 
         # define motors
-        self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
+        self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outD'), ev3.LargeMotor('outC'))
         self.motors.alternative.run_forever(speed_sp=-100)
         # self.handler = ev3.LargeMotor('outC')
 
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
-        self.reverse_path = True
+        self.reverse_path = False
         self.dor_open = True
 
         # define network sensors
         self.infrared_sensors = (0, 0)
-        self.ultrasonic_sensor = 0
+        self.ultrasonic_sensor = 255
         self.white_counter = 0
 
     def update(self):
@@ -58,6 +58,9 @@ class Robot:
 
         elif sensor_name == "GyroSensor":
             return self.gyroscope_sensor.angle
+
+        elif sensor_name == "Ultrasonic":
+            return self.ultrasonic_sensors.value()/10
 
         elif sensor_name == "ColorSensor":
             dict_colors = {
