@@ -10,7 +10,7 @@ from simple_pid import PID
 from assets.classes.robot import Robot
 from rescue import rescue, bounding_box
 
-DEFAULT_SPEED = 400
+DEFAULT_SPEED = 350
 
 
 def undefined_dealing(color_sensor):
@@ -52,7 +52,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             pid.output_limits = (-600, 600)
             control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
 
-            if robot.reverse_path == None:
+            if robot.reverse_path is None or robot.has_doll == True:
                 n_speed = 600
                 if control > 400:
                     control = 400
@@ -69,9 +69,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
             # n_speed = 400
             #
-
-
-
 
             if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
                 robot.motors.left.run_forever(speed_sp=speed)
@@ -98,7 +95,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
                     # ev3.Sound.speak("Robot aligned...").wait()
                     robot.in_rect = True
-                    # time.sleep(3) Tempo para verificar se ele está voltando de fato para dentro do quadrado com os sensores de cor.
                     if robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"]:
                         robot.rect_color = robot.sensor_data("ColorSensor")[0]
                     elif robot.sensor_data("ColorSensor")[1] not in ["White", "Undefined"]:
@@ -189,7 +185,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.111.181", 1883, 60)
+client.connect("169.254.179.151", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -211,8 +207,8 @@ client.loop_start()
 
 def main():
     try:
-        learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
-        # learned_colors = {}
+        #learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
+        learned_colors = {}
 
         being_learned = "Undefined"
 
@@ -222,20 +218,19 @@ def main():
         result = None
 
         while True:
-            # print("LOOP PRIMARIO")
-            # print("TA APRENDENDO = {}".format(im_learning))
+
             robot.update()
+            #print("reverse_path:", robot.reverse_path, "dor_open:", robot.dor_open, "has_doll:", robot.has_doll, "done_learning:", robot.done_learning, robot.sensor_data("Ultrasonic"))
 
             if robot.reverse_path == False:
-                print("INICCIANDO BOUDING BOX")
+                robot.done_learning = True
+                print("Starting bounding box..")
                 bounding_box(robot)
                 continue
 
             search = robot.sensor_data("ColorSensor")
-
             result = color_realignment(robot, search, robot.infrared_sensors)
 
-            # print("ULTRASOM", robot.sensor_data("Ultrasonic"))
             if robot.sensor_data("Ultrasonic") < 20:
                 robot.stop_motors()
                 rescue(robot)
@@ -245,11 +240,6 @@ def main():
 
             if result == "On square" or robot.in_rect:
                 print("On square")
-                # if search[0] != being_learned and search[0] not in ["White", "Undefined"]:
-                #     learned_colors[being_learned] = learning_dic[being_learned][0]
-                #     im_learning = False
-                #     being_learned = "Undefined"
-                #     print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
 
                 if not im_learning:
                     # print("SE O ROBO DEU O BUG ESPERADO JA SEI QUE TEM QUE MEXER COM A robot.rect_colors")
@@ -262,6 +252,7 @@ def main():
                             if learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor") not in ["Black",
                                                                                                              "Brown",
                                                                                                              "Undefined"]:
+                                print("Executando acao:", learned_colors[robot.rect_color])
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
                                 robot.move_timed(how_long=0.4)
                                 color = 0
@@ -277,7 +268,6 @@ def main():
                 elif im_learning:
                     robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
-                        print("ULTRASOM", robot.sensor_data("Ultrasonic"))
                         if robot.sensor_data("Ultrasonic") < 20:
                             robot.stop_motors()
                             rescue(robot)
@@ -296,7 +286,7 @@ def main():
 
                         # print("On square loop secundario")
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
-                                robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined", "Black"]:
+                                robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined", "Black", "Brown"]:
                             if robot.sensor_data("ColorSensor")[0] != being_learned or (
                                     robot.sensor_data("ColorSensor")[0] == being_learned and white_counter >= 5):
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
@@ -325,6 +315,7 @@ def main():
                     white_counter = 0
 
             if search[0] == "Undefined" and search[1] == "Undefined":
+                print("Both sensors are undefined!")
                 robot.motors.left.stop()
                 robot.motors.right.stop()
 

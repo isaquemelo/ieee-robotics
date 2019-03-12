@@ -32,6 +32,13 @@ class Robot:
         self.reverse_path = None
         self.dor_open = True
         self.has_doll = False
+        self.done_learning = False
+
+        # self.reverse_path = True
+        # self.dor_open = True
+        # self.has_doll = False
+        # self.done_learning = True
+
 
         # define network sensors
         self.infrared_sensors = (0, 0)
@@ -73,28 +80,8 @@ class Robot:
 
                 self.kon = 0
 
-
-        # ou seja so ira realizar a verificacao depois de um certo tempo e seta a variavel de interesse corretamente
-        # este contador foi realmente necessario posi nao foi possivel fazer a fila armazenar as 3 cores do fim de pista
-        # por isso teve que ser feito uma fila que armazenace apenas dois so as vezes o robo pela as 3 cores
-        # (as vezes por causa do color realigment que nao podia ser retirado) e ai
-        # comutava entre entrando e saindo ao mesmo tempo isso fazia a self.plataforma_de_entrega_entrando ficar louca
-        # so que com o contador para restringir a comutacao desta ele ficou bem melhor mesmo o robo identificando as 3 ou as
-        # duas cores do fim da pista ele so comutara a variavel na hora certa
         elif self.kon <= self.kon_const:
             self.kon += 1
-
-        # parte de debugg
-        # print("self.plataforma_de_entrega = {}".format(self.plataforma_de_entrega_entrado))
-        """
-        if self.reverse_path == None:
-            print("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONE")
-        elif self.reverse_path == False:
-            print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ENTRANDO")
-        elif self.reverse_path == True:
-            print("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}SAINDO")
-        print("fila = {}".format(self.fila_para_registro_do_fim))
-        """
 
     def update(self):
         # sensors update
@@ -199,8 +186,11 @@ class Robot:
         self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
+        print(direction, still_learning)
         if self.reverse_path:
+            print("AQUI A")
             if not still_learning:
+                print("AQUI AA")
                 if direction == "forward":
                     pass
                 elif direction == "left":
@@ -208,12 +198,14 @@ class Robot:
                 elif direction == "right":
                     self.rotate(-90, axis="own")
             else:
+                print("AQUI AB")
                 self.rotate(-90, axis="own")
             return None
 
-
         else:
+            print("AQUI B")
             if not still_learning:
+                print("AQUI BA")
                 if direction == "forward":
                     pass
                 elif direction == "left":
@@ -221,6 +213,7 @@ class Robot:
                 elif direction == "right":
                     self.rotate(90, axis="own")
             else:
+                print("AQUI BB")
                 self.rotate(90, axis="own")
             return None
 
