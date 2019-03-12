@@ -40,9 +40,6 @@ def rescue(robot, speed=DEFAULT_SPEED):
 
                     return
 
-
-            break
-
         robot.motors.right.run_forever(speed_sp=speed)
         robot.motors.left.run_forever(speed_sp=speed)
 
