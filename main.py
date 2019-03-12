@@ -255,7 +255,6 @@ def main():
                                 time.sleep(0.5)
 
                         except:
-                            # print("ENTROU NO EXCEPT")
                             print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
                             learning_dic[being_learned] = ["right", "forward", "left"]
