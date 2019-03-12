@@ -100,7 +100,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                     elif robot.sensor_data("ColorSensor")[1] not in ["White", "Undefined"]:
                         robot.rect_color = robot.sensor_data("ColorSensor")[1]
 
-                    print("Estou num quadrado: ", robot.rect_color)
+                    print("I'm on a square", robot.rect_color)
                     rect_check = True
                     # ev3.Sound.speak("The rect color is " + robot.rect_color).wait()
                     return "On square"
@@ -175,7 +175,6 @@ def return_last_color(robot, square_color, last_choice):
         result = color_realignment(robot, search, robot.infrared_sensors)
 
         if result == "On square" and robot.rect_color == square_color:
-            print("TERMNOU IF")
             robot.in_rect = True
             break
 
@@ -209,10 +208,7 @@ def main():
     try:
         #learned_colors = {'Green': 'forward', 'Red': 'left', 'Blue': 'forward'}
         learned_colors = {}
-
         being_learned = "Undefined"
-
-        # learning_dic = {"Green": ["left", "right", "forward"]}
         learning_dic = {}
         im_learning = False
         result = None
@@ -220,7 +216,7 @@ def main():
         while True:
 
             robot.update()
-            #print("reverse_path:", robot.reverse_path, "dor_open:", robot.dor_open, "has_doll:", robot.has_doll, "done_learning:", robot.done_learning, robot.sensor_data("Ultrasonic"))
+            # robot.status()
 
             if robot.reverse_path == False:
                 robot.done_learning = True
@@ -297,7 +293,7 @@ def main():
                                 break
 
                         if search[0] == "Black" and search[1] == "Black":
-                            print("DIRECAO ERRADA")
+                            print("Wrong path")
                             global realignment_counter
                             robot.motors.left.stop()
                             robot.motors.right.stop()

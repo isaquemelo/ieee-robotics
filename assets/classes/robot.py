@@ -188,9 +188,7 @@ class Robot:
     def run_action(self, direction, still_learning=True):
         print(direction, still_learning)
         if self.reverse_path:
-            print("AQUI A")
             if not still_learning:
-                print("AQUI AA")
                 if direction == "forward":
                     pass
                 elif direction == "left":
@@ -198,14 +196,11 @@ class Robot:
                 elif direction == "right":
                     self.rotate(-90, axis="own")
             else:
-                print("AQUI AB")
                 self.rotate(-90, axis="own")
             return None
 
         else:
-            print("AQUI B")
             if not still_learning:
-                print("AQUI BA")
                 if direction == "forward":
                     pass
                 elif direction == "left":
@@ -213,7 +208,6 @@ class Robot:
                 elif direction == "right":
                     self.rotate(90, axis="own")
             else:
-                print("AQUI BB")
                 self.rotate(90, axis="own")
             return None
 
