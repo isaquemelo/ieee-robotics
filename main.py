@@ -175,7 +175,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.179.151", 1883, 60)
+client.connect("169.254.211.122", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -217,7 +217,7 @@ def main():
             search = robot.sensor_data("ColorSensor")
             result = color_realignment(robot, search, robot.infrared_sensors)
 
-            if robot.sensor_data("Ultrasonic") < 20:
+            if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
                 robot.stop_motors()
                 rescue(robot)
                 time.sleep(1)
@@ -251,7 +251,7 @@ def main():
                 elif im_learning:
                     robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
-                        if robot.sensor_data("Ultrasonic") < 20:
+                        if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
                             robot.stop_motors()
                             rescue(robot)
                             time.sleep(1)
