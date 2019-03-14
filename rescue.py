@@ -1,6 +1,6 @@
 import ev3dev.ev3 as ev3
 from assets.classes.robot import Robot
-
+from simple_pid import PID
 
 DEFAULT_SPEED = 400
 
@@ -46,55 +46,56 @@ def rescue(robot, speed=DEFAULT_SPEED):
 
 def drop_doll(robot, speed=DEFAULT_SPEED):
     if robot.has_doll:
+        ev3.Sound.beep()
+        ev3.Sound.beep()
         robot.motors.alternative.stop()
-        robot.motors.alternative.run_forever(speed_sp=-1000)
+        robot.motors.alternative.run_timed(time_sp=2000, speed_sp=-1000)
         #robot.move_timed(how_long=1.4, direction="back", speed=speed)
-        robot.motors.alternative.stop()
+        #robot.motors.alternative.stop()
         robot.dor_open = False
         robot.has_doll = False
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+
+    robot.motors.alternative.run_timed(time_sp=1000, speed_sp=1000)
+
+    # limits
+    pid = PID(20, 0.2, 60.1, setpoint=83.3)
+
+    # 83.3 indo
+    # 75 voltando
+
+    pid.output_limits = (-400, 400)
+    has_seen_black = False
     while True:
-        # print("Bouding box loop..")
+        print("Bouding box loop..")
         search = robot.sensor_data("ColorSensor")
-        if search[0] == "Black" or search[1] == "Black":
-            #robot.move_timed(how_long=1.3, direction="forward", speed=speed)
+        control = pid(robot.sensor_data("Ultrasonic"))
 
-            # limits
-            pid = PID(15.6, 0, 4.8, setpoint=83.3)
-            while True:
-                pid.output_limits = (-400, 400)
-                control = pid(robot.sensor_data("Ultrasonic"))
+        if search[0] == "Black" and search[1] == "Black" and not has_seen_black:
 
-                if robot.reverse_path is None or robot.has_doll == True:
-                    n_speed = 600
-                    if control > 400:
-                        control = 400
-                    if control < -400:
-                        control = -400
-                else:
-                    n_speed = 280
-
-                    if control > 60:
-                        control = 60
-                    if control < -60:
-                        control = -60
-
-                robot.motors.left.run_forever(speed_sp=n_speed + control)
-                robot.motors.right.run_forever(speed_sp=n_speed - control)
-
-                break
-            # limits
-
+            robot.move_timed(how_long=3.3, direction="forward", speed=speed)
             drop_doll(robot)
+            robot.move_timed(how_long=1.6, direction="back", speed=speed)
             robot.rotate(180)
             robot.reverse_path = True
-            robot.move_timed(how_long=5.3, direction="forward", speed=speed)
-            break
+            pid = PID(20, 0.2, 60.1, setpoint=75)
 
-    return
+            ev3.Sound.beep()
+            has_seen_black = True
+            #return
 
-# 83.3 indo
 
-# 75 voltando
+        n_speed = 350
+
+        if control > 500:
+            control = 500
+        if control < -500:
+            control = -500
+
+        robot.motors.left.run_forever(speed_sp=n_speed + control)
+        robot.motors.right.run_forever(speed_sp=n_speed - control)
+
+
+

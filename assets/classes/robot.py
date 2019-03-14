@@ -29,16 +29,16 @@ class Robot:
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
-        self.reverse_path = None
-        self.dor_open = True
-        self.has_doll = False
-        self.done_learning = False
-        self.cont_caminho = 0
-
-        # self.reverse_path = True
+        # self.reverse_path = None
         # self.dor_open = True
         # self.has_doll = False
-        # self.done_learning = True
+        # self.done_learning = False
+        # self.cont_caminho = 0
+
+        self.reverse_path = False
+        self.dor_open = True
+        self.has_doll = True
+        self.done_learning = True
 
 
         # define network sensors
