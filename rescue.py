@@ -72,6 +72,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         print("Bouding box loop..")
         search = robot.sensor_data("ColorSensor")
         control = pid(robot.sensor_data("Ultrasonic"))
+        ultrasonico = robot.sensor_data("Ultrasonic")
 
         if search[0] == "Black" and search[1] == "Black" and not has_seen_black:
 
@@ -88,14 +89,18 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
 
         n_speed = 350
+        print("ULTRASONICO: ", ultrasonico)
+        if ultrasonico >= 60 and ultrasonico <= 100:
+            if control > 500:
+                control = 500
+            if control < -500:
+                control = -500
 
-        if control > 500:
-            control = 500
-        if control < -500:
-            control = -500
-
-        robot.motors.left.run_forever(speed_sp=n_speed + control)
-        robot.motors.right.run_forever(speed_sp=n_speed - control)
+            robot.motors.left.run_forever(speed_sp=n_speed + control)
+            robot.motors.right.run_forever(speed_sp=n_speed - control)
+        else:
+            robot.motors.left.run_forever(speed_sp=n_speed)
+            robot.motors.right.run_forever(speed_sp=n_speed)
 
 
 
