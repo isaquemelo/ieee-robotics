@@ -175,7 +175,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.211.122", 1883, 60)
+client.connect("169.254.75.196", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -240,6 +240,13 @@ def main():
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
                                 robot.move_timed(how_long=0.4)
                                 color = 0
+
+                                if robot.reverse_path == True:
+                                    robot.cont_caminho -= 1
+                                else:
+                                    robot.cont_caminho +=1
+                                print("CONTADOR_CAMINHO: ", robot.cont_caminho)
+
                                 time.sleep(0.5)
 
                         except:
@@ -275,6 +282,13 @@ def main():
                                 being_learned = "Undefined"
                                 learning_dic = {}
                                 print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+
+                                if robot.reverse_path == True:
+                                    robot.cont_caminho -= 1
+                                else:
+                                    robot.cont_caminho +=1
+                                print("CONTADOR_CAMINHO: ", robot.cont_caminho)
+
                                 break
 
                         if search[0] == "Black" and search[1] == "Black":

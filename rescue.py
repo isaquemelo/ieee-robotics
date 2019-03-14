@@ -48,7 +48,7 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
     if robot.has_doll:
         robot.motors.alternative.stop()
         robot.motors.alternative.run_forever(speed_sp=-1000)
-        robot.move_timed(how_long=1.4, direction="back", speed=speed)
+        #robot.move_timed(how_long=1.4, direction="back", speed=speed)
         robot.motors.alternative.stop()
         robot.dor_open = False
         robot.has_doll = False
@@ -59,7 +59,34 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         # print("Bouding box loop..")
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" or search[1] == "Black":
-            robot.move_timed(how_long=1.3, direction="forward", speed=speed)
+            #robot.move_timed(how_long=1.3, direction="forward", speed=speed)
+
+            # limits
+            pid = PID(15.6, 0, 4.8, setpoint=83.3)
+            while True:
+                pid.output_limits = (-400, 400)
+                control = pid(robot.sensor_data("Ultrasonic"))
+
+                if robot.reverse_path is None or robot.has_doll == True:
+                    n_speed = 600
+                    if control > 400:
+                        control = 400
+                    if control < -400:
+                        control = -400
+                else:
+                    n_speed = 280
+
+                    if control > 60:
+                        control = 60
+                    if control < -60:
+                        control = -60
+
+                robot.motors.left.run_forever(speed_sp=n_speed + control)
+                robot.motors.right.run_forever(speed_sp=n_speed - control)
+
+                break
+            # limits
+
             drop_doll(robot)
             robot.rotate(180)
             robot.reverse_path = True
@@ -68,3 +95,6 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
     return
 
+# 83.3 indo
+
+# 75 voltando

@@ -33,6 +33,7 @@ class Robot:
         self.dor_open = True
         self.has_doll = False
         self.done_learning = False
+        self.cont_caminho = 0
 
         # self.reverse_path = True
         # self.dor_open = True
