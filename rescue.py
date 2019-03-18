@@ -101,6 +101,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     robot.motors.alternative.run_timed(time_sp=1000, speed_sp=1000)
     p_reverse = False
     can_break = False
+    contador_para_re = 30
     # limits
     pid = PID(20, 0.2, 60.1, setpoint=83.3)
 
@@ -113,14 +114,17 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" and search[1] == "Black":
             black_counter += 1
-            if black_counter >= 80:
+            if black_counter >= 100 or (black_counter >= 20 and "White" in search):
                 drop_doll(robot)
                 # move back with pid
                 p_reverse = True
                 black_counter = 0
                 can_break = True
 
-        if p_reverse and "White" in search:
+        if p_reverse and contador_para_re > 0:
+            contador_para_re -= 1
+                        # parte da condicional a ser alterada
+        if p_reverse and contador_para_re == 0:
             p_reverse = False
             robot.rotate(180)
             pid = PID(20, 0.2, 60.1, setpoint=75)
