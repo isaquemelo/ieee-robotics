@@ -29,7 +29,7 @@ class Robot:
         # define status
         self.in_rect = False
         self.rect_color = "Undefined"
-        self.reverse_path = None
+        self.reverse_path = True
         self.dor_open = True
         self.has_doll = False
         self.done_learning = False
