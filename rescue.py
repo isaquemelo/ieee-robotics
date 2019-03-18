@@ -97,24 +97,27 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    kp = 20
+    ki = 1.5
+    kd = 60.1
     black_counter = 0
     robot.motors.alternative.run_timed(time_sp=1000, speed_sp=1000)
     p_reverse = False
     can_break = False
     contador_para_re = 30
     # limits
-    pid = PID(20, 0.2, 60.1, setpoint=83.3)
+    pid = PID(kp, ki, kd, setpoint=83.3)
 
     # 83.3 indo
     # 75 voltando
 
     pid.output_limits = (-400, 400)
     while True:
-        # print("Bouding box loop..")
+        print("Bouding box loop..")
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" and search[1] == "Black":
             black_counter += 1
-            if black_counter >= 100 or (black_counter >= 20 and "White" in search):
+            if black_counter >= 80 or (black_counter >= 40 and "White" in search):
                 drop_doll(robot)
                 # move back with pid
                 p_reverse = True
@@ -127,14 +130,15 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         if p_reverse and contador_para_re == 0:
             p_reverse = False
             robot.rotate(180)
-            pid = PID(20, 0.2, 60.1, setpoint=75)
+            pid = PID(kp, ki, kd, setpoint=75)
 
-        control = pid(robot.sensor_data("Ultrasonic"))
+        #control = pid(robot.sensor_data("Ultrasonic"))
         ultrasonico = robot.sensor_data("Ultrasonic")
 
         n_speed = 350
         # print("ULTRASONICO: ", ultrasonico)
         if ultrasonico >= 60 and ultrasonico <= 100:
+            control = pid(robot.sensor_data("Ultrasonic"))
             if control > 500:
                 control = 500
             if control < -500:
@@ -143,8 +147,8 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                 robot.motors.left.run_forever(speed_sp=n_speed + control)
                 robot.motors.right.run_forever(speed_sp=n_speed - control)
             else:
-                robot.motors.left.run_forever(speed_sp=(n_speed + control) * (-999 / (n_speed + control)))
-                robot.motors.right.run_forever(speed_sp=(n_speed - control) * (-999 / (n_speed - control)))
+                robot.motors.left.run_forever(speed_sp=(n_speed + control) * -1)
+                robot.motors.right.run_forever(speed_sp=(n_speed - control) * -1)
         else:
             robot.motors.left.run_forever(speed_sp=n_speed)
             robot.motors.right.run_forever(speed_sp=n_speed)
