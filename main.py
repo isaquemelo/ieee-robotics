@@ -197,8 +197,8 @@ client.loop_start()
 
 def main():
     try:
-        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        #learned_colors = {}
+        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False
@@ -240,7 +240,7 @@ def main():
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
 
                                 # adds action to historic
-                                robot.historic.append()
+                                robot.historic.append(learned_colors[robot.rect_color])
 
                                 robot.move_timed(how_long=0.4)
                                 color = 0
@@ -281,13 +281,15 @@ def main():
                                 robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined", "Black", "Brown"]:
                             if robot.sensor_data("ColorSensor")[0] != being_learned or (
                                     robot.sensor_data("ColorSensor")[0] == being_learned and white_counter >= 5):
+
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
+
+                                # adds action to historic
+                                robot.historic.append(learned_colors[being_learned])
+
                                 im_learning = False
                                 being_learned = "Undefined"
                                 learning_dic = {}
-
-                                # adds action to historic
-                                robot.historic.append()
 
                                 print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
 
