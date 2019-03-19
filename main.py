@@ -238,13 +238,17 @@ def main():
                                                                                                              "Undefined"]:
                                 print("Executando acao:", learned_colors[robot.rect_color])
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
+
+                                # adds action to historic
+                                robot.historic.append()
+
                                 robot.move_timed(how_long=0.4)
                                 color = 0
 
-                                if robot.reverse_path == True:
+                                if robot.reverse_path:
                                     robot.cont_caminho -= 1
                                 else:
-                                    robot.cont_caminho +=1
+                                    robot.cont_caminho += 1
                                 print("CONTADOR_CAMINHO: ", robot.cont_caminho)
 
                                 time.sleep(0.5)
@@ -271,7 +275,7 @@ def main():
                                 robot.sensor_data("ColorSensor")[1] == "White":
                             white_counter += 1
 
-                        print(white_counter)
+                        # print(white_counter)
 
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
                                 robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined", "Black", "Brown"]:
@@ -281,6 +285,10 @@ def main():
                                 im_learning = False
                                 being_learned = "Undefined"
                                 learning_dic = {}
+
+                                # adds action to historic
+                                robot.historic.append()
+
                                 print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
 
                                 if robot.reverse_path == True:

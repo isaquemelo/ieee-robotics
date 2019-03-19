@@ -27,6 +27,7 @@ class Robot:
         # self.handler = ev3.LargeMotor('outC')
 
         # define status
+        self.historic = [""]
         self.in_rect = False
         self.rect_color = "Undefined"
         self.reverse_path = None
@@ -40,13 +41,12 @@ class Robot:
         # self.has_doll = True
         # self.done_learning = True
 
-
         # define network sensors
+
         self.infrared_sensors = (0, 0)
-        #self.ultrasonic_sensor = 255
         self.white_counter = 0
 
-        # coisas para identificar o final da pista
+        # path detection variables
         self.fila_para_registro_do_fim = ["White", "White"]
         # contador de tempo para o identificar de fim de pista
         self.kon_const = 25
@@ -187,7 +187,9 @@ class Robot:
         self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
-        print(direction, still_learning)
+
+        print(self.historic)
+
         if self.reverse_path:
             if not still_learning:
                 if direction == "forward":
