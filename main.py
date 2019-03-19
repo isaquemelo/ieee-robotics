@@ -261,12 +261,6 @@ def main():
                                 robot.move_timed(how_long=0.4)
                                 color = 0
 
-                                if robot.reverse_path:
-                                    robot.cont_caminho -= 1
-                                else:
-                                    robot.cont_caminho += 1
-                                print("CONTADOR_CAMINHO: ", robot.cont_caminho)
-
                                 time.sleep(0.5)
 
                         except:
@@ -312,12 +306,6 @@ def main():
                                 learning_dic = {}
 
                                 print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
-
-                                if robot.reverse_path == True:
-                                    robot.cont_caminho -= 1
-                                else:
-                                    robot.cont_caminho += 1
-                                print("CONTADOR_CAMINHO: ", robot.cont_caminho)
 
                                 break
 
