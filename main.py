@@ -26,7 +26,6 @@ def undefined_dealing(color_sensor):
 
 last_same_color = [None, ""]
 color = 0
-realignment_counter = 0
 rect_check = False
 
 # 15.6 0 4.8
@@ -35,7 +34,7 @@ pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     robot.update()
-    global last_same_color, color, realignment_counter, rect_check
+    global last_same_color, color, rect_check
     reverse = False
 
     search = color_sensor_data
@@ -117,11 +116,11 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
         time.sleep(0.15)
         robot.move_timed(direction="back")
-        realignment_counter += 1
+        robot.realigment_counter += 1
 
-        if realignment_counter > 7:
+        if robot.realigment_counter > 7:
             ev3.Sound.speak("Robot has exceed correction numbers...").wait()
-            realignment_counter = 0
+            robot.realigment_counter = 0
             robot.move_timed(direction="forward", how_long=0.6)
 
         if reverse:
@@ -144,12 +143,12 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
         time.sleep(0.15)
         robot.move_timed(direction="back")
-        realignment_counter += 1
+        robot.realigment_counter += 1
 
-        if realignment_counter > 7:
+        if robot.realigment_counter > 7:
             ev3.Sound.beep().wait()
             ev3.Sound.beep().wait()
-            realignment_counter = 0
+            robot.realigment_counter = 0
             robot.move_timed(direction="forward", how_long=0.6)
 
         if reverse:
@@ -197,8 +196,8 @@ client.loop_start()
 
 def main():
     try:
-        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        #learned_colors = {}
+        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False
@@ -252,7 +251,7 @@ def main():
                                         last_item = robot.historic[-1]
                                         robot.historic.pop()
                                         if len(robot.historic) == 1:
-                                            print("ULtimo item")
+                                            print("Ultimo item")
                                             robot.rotate(90)
                                             robot.reverse_path = None
                                             robot.historic.append(last_item)
@@ -297,7 +296,7 @@ def main():
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
 
                                 # adds action to historic
-                                if robot.reverse_path == False:
+                                if robot.reverse_path == None:
                                     print(robot.historic)
                                     robot.historic.append(learned_colors[being_learned])
 
@@ -311,11 +310,10 @@ def main():
 
                         if search[0] == "Black" and search[1] == "Black":
                             print("Wrong path")
-                            global realignment_counter
                             robot.motors.left.stop()
                             robot.motors.right.stop()
                             time.sleep(0.3)
-                            realignment_counter = 0
+                            robot.realigment_counter = 0
 
                             last_choise = learning_dic[being_learned][0]
                             del learning_dic[being_learned][0]
@@ -329,6 +327,7 @@ def main():
 
             if search[0] == "Undefined" and search[1] == "Undefined":
                 print("Both sensors are undefined!")
+                robot.move_timed(how_long=0.5, direction="back")
                 robot.motors.left.stop()
                 robot.motors.right.stop()
 

@@ -51,12 +51,13 @@ def rescue(robot, speed=DEFAULT_SPEED):
                             robot.rotate(90, speed=500)
                             robot.reverse_path = None
 
+                        robot.motors.alternative.run_forever(speed_sp=1000)
                         return
 
             # camada de protessao caso o robo tente entrar com uma das rodas fora da plataforma (o robo vai tentar resgatar o boneco)
             if search[0] == "Undefined" or search[1] == "Undefined":
                 # tentando pegar o doll antes de chegar a ponto de cair
-                robot.move_timed(how_long=0.6, direction="forward", speed=speed)
+                robot.move_timed(how_long=0.7, direction="forward", speed=speed)
                 robot.stop_motors()
                 robot.motors.alternative.run_forever(speed_sp=1000)
                 #time.sleep(2)
@@ -108,10 +109,9 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     ki = 1.5
     kd = 60.1
     black_counter = 0
-    robot.motors.alternative.run_timed(time_sp=1000, speed_sp=1000)
-    p_reverse = False
+    #robot.motors.alternative.run_forever(speed_sp=1000)
     can_break = False
-    contador_para_re = 30
+    #contador_para_re = 40
     # limits
     pid = PID(kp, ki, kd, setpoint=83.3)
 
@@ -124,20 +124,14 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" and search[1] == "Black":
             black_counter += 1
-            if black_counter >= 80 or (black_counter >= 40 and "White" in search):
-                drop_doll(robot)
-                # move back with pid
-                p_reverse = True
-                black_counter = 0
-                can_break = True
-
-        if p_reverse and contador_para_re > 0:
-            contador_para_re -= 1
-                        # parte da condicional a ser alterada
-        if p_reverse and contador_para_re == 0:
-            p_reverse = False
+        if black_counter >= 70:
+            drop_doll(robot)
+            # move back with pid
+            robot.move_timed(how_long=1.3, direction="back", speed=1000)
             robot.rotate(180)
             pid = PID(kp, ki, kd, setpoint=75)
+            black_counter = 0
+            can_break = True
 
         #control = pid(robot.sensor_data("Ultrasonic"))
         ultrasonico = robot.sensor_data("Ultrasonic")
@@ -150,12 +144,9 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                 control = 500
             if control < -500:
                 control = -500
-            if p_reverse == False:
-                robot.motors.left.run_forever(speed_sp=n_speed + control)
-                robot.motors.right.run_forever(speed_sp=n_speed - control)
-            else:
-                robot.motors.left.run_forever(speed_sp=(n_speed + control) * -1)
-                robot.motors.right.run_forever(speed_sp=(n_speed - control) * -1)
+            robot.motors.left.run_forever(speed_sp=n_speed + control)
+            robot.motors.right.run_forever(speed_sp=n_speed - control)
+
         else:
             robot.motors.left.run_forever(speed_sp=n_speed)
             robot.motors.right.run_forever(speed_sp=n_speed)

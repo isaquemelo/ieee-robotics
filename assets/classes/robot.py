@@ -27,7 +27,7 @@ class Robot:
         # self.handler = ev3.LargeMotor('outC')
 
         # define status
-        #self.historic = [""]
+        self.historic = [""]
         #self.historic = ['', 'left', 'forward', 'right', 'right', 'forward', 'left']
         self.in_rect = False
         self.rect_color = "Undefined"
@@ -40,6 +40,9 @@ class Robot:
         # self.dor_open = True
         #self.has_doll = True
         # self.done_learning = True
+
+        self.nao_pode = False
+        self.realigment_counter = 0
 
         # define network sensors
 
@@ -88,9 +91,10 @@ class Robot:
         # sensors update
         if self.color_sensors.left.color == 6 and self.color_sensors.right.color == 6:
             self.white_counter += 1
-        if self.white_counter > 20:
-            global realignment_counter
-            realignment_counter = 0
+
+        if self.white_counter > 15:
+            self.nao_pode = False
+            self.realigment_counter = 0
             self.white_counter = 0
         # history update
         # position update
@@ -187,8 +191,12 @@ class Robot:
         self.motors.right.stop()
 
     def run_action(self, direction, still_learning=True):
+        self.realigment_counter = 0
 
+        if self.nao_pode == True:
+            return
 
+        self.nao_pode = True
         if self.reverse_path:
             if not still_learning:
                 if direction == "forward":
