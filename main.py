@@ -175,7 +175,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.116.201", 1883, 60)
+client.connect("169.254.200.230", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -249,11 +249,14 @@ def main():
                                         pass
                                     else:
                                         print("Removendo item")
+                                        last_item = robot.historic[-1]
                                         robot.historic.pop()
                                         if len(robot.historic) == 1:
                                             print("ULtimo item")
                                             robot.rotate(90)
                                             robot.reverse_path = None
+                                            robot.historic.append(last_item)
+
 
                                 robot.move_timed(how_long=0.4)
                                 color = 0
