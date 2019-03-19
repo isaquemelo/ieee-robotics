@@ -197,8 +197,8 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        learned_colors = {}
+        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        #learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False
@@ -223,6 +223,7 @@ def main():
                 time.sleep(1)
 
             white_counter = 0
+            print(robot.historic)
 
             if result == "On square" or robot.in_rect:
                 print("On square")
@@ -240,15 +241,19 @@ def main():
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
 
                                 # adds action to historic
-                                if robot.reverse_path == False:
+                                if robot.reverse_path == None:
                                     robot.historic.append(learned_colors[robot.rect_color])
-                                else:
-                                    print("Reverse path is True")
+                                elif robot.reverse_path:
+                                    print("Reverse path is True", len(robot.historic))
                                     if len(robot.historic) == 1:
-                                        robot.rotate(180)
-                                        robot.reverse_path = False
+                                        pass
                                     else:
+                                        print("Removendo item")
                                         robot.historic.pop()
+                                        if len(robot.historic) == 1:
+                                            print("ULtimo item")
+                                            robot.rotate(90)
+                                            robot.reverse_path = None
 
                                 robot.move_timed(how_long=0.4)
                                 color = 0
@@ -285,6 +290,8 @@ def main():
 
                         # print(white_counter)
 
+                        print(robot.historic)
+
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
                                 robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined", "Black", "Brown"]:
                             if robot.sensor_data("ColorSensor")[0] != being_learned or (
@@ -294,6 +301,7 @@ def main():
 
                                 # adds action to historic
                                 if robot.reverse_path == False:
+                                    print(robot.historic)
                                     robot.historic.append(learned_colors[being_learned])
 
                                 im_learning = False

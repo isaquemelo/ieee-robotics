@@ -27,7 +27,8 @@ class Robot:
         # self.handler = ev3.LargeMotor('outC')
 
         # define status
-        self.historic = [""]
+        #self.historic = [""]
+        self.historic = ['', 'left', 'forward', 'right', 'right', 'forward', 'left']
         self.in_rect = False
         self.rect_color = "Undefined"
         self.reverse_path = None
@@ -36,9 +37,9 @@ class Robot:
         self.done_learning = False
         self.cont_caminho = 0
 
-        # self.reverse_path = False
+        self.reverse_path = True
         # self.dor_open = True
-        # self.has_doll = True
+        self.has_doll = True
         # self.done_learning = True
 
         # define network sensors
@@ -188,7 +189,6 @@ class Robot:
 
     def run_action(self, direction, still_learning=True):
 
-        print(self.historic)
 
         if self.reverse_path:
             if not still_learning:
