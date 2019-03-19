@@ -76,16 +76,23 @@ class Robot:
         # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
         if self.kon > self.kon_const:
             if "White" not in self.fila_para_registro_do_fim:
-                # print("---------------------------------------------------------------------------------------------------")
-                if self.reverse_path in [True, None]:
-                    self.reverse_path = False
-                else:
-                    self.reverse_path = True
+                if self.verifica_para_bound_box() == True:
+                    # print("---------------------------------------------------------------------------------------------------")
+                    if self.reverse_path in [True, None]:
+                        self.reverse_path = False
+                    else:
+                        self.reverse_path = True
 
-                self.kon = 0
+                    self.kon = 0
 
         elif self.kon <= self.kon_const:
             self.kon += 1
+
+    def verifica_para_bound_box(self):
+        for i in self.fila_para_registro_do_fim:
+            if i in ["Black", "Undefined", "Brown", "White"]:
+                return False
+        return True
 
     def update(self):
         # sensors update

@@ -1,7 +1,6 @@
 import ev3dev.ev3 as ev3
 from assets.classes.robot import Robot
 from simple_pid import PID
-import time
 
 DEFAULT_SPEED = 400
 
@@ -21,19 +20,13 @@ def rescue(robot, speed=DEFAULT_SPEED):
 
         if "Undefined" in search:
             robot.stop_motors()
-            # time.sleep(1)
-            robot.move_timed(how_long=0.01, direction="forward", speed=speed)
+            robot.move_timed(how_long=0.1, direction="forward", speed=speed)
             robot.stop_motors()
-            # time.sleep(1)
             search = robot.sensor_data("ColorSensor")
             if search[0] == "Undefined" and search[1] == "Undefined":
-                robot.motors.alternative.run_forever(speed_sp=800)
+                robot.motors.alternative.run_forever(speed_sp=1000)
                 robot.stop_motors()
-                while "Undefined" in search:
-                    search = robot.sensor_data("ColorSensor")
-                    robot.motors.right.run_forever(speed_sp=-speed)
-                    robot.motors.left.run_forever(speed_sp=-speed)
-                robot.move_timed(how_long=0.9, direction="back", speed=speed)
+                robot.move_timed(how_long=1.6, direction="back", speed=speed)
                 robot.rotate(180, speed=1000)
 
                 while True:
@@ -55,22 +48,15 @@ def rescue(robot, speed=DEFAULT_SPEED):
                         return
 
             # camada de protessao caso o robo tente entrar com uma das rodas fora da plataforma (o robo vai tentar resgatar o boneco)
-            if search[0] == "Undefined" or search[1] == "Undefined":
+            if search[0] != search[1]:
                 # tentando pegar o doll antes de chegar a ponto de cair
-                robot.move_timed(how_long=0.7, direction="forward", speed=speed)
+                robot.move_timed(how_long=0.6, direction="forward", speed=speed)
                 robot.stop_motors()
                 robot.motors.alternative.run_forever(speed_sp=1000)
-                #time.sleep(2)
-                #robot.rotate(9, speed=1000)
-                robot.move_timed(how_long=0.2, direction="back", speed=speed)
-                #time.sleep(2)
-                #robot.rotate(9, speed=1000)
+                robot.rotate(-9, speed=1000)
+                robot.rotate(9, speed=1000)
                 robot.stop_motors()
-                #robot.move_timed(how_long=0.7, direction="back", speed=speed)
-                while "Undefined" in search:
-                    search = robot.sensor_data("ColorSensor")
-                    robot.motors.right.run_forever(speed_sp=-speed)
-                    robot.motors.left.run_forever(speed_sp=-speed)
+                robot.move_timed(how_long=0.7, direction="back", speed=speed)
 
                 robot.rotate(180, speed=1000)
                 while True:

@@ -174,7 +174,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.200.230", 1883, 60)
+client.connect("169.254.2.106", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -241,9 +241,10 @@ def main():
 
                                 # adds action to historic
                                 if robot.reverse_path == None:
-                                    robot.historic.append(learned_colors[robot.rect_color])
-                                elif robot.reverse_path:
+                                    robot.historic.append(robot.rect_color)
+                                elif robot.reverse_path and robot.nao_pode:
                                     print("Reverse path is True", len(robot.historic))
+                                    print("AAAAAAAAAA")
                                     if len(robot.historic) == 1:
                                         pass
                                     else:
@@ -296,9 +297,10 @@ def main():
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
 
                                 # adds action to historic
-                                if robot.reverse_path == None:
+                                if robot.reverse_path == None and not robot.nao_pode:
+                                    print("BBBBBBBBB")
                                     print(robot.historic)
-                                    robot.historic.append(learned_colors[being_learned])
+                                    robot.historic.append(being_learned)
 
                                 im_learning = False
                                 being_learned = "Undefined"
@@ -308,7 +310,7 @@ def main():
 
                                 break
 
-                        if search[0] == "Black" and search[1] == "Black":
+                        if robot.sensor_data("ColorSensor")[0] == "Black" and robot.sensor_data("ColorSensor")[1] == "Black":
                             print("Wrong path")
                             robot.motors.left.stop()
                             robot.motors.right.stop()
