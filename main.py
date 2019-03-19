@@ -197,8 +197,8 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        learned_colors = {}
+        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        #learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False
@@ -296,7 +296,7 @@ def main():
                                 if robot.reverse_path == True:
                                     robot.cont_caminho -= 1
                                 else:
-                                    robot.cont_caminho +=1
+                                    robot.cont_caminho += 1
                                 print("CONTADOR_CAMINHO: ", robot.cont_caminho)
 
                                 break
