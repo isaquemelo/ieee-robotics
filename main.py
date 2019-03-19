@@ -240,7 +240,15 @@ def main():
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
 
                                 # adds action to historic
-                                robot.historic.append(learned_colors[robot.rect_color])
+                                if robot.reverse_path == False:
+                                    robot.historic.append(learned_colors[robot.rect_color])
+                                else:
+                                    print("Reverse path is True")
+                                    if len(robot.historic) == 1:
+                                        robot.rotate(180)
+                                        robot.reverse_path = False
+                                    else:
+                                        robot.historic.pop()
 
                                 robot.move_timed(how_long=0.4)
                                 color = 0
@@ -285,7 +293,8 @@ def main():
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
 
                                 # adds action to historic
-                                robot.historic.append(learned_colors[being_learned])
+                                if robot.reverse_path == False:
+                                    robot.historic.append(learned_colors[being_learned])
 
                                 im_learning = False
                                 being_learned = "Undefined"
