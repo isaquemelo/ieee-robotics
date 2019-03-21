@@ -94,12 +94,13 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 rect_check = True
                 return "On square"
 
-    elif search[0] == "Undefined" and search[1] == "White" or  search[1] == "White" and search[0] == "Undefined":
+    elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
         print("Undefine Dealing")
         undefined_dealing(search)
 
-    elif search[0] == "White" and search[1] != "White":
+    elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"]:
         print("[0] == White and [1] != White")
+        print(search)
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
         else:
@@ -130,7 +131,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         else:
             robot.motors.right.stop()
 
-    elif search[0] != "White" and search[1] == "White":
+    elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"]:
         print("[0] != White and [1] == White")
 
         if last_same_color[0] == "White" and last_same_color[1] == "White":
@@ -213,8 +214,8 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        learned_colors = {}
+        learned_colors = {'Green': 'left', 'Red': 'right', 'Blue': 'forward'}
+        #learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False

@@ -92,7 +92,7 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
     kp = 20
-    ki = 0.2
+    ki = 1.5
     kd = 60.1
     black_counter = 0
     #robot.motors.alternative.run_forever(speed_sp=1000)
