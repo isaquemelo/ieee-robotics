@@ -38,6 +38,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
     reverse = False
 
     search = color_sensor_data
+    pid.output_limits = (-600, 600)
+    control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
 
     if robot.in_rect:
         if (search[0] != robot.rect_color) or (search[1] != robot.rect_color):
@@ -45,62 +47,63 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.in_rect = False
             return None
 
-    if move_forward:
-        if search[0] == search[1]:
-            pid.output_limits = (-600, 600)
-            control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
-
-            if robot.reverse_path is None or robot.has_doll == True:
-                n_speed = 600
-                if control > 400:
-                    control = 400
-                if control < -400:
-                    control = -400
-            else:
-                n_speed = 280
-
-                if control > 60:
-                    control = 60
-                if control < -60:
-                    control = -60
-
-            if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
-                robot.motors.left.run_forever(speed_sp=speed)
-                robot.motors.right.run_forever(speed_sp=speed)
-            else:
-                robot.motors.left.run_forever(speed_sp=n_speed + control)
-                robot.motors.right.run_forever(speed_sp=n_speed - control)
-
-            last_same_color = search
-
-            if search[1] not in ["White", "Undefined", "Brown", "Black"]:
-                color += 1
-
-            if color > 13:
-                if search[0] in ["White", "Undefined"] or search[1] in ["White", "Undefined"]:
-                    color = 0
-
-                    robot.motors.left.stop()
-                    robot.motors.right.stop()
-
-                    robot.move_timed(how_long=0.4, direction="back")
-
-                    robot.in_rect = True
-                    if robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"]:
-                        robot.rect_color = robot.sensor_data("ColorSensor")[0]
-                    elif robot.sensor_data("ColorSensor")[1] not in ["White", "Undefined"]:
-                        robot.rect_color = robot.sensor_data("ColorSensor")[1]
-
-                    print("I'm on a square", robot.rect_color)
-                    rect_check = True
-                    return "On square"
-
-    if last_same_color[0] == "White" and last_same_color[1] == "White":
-        reverse = True
+    if robot.reverse_path is None or robot.has_doll:
+        n_speed = 600
+        if control > 400:
+            control = 400
+        if control < -400:
+            control = -400
     else:
-        reverse = False
+        n_speed = 280
 
-    if search[0] == "White" and search[1] != "White":
+        if control > 60:
+            control = 60
+        if control < -60:
+            control = -60
+
+    if search[0] == search[1]:
+        print("[0] == [1]")
+        if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
+            robot.motors.left.run_forever(speed_sp=speed)
+            robot.motors.right.run_forever(speed_sp=speed)
+        else:
+            robot.motors.left.run_forever(speed_sp=n_speed + control)
+            robot.motors.right.run_forever(speed_sp=n_speed - control)
+
+        last_same_color = search
+
+        if search[1] not in ["White", "Undefined", "Brown", "Black"]:
+            color += 1
+
+        if color > 13:
+            if search[0] in ["White", "Undefined"] or search[1] in ["White", "Undefined"]:
+                color = 0
+
+                robot.motors.left.stop()
+                robot.motors.right.stop()
+
+                robot.move_timed(how_long=0.4, direction="back")
+
+                robot.in_rect = True
+                if robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined"]:
+                    robot.rect_color = robot.sensor_data("ColorSensor")[0]
+                elif robot.sensor_data("ColorSensor")[1] not in ["White", "Undefined"]:
+                    robot.rect_color = robot.sensor_data("ColorSensor")[1]
+
+                print("I'm on a square", robot.rect_color)
+                rect_check = True
+                return "On square"
+
+    elif search[0] == "Undefined" and search[1] == "White" or  search[1] == "White" and search[0] == "Undefined":
+        print("Undefine Dealing")
+        undefined_dealing(search)
+
+    elif search[0] == "White" and search[1] != "White":
+        print("[0] == White and [1] != White")
+        if last_same_color[0] == "White" and last_same_color[1] == "White":
+            reverse = True
+        else:
+            reverse = False
 
         robot.motors.left.stop()
         robot.motors.right.stop()
@@ -112,7 +115,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 robot.motors.right.run_forever(speed_sp=speed)
 
             search = robot.sensor_data("ColorSensor")
-            undefined_dealing(search)
 
         time.sleep(0.15)
         robot.move_timed(direction="back")
@@ -129,17 +131,24 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.motors.right.stop()
 
     elif search[0] != "White" and search[1] == "White":
+        print("[0] != White and [1] == White")
+
+        if last_same_color[0] == "White" and last_same_color[1] == "White":
+            reverse = True
+        else:
+            reverse = False
+
         robot.motors.left.stop()
         robot.motors.right.stop()
 
         while search[0] != search[1]:
+
             if reverse:
                 robot.motors.right.run_forever(speed_sp=speed)
             else:
                 robot.motors.left.run_forever(speed_sp=speed)
 
             search = robot.sensor_data("ColorSensor")
-            undefined_dealing(search)
 
         time.sleep(0.15)
         robot.move_timed(direction="back")
@@ -155,6 +164,14 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.motors.right.stop()
         else:
             robot.motors.left.stop()
+    else:
+        print("else")
+        if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
+            robot.motors.left.run_forever(speed_sp=speed)
+            robot.motors.right.run_forever(speed_sp=speed)
+        else:
+            robot.motors.left.run_forever(speed_sp=n_speed + control)
+            robot.motors.right.run_forever(speed_sp=n_speed - control)
 
 
 def return_last_color(robot, square_color, last_choice):
@@ -174,7 +191,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.2.106", 1883, 60)
+client.connect("169.254.87.119", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -202,6 +219,7 @@ def main():
         learning_dic = {}
         im_learning = False
         result = None
+        undefined_counter = 0
 
         while True:
 
@@ -222,7 +240,7 @@ def main():
                 time.sleep(1)
 
             white_counter = 0
-            print(robot.historic)
+            #print(robot.historic)
 
             if result == "On square" or robot.in_rect:
                 print("On square")
@@ -240,7 +258,7 @@ def main():
                                 robot.run_action(learned_colors[robot.rect_color], im_learning)
 
                                 # adds action to historic
-                                if robot.reverse_path == None:
+                                if robot.reverse_path is None:
                                     robot.historic.append(robot.rect_color)
                                 elif robot.reverse_path and robot.nao_pode:
                                     print("Reverse path is True", len(robot.historic))
@@ -256,7 +274,6 @@ def main():
                                             robot.rotate(90)
                                             robot.reverse_path = None
                                             robot.historic.append(last_item)
-
 
                                 robot.move_timed(how_long=0.4)
                                 color = 0
@@ -285,21 +302,18 @@ def main():
                                 robot.sensor_data("ColorSensor")[1] == "White":
                             white_counter += 1
 
-                        # print(white_counter)
+                        color_sensor = robot.sensor_data("ColorSensor")
 
-                        print(robot.historic)
-
-                        if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
-                                robot.sensor_data("ColorSensor")[0] not in ["White", "Undefined", "Black", "Brown"]:
-                            if robot.sensor_data("ColorSensor")[0] != being_learned or (
-                                    robot.sensor_data("ColorSensor")[0] == being_learned and white_counter >= 5):
+                        if color_sensor[0] == color_sensor[1] and \
+                                color_sensor[0] not in ["White", "Undefined", "Black", "Brown"]:
+                            if color_sensor[0] != being_learned or (
+                                    color_sensor[0] == being_learned and white_counter >= 5):
 
                                 learned_colors[being_learned] = learning_dic[being_learned][0]
 
                                 # adds action to historic
                                 if robot.reverse_path == None and not robot.nao_pode:
                                     print("BBBBBBBBB")
-                                    print(robot.historic)
                                     robot.historic.append(being_learned)
 
                                 im_learning = False
@@ -314,7 +328,7 @@ def main():
                             print("Wrong path")
                             robot.motors.left.stop()
                             robot.motors.right.stop()
-                            time.sleep(0.3)
+                            time.sleep(0.2)
                             robot.realigment_counter = 0
 
                             last_choise = learning_dic[being_learned][0]
@@ -327,11 +341,16 @@ def main():
 
                     white_counter = 0
 
+
             if search[0] == "Undefined" and search[1] == "Undefined":
-                print("Both sensors are undefined!")
-                robot.move_timed(how_long=0.5, direction="back")
-                robot.motors.left.stop()
-                robot.motors.right.stop()
+                undefined_counter += 1
+
+                if undefined_counter > 30:
+                    undefined_counter = 0
+                    print("Both sensors are undefined!")
+                    robot.move_timed(how_long=0.5, direction="back")
+                    robot.motors.left.stop()
+                    robot.motors.right.stop()
 
     except KeyboardInterrupt:
         robot.motors.right.stop()

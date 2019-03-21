@@ -138,7 +138,7 @@ class Robot:
 
     def rotate(self, angle, axis="own", speed=DEFAULT_SPEED):
 
-        if angle < 30 and angle > 0:
+        if 30 > angle > 0:
             speed = map_values(math.fabs(angle), 0, 90, 100, 1000)
 
         reverse = False
@@ -200,7 +200,7 @@ class Robot:
     def run_action(self, direction, still_learning=True):
         self.realigment_counter = 0
 
-        if self.nao_pode == True:
+        if self.nao_pode:
             return
 
         self.nao_pode = True

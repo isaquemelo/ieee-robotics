@@ -92,14 +92,14 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
     kp = 20
-    ki = 1.5
+    ki = 0.2
     kd = 60.1
     black_counter = 0
     #robot.motors.alternative.run_forever(speed_sp=1000)
     can_break = False
     #contador_para_re = 40
     # limits
-    pid = PID(kp, ki, kd, setpoint=83.3)
+    pid = PID(kp, ki, kd, setpoint=76.2)
 
     # 83.3 indo
     # 75 voltando
@@ -113,9 +113,9 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         if black_counter >= 70:
             drop_doll(robot)
             # move back with pid
-            robot.move_timed(how_long=1.3, direction="back", speed=1000)
+            robot.move_timed(how_long=1.1, direction="back", speed=1000)
             robot.rotate(180)
-            pid = PID(kp, ki, kd, setpoint=75)
+            pid = PID(kp, ki, kd, setpoint=81.2)
             black_counter = 0
             can_break = True
 
@@ -124,7 +124,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
         n_speed = 350
         # print("ULTRASONICO: ", ultrasonico)
-        if ultrasonico >= 60 and ultrasonico <= 100:
+        if 60 <= ultrasonico <= 100:
             control = pid(robot.sensor_data("Ultrasonic"))
             if control > 500:
                 control = 500
