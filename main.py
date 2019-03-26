@@ -12,7 +12,6 @@ from rescue import rescue, bounding_box
 
 DEFAULT_SPEED = 350
 
-
 def undefined_dealing(color_sensor):
     sensor_color = color_sensor
     if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":

@@ -7,7 +7,6 @@ from simple_pid import PID
 import time
 DEFAULT_SPEED = 400
 
-
 class Robot:
     ev3.Sound.speak("Robot started...")
 
