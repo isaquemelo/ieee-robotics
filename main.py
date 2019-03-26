@@ -191,7 +191,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.87.119", 1883, 60)
+client.connect("169.254.205.242", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -213,8 +213,8 @@ client.loop_start()
 
 def main():
     try:
-        learned_colors = {'Green': 'left', 'Red': 'right', 'Blue': 'forward'}
-        #learned_colors = {}
+        #learned_colors = {'Green': 'left', 'Red': 'right', 'Blue': 'forward'}
+        learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False

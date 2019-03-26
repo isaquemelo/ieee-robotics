@@ -115,7 +115,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             # move back with pid
             robot.move_timed(how_long=1.1, direction="back", speed=1000)
             robot.rotate(180)
-            pid = PID(kp, ki, kd, setpoint=81.2)
+            pid = PID(kp, ki, kd, setpoint=81.8)
             black_counter = 0
             can_break = True
 
