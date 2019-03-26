@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/ieee-robotics.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ieee-robotics.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rescue.py" beforeDir="false" afterPath="$PROJECT_DIR$/rescue.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,47 +14,47 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="291">
+              <caret line="217" column="8" lean-forward="true" selection-start-line="217" selection-start-column="8" selection-end-line="217" selection-end-column="8" />
+              <folding>
+                <element signature="e#19#43#0" expanded="true" />
+                <element signature="e#960#5820#0" />
+                <element signature="e#5884#6218#0" />
+                <element signature="e#6353#6505#0" />
+                <element signature="e#6557#6654#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="191" selection-start-line="191" selection-end-line="191" />
+            <state relative-caret-position="-487">
+              <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
-                <element signature="e#1125#1152#0" />
-                <element signature="e#1708#3339#0" />
-                <element signature="e#3371#3784#0" />
-                <element signature="e#3834#4720#0" />
-                <element signature="e#4244#4720#0" />
-                <element signature="e#4793#6256#0" />
-                <element signature="e#6348#6770#0" />
-                <element signature="e#7695#7751#0" />
+                <element signature="e#1803#3517#0" />
+                <element signature="e#4212#5098#0" />
+                <element signature="e#6716#7138#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="247" column="57" lean-forward="true" selection-start-line="247" selection-start-column="57" selection-end-line="247" selection-end-column="57" />
-              <folding>
-                <element signature="e#19#43#0" expanded="true" />
-                <element signature="e#332#737#0" />
-                <element signature="e#985#5131#0" />
-                <element signature="e#5195#5529#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rescue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="55">
-              <caret line="141" column="17" selection-start-line="141" selection-start-column="17" selection-end-line="141" selection-end-column="17" />
+            <state relative-caret-position="135">
+              <caret line="117" column="47" selection-start-line="117" selection-start-column="47" selection-end-line="117" selection-end-column="47" />
+              <folding>
+                <element signature="e#158#3385#0" />
+                <element signature="e#3435#3678#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -73,6 +73,9 @@
       <find>run_ti</find>
       <find>doll</find>
       <find>has_doll</find>
+      <find>print(robot.</find>
+      <find>robot.his</find>
+      <find>ção</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -83,9 +86,10 @@
       <list>
         <option value="$PROJECT_DIR$/client.py" />
         <option value="$PROJECT_DIR$/comunication.py" />
-        <option value="$PROJECT_DIR$/rescue.py" />
         <option value="$PROJECT_DIR$/assets/classes/robot.py" />
+        <option value="$PROJECT_DIR$/teste.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/rescue.py" />
       </list>
     </option>
   </component>
@@ -109,14 +113,7 @@
             </path>
             <path>
               <item name="ieee-robotics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ieee-robotics" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ieee-robotics" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ieee-robotics" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -189,11 +186,14 @@
       <workItem from="1552925274365" duration="319000" />
       <workItem from="1553005647434" duration="18000" />
       <workItem from="1553005719027" duration="3902000" />
+      <workItem from="1553190066042" duration="7518000" />
+      <workItem from="1553546163117" duration="184000" />
+      <workItem from="1553616195031" duration="6523000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47317000" />
+    <option name="totallyTimeSpent" value="61542000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -205,10 +205,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="0" width="1366" height="738" extended-state="6" />
+    <frame x="0" y="-1" width="1366" height="740" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.27929986" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2931818" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -218,13 +218,13 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3284553" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.22113821" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.22077923" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.3284553" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.3284553" />
+      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32792208" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="12" />
-      <window_info anchor="bottom" id="File Transfer" order="13" visible="true" weight="0.3284553" />
+      <window_info anchor="bottom" id="File Transfer" order="13" weight="0.32792208" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -257,49 +257,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
+    <entry file="file://$USER_HOME$/.PyCharm2018.3/system/python_stubs/-1247971763/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="191" selection-start-line="191" selection-end-line="191" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-            <element signature="e#1125#1152#0" />
-            <element signature="e#1708#3339#0" />
-            <element signature="e#3371#3784#0" />
-            <element signature="e#3834#4720#0" />
-            <element signature="e#4244#4720#0" />
-            <element signature="e#4793#6256#0" />
-            <element signature="e#6348#6770#0" />
-            <element signature="e#7695#7751#0" />
-          </folding>
+        <state relative-caret-position="151">
+          <caret line="3598" column="8" selection-start-line="3598" selection-start-column="8" selection-end-line="3598" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/teste.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3051">
+        <state relative-caret-position="-2930">
+          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rescue.py">
+    <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="55">
-          <caret line="141" column="17" selection-start-line="141" selection-start-column="17" selection-end-line="141" selection-end-column="17" />
+        <state relative-caret-position="-487">
+          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#1803#3517#0" />
+            <element signature="e#4212#5098#0" />
+            <element signature="e#6716#7138#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="247" column="57" lean-forward="true" selection-start-line="247" selection-start-column="57" selection-end-line="247" selection-end-column="57" />
+        <state relative-caret-position="291">
+          <caret line="217" column="8" lean-forward="true" selection-start-line="217" selection-start-column="8" selection-end-line="217" selection-end-column="8" />
           <folding>
             <element signature="e#19#43#0" expanded="true" />
-            <element signature="e#332#737#0" />
-            <element signature="e#985#5131#0" />
-            <element signature="e#5195#5529#0" />
+            <element signature="e#960#5820#0" />
+            <element signature="e#5884#6218#0" />
+            <element signature="e#6353#6505#0" />
+            <element signature="e#6557#6654#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rescue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="117" column="47" selection-start-line="117" selection-start-column="47" selection-end-line="117" selection-end-column="47" />
+          <folding>
+            <element signature="e#158#3385#0" />
+            <element signature="e#3435#3678#0" />
           </folding>
         </state>
       </provider>

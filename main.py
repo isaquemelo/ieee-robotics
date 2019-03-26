@@ -12,6 +12,7 @@ from rescue import rescue, bounding_box
 
 DEFAULT_SPEED = 350
 
+
 def undefined_dealing(color_sensor):
     sensor_color = color_sensor
     if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":
@@ -61,7 +62,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             control = -60
 
     if search[0] == search[1]:
-        print("[0] == [1]")
+        # print("[0] == [1]")
         if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
             robot.motors.left.run_forever(speed_sp=speed)
             robot.motors.right.run_forever(speed_sp=speed)
@@ -98,7 +99,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         undefined_dealing(search)
 
     elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"]:
-        print("[0] == White and [1] != White")
+        # print("[0] == White and [1] != White")
         print(search)
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
@@ -131,7 +132,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.motors.right.stop()
 
     elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"]:
-        print("[0] != White and [1] == White")
+        # print("[0] != White and [1] == White")
 
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
@@ -213,7 +214,7 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'left', 'Red': 'right', 'Blue': 'forward'}
+        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
         learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
@@ -222,7 +223,7 @@ def main():
         undefined_counter = 0
 
         while True:
-
+            print(robot.historic)
             robot.update()
 
             if robot.reverse_path == False:
