@@ -104,8 +104,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             undefined_dealing(search)
 
     elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"]:
-        # print("[0] == White and [1] != White")
-        print(search)
+        print("[0] == White [1] != White")
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
         else:
@@ -114,7 +113,13 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         robot.motors.left.stop()
         robot.motors.right.stop()
 
+        starting_angle = robot.sensor_data("GyroSensor")
+        actual_angle = robot.sensor_data("GyroSensor")
+
         while search[0] != search[1]:
+            actual_angle = robot.sensor_data("GyroSensor")
+            print(math.fabs(starting_angle - actual_angle), starting_angle - actual_angle)
+
             if reverse:
                 robot.motors.left.run_forever(speed_sp=speed)
             else:
@@ -137,7 +142,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.motors.right.stop()
 
     elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"]:
-        # print("[0] != White and [1] == White")
+        print("[0] != White and [1] == White")
 
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
@@ -232,9 +237,12 @@ def main():
             #print(robot.historic)
             robot.update()
 
-            if robot.reverse_path == False:
+            if robot.bounding_box:
                 robot.done_learning = True
-                print("Starting bounding box..")
+                print("ENTRANDO no bounding box..")
+                print("valoes na fila de igentificassao de fim de pista: {}".format(robot.fila_para_registro_do_fim))
+                ev3.Sound.beep()
+                ev3.Sound.beep()
                 bounding_box(robot)
                 continue
 

@@ -89,7 +89,6 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
         robot.dor_open = False
         robot.has_doll = False
 
-
 def bounding_box(robot, speed=DEFAULT_SPEED):
     kp = 20
     ki = 1.5
@@ -110,12 +109,12 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" and search[1] == "Black":
             black_counter += 1
-        if black_counter >= 70:
+        if black_counter >= 50:
             drop_doll(robot)
             # move back with pid
             robot.move_timed(how_long=1.1, direction="back", speed=1000)
             robot.rotate(180)
-            pid = PID(kp, ki, kd, setpoint=82.8)
+            pid = PID(kp, ki, kd, setpoint=81.1)
             black_counter = 0
             can_break = True
 
@@ -137,9 +136,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             robot.motors.left.run_forever(speed_sp=n_speed)
             robot.motors.right.run_forever(speed_sp=n_speed)
 
-        if can_break and (search[0] not in ["White", "Black", "Undefined"] or search[1] not in ["White", "Black", "Undefined"]):
-            robot.reverse_path = True
-            robot.move_timed(how_long=0.8, speed=500)
+        if can_break and robot.verifica_para_saida_do_bound_box() is True:
             break
-
+    ev3.Sound.beep()
     return

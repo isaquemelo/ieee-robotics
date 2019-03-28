@@ -36,7 +36,7 @@ class Robot:
         self.has_doll = False
         self.done_learning = False
 
-
+        self.bounding_box = False
 
         # self.historic = ['', 'left', 'forward', 'right', 'right', 'forward', 'left']
         #self.reverse_path = True
@@ -78,15 +78,14 @@ class Robot:
 
         # (if 1.0) registra se o robo esta entrando ou saindo na plataforma de entraga
         if self.kon > self.kon_const:
-            if "White" not in self.fila_para_registro_do_fim:
-                if self.verifica_para_bound_box() == True:
-                    # print("---------------------------------------------------------------------------------------------------")
-                    if self.reverse_path in [True, None]:
-                        self.reverse_path = False
-                    else:
-                        self.reverse_path = True
-
-                    self.kon = 0
+            if self.verifica_para_bound_box() == True:
+                # print("---------------------------------------------------------------------------------------------------")
+                if self.reverse_path in [True, None]:
+                    self.reverse_path = False
+                else:
+                    self.reverse_path = True
+                self.bounding_box = True
+                self.kon = 0
 
         elif self.kon <= self.kon_const:
             self.kon += 1
@@ -95,6 +94,16 @@ class Robot:
         for i in self.fila_para_registro_do_fim:
             if i in ["Black", "Undefined", "Brown", "White"]:
                 return False
+        return True
+
+    def verifica_para_saida_do_bound_box(self):
+        for i in self.sensor_data("ColorSensor"):
+            if i in ["Black", "White", "Undefined", "Brown"]:
+                return False
+        self.bounding_box = False
+        print("SAINDO do bound box")
+        print("valoes na fila de igentificassao de fim de pista: {}".format(self.fila_para_registro_do_fim))
+        self.reverse_path = True
         return True
 
     def update(self):
@@ -130,7 +139,7 @@ class Robot:
                 1: 'Black',
                 2: 'Blue',
                 3: 'Green',
-                4: 'Yellow',
+                4: 'Red', # era Yellow, para evitar cores que não exitem e acabar chamando o bounding box quando não deve
                 5: 'Red',
                 6: 'White',
                 7: 'Brown'
@@ -199,6 +208,8 @@ class Robot:
         # print("Time is over!")
         self.motors.left.stop()
         self.motors.right.stop()
+
+
 
     def run_action(self, direction, still_learning=True):
         self.realigment_counter = 0
