@@ -28,7 +28,7 @@ class Robot:
 
         # define status
         self.historic = [""]
-        #self.historic = ['', 'left', 'forward', 'right', 'right', 'forward', 'left']
+        self.undefined_counter = 0
         self.in_rect = False
         self.rect_color = "Undefined"
         self.reverse_path = None
@@ -36,6 +36,9 @@ class Robot:
         self.has_doll = False
         self.done_learning = False
 
+
+
+        # self.historic = ['', 'left', 'forward', 'right', 'right', 'forward', 'left']
         #self.reverse_path = True
         # self.dor_open = True
         #self.has_doll = True

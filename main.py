@@ -95,8 +95,13 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 return "On square"
 
     elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
-        print("Undefine Dealing")
-        undefined_dealing(search)
+        print("Undefine Dealing counting..")
+        robot.undefined_counter += 1
+
+        if robot.undefined_counter > 3:
+            print("Undefine Dealing executed..")
+            robot.undefined_counter = 0
+            undefined_dealing(search)
 
     elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"]:
         # print("[0] == White and [1] != White")
@@ -192,7 +197,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.205.242", 1883, 60)
+client.connect("169.254.128.0", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -214,8 +219,8 @@ client.loop_start()
 
 def main():
     try:
-        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        learned_colors = {}
+        learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        #learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False
@@ -223,7 +228,8 @@ def main():
         undefined_counter = 0
 
         while True:
-            print(robot.historic)
+            #print(robot.sensor_data("ColorSensor"))
+            #print(robot.historic)
             robot.update()
 
             if robot.reverse_path == False:
