@@ -202,7 +202,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.128.0", 1883, 60)
+client.connect("169.254.190.70", 1883, 60)
 
 
 def on_message(client, userdata, message):
