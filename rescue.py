@@ -16,14 +16,14 @@ def rescue(robot, speed=DEFAULT_SPEED):
     robot.motors.alternative.run_timed(time_sp=1000, speed_sp=-1000)
     robot.dor_open = True
 
-    end_time = datetime.now() + timedelta(seconds=1.5)
+    end_time = datetime.now() + timedelta(seconds=1)
     while True:
         search = robot.sensor_data("ColorSensor")
 
         robot.motors.right.run_forever(speed_sp=speed)
         robot.motors.left.run_forever(speed_sp=speed)
 
-        if datetime.now() >= end_time:  # se passou 1.5 segundo ou mais para encontrar o "Undefined"
+        if datetime.now() >= end_time:  # se passou 1 segundo ou mais para encontrar o "Undefined"
             res_dang = False
 
         if "Undefined" in search:
@@ -178,6 +178,13 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    if not robot.has_doll:
+        robot.reverse_path = True
+        robot.bounding_box = False
+        robot.move_timed(how_long=1, direction="back", speed=1000)
+        robot.rotate(180)
+        return
+
     kp = 20
     ki = 1.5
     kd = 60.1
