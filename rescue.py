@@ -81,7 +81,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     ev3.Sound.beep()
                     ev3.Sound.beep()
                     # tentando pegar o doll antes de chegar a ponto de cair
-                    robot.move_timed(how_long=0.6, direction="forward", speed=speed)
+                    robot.move_timed(how_long=0.7, direction="forward", speed=speed)
                     robot.stop_motors()
                     #time.sleep(3)
                     robot.motors.alternative.run_forever(speed_sp=1000)
@@ -128,7 +128,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     ev3.Sound.beep()
                     ev3.Sound.beep()
                     # tentando pegar o doll antes de chegar a ponto de cair
-                    robot.move_timed(how_long=0.6, direction="forward", speed=speed)
+                    robot.move_timed(how_long=0.7, direction="forward", speed=speed)
                     robot.stop_motors()
                     #time.sleep(3)
                     robot.motors.alternative.run_forever(speed_sp=1000)
@@ -232,6 +232,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             robot.motors.right.run_forever(speed_sp=n_speed)
 
         if can_break and robot.verifica_para_saida_do_bound_box() is True:
+            robot.move_timed(how_long=1, direction="forward", speed=n_speed)
             break
     ev3.Sound.beep()
     return

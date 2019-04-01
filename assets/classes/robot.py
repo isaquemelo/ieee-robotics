@@ -33,7 +33,7 @@ class Robot:
         self.rect_color = "Undefined"
         self.reverse_path = None
         self.dor_open = True
-        self.has_doll = False
+        self.has_doll = True
         self.done_learning = False
 
         self.bounding_box = False
@@ -46,6 +46,7 @@ class Robot:
 
         self.nao_pode = False
         self.realigment_counter = 0
+        self.starting_angle = self.sensor_data("GyroSensor")
 
         # define network sensors
 
@@ -192,6 +193,7 @@ class Robot:
 
         self.gyroscope_sensor.mode = 'GYRO-RATE'
         self.gyroscope_sensor.mode = 'GYRO-ANG'
+        self.starting_angle = self.sensor_data("GyroSensor")
 
     def move_timed(self, how_long=0.3, direction="forward", speed=DEFAULT_SPEED):
         end_time = datetime.now() + timedelta(seconds=how_long)
