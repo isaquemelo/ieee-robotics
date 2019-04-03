@@ -16,6 +16,7 @@ class Robot:
     def __init__(self):
         # define sensors
         self.gyroscope_sensor = ev3.GyroSensor('in3')
+        self.gyroscope_sensor.mode = 'GYRO-RATE'
         self.gyroscope_sensor.mode = 'GYRO-ANG'
         self.DEFAULT_SPEED = DEFAULT_SPEED
         self.color_sensors = Duo(ev3.ColorSensor('in1'), ev3.ColorSensor('in2'))

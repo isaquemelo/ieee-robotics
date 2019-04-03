@@ -123,6 +123,19 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         while search[0] != search[1]:
             #actual_angle = robot.sensor_data("GyroSensor")
             #print(math.fabs(starting_angle - actual_angle), starting_angle - actual_angle)
+            # if math.fabs(robot.sensor_data("GyroSensor") - robot.starting_angle > 20):
+            #     ev3.Sound.beep()
+            #     ev3.Sound.beep()
+            # if robot.sensor_data("GyroSensor") < -15:
+            #     ev3.Sound.beep()
+            #     ev3.Sound.beep()
+            #     grau = robot.sensor_data("GyroSensor")
+            #     # while grau < 0:
+            #     #     grau = robot.sensor_data("GyroSensor")
+            #     #     robot.motors.left.run_forever(speed_sp=400)
+            #     # robot.stop_motors()
+            #     robot.rotate(grau * -1)
+            #     robot.move_timed(how_long=1, direction="back", speed=400)
 
             if reverse:
                 robot.motors.left.run_forever(speed_sp=speed)
@@ -157,6 +170,20 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         robot.motors.right.stop()
 
         while search[0] != search[1]:
+            # if math.fabs(robot.sensor_data("GyroSensor") - robot.starting_angle > 20):
+            #     ev3.Sound.beep()
+            #     ev3.Sound.beep()
+            #     ev3.Sound.beep()
+            # if robot.sensor_data("GyroSensor") > 15:
+            #     grau = robot.sensor_data("GyroSensor")
+            #     ev3.Sound.beep()
+            #     ev3.Sound.beep()
+            #     # while grau > 0:
+            #     #     grau = robot.sensor_data("GyroSensor")
+            #     #     robot.motors.right.run_forever(speed_sp=400)
+            #     # robot.stop_motors()
+            #     robot.rotate(grau * -1)
+            #     robot.move_timed(how_long=1, direction="back", speed=400)
 
             if reverse:
                 robot.motors.right.run_forever(speed_sp=speed)
@@ -187,6 +214,28 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         else:
             robot.motors.left.run_forever(speed_sp=n_speed + control)
             robot.motors.right.run_forever(speed_sp=n_speed - control)
+
+    if robot.sensor_data("GyroSensor") > 15:
+        grau = robot.sensor_data("GyroSensor")
+        ev3.Sound.beep()
+        ev3.Sound.beep()
+        # while grau > 0:
+        #     grau = robot.sensor_data("GyroSensor")
+        #     robot.motors.right.run_forever(speed_sp=400)
+        # robot.stop_motors()
+        robot.rotate(grau * -1)
+        robot.move_timed(how_long=1, direction="back", speed=400)
+
+    elif robot.sensor_data("GyroSensor") < -15:
+        ev3.Sound.beep()
+        ev3.Sound.beep()
+        grau = robot.sensor_data("GyroSensor")
+        # while grau < 0:
+        #     grau = robot.sensor_data("GyroSensor")
+        #     robot.motors.left.run_forever(speed_sp=400)
+        # robot.stop_motors()
+        robot.rotate(grau * -1)
+        robot.move_timed(how_long=1, direction="back", speed=400)
 
 
 def return_last_color(robot, square_color, last_choice):
@@ -237,7 +286,7 @@ def main():
         undefined_counter = 0
 
         while True:
-            print(robot.starting_angle)
+            print(robot.sensor_data("GyroSensor") - robot.starting_angle)
             #print(robot.sensor_data("ColorSensor"))
             #print(robot.historic)
             robot.update()
