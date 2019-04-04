@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/rescue.py" beforeDir="false" afterPath="$PROJECT_DIR$/rescue.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="431" column="12" selection-start-line="431" selection-start-column="12" selection-end-line="439" selection-end-column="45" />
+            <state relative-caret-position="188">
+              <caret line="331" column="45" selection-start-line="331" selection-start-column="45" selection-end-line="331" selection-end-column="45" />
               <folding>
                 <element signature="e#19#43#0" expanded="true" />
               </folding>
@@ -83,8 +83,8 @@
       <find>has</find>
       <find>print(</find>
       <find>rotate</find>
-      <find>undef</find>
       <find>print</find>
+      <find>undef</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -103,7 +103,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="-1" />
     <option name="width" value="1366" />
     <option name="height" value="370" />
@@ -239,12 +239,12 @@
       <workItem from="1553876770890" duration="8687000" />
       <workItem from="1554126456067" duration="17730000" />
       <workItem from="1554223597495" duration="98000" />
-      <workItem from="1554399512464" duration="3111000" />
+      <workItem from="1554399512464" duration="3610000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103922000" />
+    <option name="totallyTimeSpent" value="104421000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -257,6 +257,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1372" height="738" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13636364" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -268,7 +269,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3284553" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.42276424" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.41788617" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32792208" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32792208" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
@@ -351,8 +352,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="431" column="12" selection-start-line="431" selection-start-column="12" selection-end-line="439" selection-end-column="45" />
+        <state relative-caret-position="188">
+          <caret line="331" column="45" selection-start-line="331" selection-start-column="45" selection-end-line="331" selection-end-column="45" />
           <folding>
             <element signature="e#19#43#0" expanded="true" />
           </folding>

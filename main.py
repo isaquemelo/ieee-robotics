@@ -297,6 +297,7 @@ client.on_message = on_message
 
 client.loop_start()
 
+last_same_color2 = None
 
 def main():
     try:
@@ -310,7 +311,7 @@ def main():
 
         while True:
             #print(robot.sensor_data("ColorSensor"))
-            print(robot.historic)
+            #print(robot.historic)
             robot.update()
 
             if robot.bounding_box:
@@ -324,6 +325,19 @@ def main():
 
             search = robot.sensor_data("ColorSensor")
             result = color_realignment(robot, search, robot.infrared_sensors)
+
+            if search[0] == search[1] and search[0] not in ["Black", "Undefined", "Brown", "White"]:
+                last_same_color2 = search[0]
+
+            if search[0] == search[1] == "Black":
+                print("ESSEEEE EH O CASO!")
+                print(last_same_color2)
+                return_last_color(robot, last_same_color2, [])
+                robot.rotate(-180,speed=400)
+                robot.move_timed(0.3)
+                print("ESSEEEE EH O CASO FIM!")
+
+
 
             if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
                 robot.stop_motors()
