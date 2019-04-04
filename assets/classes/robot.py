@@ -21,11 +21,15 @@ class Robot:
         self.DEFAULT_SPEED = DEFAULT_SPEED
         self.color_sensors = Duo(ev3.ColorSensor('in1'), ev3.ColorSensor('in2'))
         self.ultrasonic_sensor = ev3.UltrasonicSensor('in4')
+        self.ta_no_final_da_pista = False
 
         # define motors
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
         self.motors.alternative.run_forever(speed_sp=-1000)
         # self.handler = ev3.LargeMotor('outC')
+        self.learned_colors = {}
+        self.learned_colors = {'Green': ['right'], 'Red': ['forward'], 'Blue': ['left']}
+        self.primeiro_bounding_box = True
 
         # define status
         self.historic = [""]
@@ -212,10 +216,22 @@ class Robot:
         self.motors.left.stop()
         self.motors.right.stop()
 
-
+    def learned_colors_is_empity(self):
+        keys = self.learned_colors.keys()
+        for k in keys:
+            print(self.learned_colors[k][-1])
+            if self.learned_colors[k][-1] >= 1:
+                return False
+        return True
 
     def run_action(self, direction, still_learning=True):
         self.realigment_counter = 0
+
+        if self.reverse_path is True:
+            self.learned_colors[self.rect_color][-1] -= 1
+            print("EXECUTOU O DESCARREGAMENTO DA COR")
+            print(self.learned_colors)
+
 
         if self.nao_pode:
             return

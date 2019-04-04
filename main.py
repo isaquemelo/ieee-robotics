@@ -34,7 +34,7 @@ pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     deu_re = False
-    limiar = 15
+    limiar = 13 # 15
     li = 5
     limiar_time = 1
     limiar_speed = speed
@@ -262,7 +262,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
 
 def return_last_color(robot, square_color, last_choice):
-    robot.rotate(180)
+    robot.rotate(-180)
     while True:
         robot.update()
         search = robot.sensor_data("ColorSensor")
@@ -278,7 +278,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.184.236", 1883, 60)
+client.connect("169.254.84.125", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -301,8 +301,8 @@ last_same_color2 = None
 
 def main():
     try:
-        #learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
-        learned_colors = {}
+        #robot.learned_colors = {'Green': 'right', 'Red': 'forward', 'Blue': 'left'}
+        #robot.learned_colors = {}
         being_learned = "Undefined"
         learning_dic = {}
         im_learning = False
@@ -313,6 +313,12 @@ def main():
             #print(robot.sensor_data("ColorSensor"))
             #print(robot.historic)
             robot.update()
+
+            # chegou ao final da pista
+            # if robot.primeiro_bounding_box is False:
+            #     if robot.learned_colors_is_empity is True:
+            #         robot.ta_no_final_da_pista = True
+            #         print("CHEGOU AO FINAL DA PISTA")
 
             if robot.bounding_box:
                 robot.done_learning = True
@@ -325,6 +331,14 @@ def main():
 
             search = robot.sensor_data("ColorSensor")
             result = color_realignment(robot, search, robot.infrared_sensors)
+
+            # volta do final da pista
+            # if robot.ta_no_final_da_pista is True:
+            #     if search[0] == search[1] and search[0] == "Undefined":
+            #         robot.stop_motors()
+            #         robot.move_timed(how_long=1, direction="back")
+            #         robot.rotate(180)
+            #         robot.ta_no_final_da_pista = False
 
             if search[0] == search[1] and search[0] not in ["Black", "Undefined", "Brown", "White"]:
                 last_same_color2 = search[0]
@@ -354,13 +368,13 @@ def main():
                     if robot.rect_color not in ["White", "Undefined", "Black"]:
                         try:
                             #print("Tentando executar acao para a cor:", robot.rect_color)
-                            #print("Aprendidos ate agora:", learned_colors)
+                            #print("Aprendidos ate agora:", robot.learned_colors)
 
-                            if learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor") not in ["Black",
+                            if robot.learned_colors[robot.rect_color] and robot.sensor_data("ColorSensor") not in ["Black",
                                                                                                              "Brown",
                                                                                                              "Undefined"]:
-                                #print("Executando acao:", learned_colors[robot.rect_color])
-                                robot.run_action(learned_colors[robot.rect_color], im_learning)
+                                #print("Executando acao:", robot.learned_colors[robot.rect_color])
+                                robot.run_action(robot.learned_colors[robot.rect_color][0], im_learning)
 
                                 # adds action to historic
                                 if robot.reverse_path is None:
@@ -374,11 +388,12 @@ def main():
                                         #print("Removendo item")
                                         last_item = robot.historic[-1]
                                         robot.historic.pop()
-                                        if len(robot.historic) == 1:
-                                            #print("Ultimo item")
-                                            robot.rotate(90)
-                                            robot.reverse_path = None
-                                            robot.historic.append(last_item)
+                                        # Uso de pilha para detectar começo de pista
+                                        # if len(robot.historic) == 1:
+                                        #     #print("Ultimo item")
+                                        #     robot.rotate(90)
+                                        #     robot.reverse_path = None
+                                        #     robot.historic.append(last_item)
 
                                 robot.move_timed(how_long=0.4)
                                 color = 0
@@ -414,7 +429,7 @@ def main():
                             if color_sensor[0] != being_learned or (
                                     color_sensor[0] == being_learned and white_counter >= 5):
 
-                                learned_colors[being_learned] = learning_dic[being_learned][0]
+                                robot.learned_colors[being_learned] = [learning_dic[being_learned][0]]
 
                                 # adds action to historic
                                 if robot.reverse_path == None and not robot.nao_pode:
@@ -425,7 +440,7 @@ def main():
                                 being_learned = "Undefined"
                                 learning_dic = {}
 
-                                #print("Aprendi uma nova cor, segue o dicionario:", learned_colors)
+                                #print("Aprendi uma nova cor, segue o dicionario:", robot.learned_colors)
 
                                 break
 

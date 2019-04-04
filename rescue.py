@@ -178,6 +178,20 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    # recarrega todos as cores pelas quais vai passar voltando;
+    if robot.primeiro_bounding_box is True:
+        robot.primeiro_bounding_box = False
+        print("PRIMEIRA CARGA")
+        keys = robot.learned_colors.keys()
+        for k in keys:
+            robot.learned_colors[k].append(2)
+            print(robot.learned_colors)
+    else:
+        print("CARGA 1 + N")
+        for k in sorted(robot.learned_colors.keys()):
+            robot.learned_colors[k][-1] = 2
+            print(robot.learned_colors)
+
     if not robot.has_doll:
         robot.reverse_path = True
         robot.bounding_box = False
