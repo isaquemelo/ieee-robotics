@@ -101,11 +101,15 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 return "On square"
 
     elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
-        #print("Undefine Dealing counting..")
-        robot.undefined_counter += 1
+        if last_same_color == ["White", "White"]:
+            print("Running undefined dealing...")
+            undefined_dealing(search)
+        else:
+            print("Undefine Dealing counting..")
+            robot.undefined_counter += 1
 
-        if robot.undefined_counter > 3:
-            #print("Undefine Dealing executed..")
+        if robot.undefined_counter > 5:
+            print("Undefined Dealing executed..")
             robot.undefined_counter = 0
             undefined_dealing(search)
 
