@@ -34,7 +34,7 @@ class Robot:
         self.rect_color = "Undefined"
         self.reverse_path = None
         self.dor_open = True
-        self.has_doll = True
+        self.has_doll = False
         self.done_learning = False
 
         self.bounding_box = False
@@ -103,8 +103,8 @@ class Robot:
             if i in ["Black", "White", "Undefined", "Brown"]:
                 return False
         self.bounding_box = False
-        print("SAINDO do bound box")
-        print("valoes na fila de igentificassao de fim de pista: {}".format(self.fila_para_registro_do_fim))
+        #print("SAINDO do bound box")
+        #print("valoes na fila de igentificassao de fim de pista: {}".format(self.fila_para_registro_do_fim))
         self.reverse_path = True
         return True
 

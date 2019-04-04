@@ -2,16 +2,16 @@
 <project version="4">
   <component name="WebServers">
     <option name="servers">
-      <webServer id="cd16bf5b-8702-4aed-b5b8-ccb8b5f2ed2b" name="robot main" url="http://10.0.0.77">
-        <fileTransfer host="10.0.0.77" port="22" rootFolder="/home/robot" accessType="SFTP">
+      <webServer id="cd16bf5b-8702-4aed-b5b8-ccb8b5f2ed2b" name="robot main" url="http://10.172.91.77">
+        <fileTransfer host="10.172.91.77" port="22" rootFolder="/home/robot" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
           <option name="port" value="22" />
         </fileTransfer>
       </webServer>
-      <webServer id="516a1441-c1c8-4b7f-b000-eef6ea292ccf" name="robot slave" url="http://10.0.0.34">
-        <fileTransfer host="10.0.0.34" port="22" rootFolder="/home/robot" accessType="SFTP">
+      <webServer id="516a1441-c1c8-4b7f-b000-eef6ea292ccf" name="robot slave" url="http://10.172.91.34">
+        <fileTransfer host="10.172.91.34" port="22" rootFolder="/home/robot" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
           </advancedOptions>
