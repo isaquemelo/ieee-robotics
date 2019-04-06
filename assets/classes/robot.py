@@ -27,10 +27,9 @@ class Robot:
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
         self.motors.alternative.run_forever(speed_sp=-1000)
         # self.handler = ev3.LargeMotor('outC')
-        self.learned_colors = {}
-        self.learned_colors = {'Green': ['right'], 'Red': ['forward'], 'Blue': ['left']}
+        # self.learned_colors = {}
+        self.learned_colors = {'Blue': ['left'], 'Red': ['forward'], 'Green': ['right']}
         self.primeiro_bounding_box = True
-
         # define status
         self.historic = [""]
         self.undefined_counter = 0
@@ -40,6 +39,8 @@ class Robot:
         self.dor_open = True
         self.has_doll = False
         self.done_learning = False
+        self.voltou = False
+        self.tempo_para_chamar_run_action = datetime.now()
 
         self.bounding_box = False
 
@@ -217,24 +218,44 @@ class Robot:
         self.motors.right.stop()
 
     def learned_colors_is_empity(self):
-        keys = self.learned_colors.keys()
+        # print("CHAMOU A FUNÇÃO")
+        keys = list(self.learned_colors.keys())
+        # print("learned_colors = {}".format(self.learned_colors))
         for k in keys:
-            print(self.learned_colors[k][-1])
+            # if type(self.learned_colors[k][-1]) != int:
+            #     print("Retornou String")
+            #     return "tentou chamar pra uma String"
+            # print("valor = {}".format(self.learned_colors[k][-1]))
             if self.learned_colors[k][-1] >= 1:
+                # print("Retornou False")
                 return False
+        # print("Retornou True")
         return True
 
     def run_action(self, direction, still_learning=True):
+        # for i in range(5):
+            # print("REVEERSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE_PATH = {}".format(self.reverse_path))
+        print("CHAMOU O RUN_ACTION COM O REVERSE_PATH = {}".format(self.reverse_path))
         self.realigment_counter = 0
+        # if self.nao_pode:
+        #     self.move_timed(how_long=0.2, direction="back")
+        #     return
+
+        if datetime.now() < self.tempo_para_chamar_run_action:
+            print("CHAMOU A RUN_ACTION NO TEMPO ERRADO")
+            ev3.Sound.beep()
+            ev3.Sound.beep()
+            self.move_timed(how_long=0.2, direction="back")
+            return
+
+        else:
+            print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
+            self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=3)
 
         if self.reverse_path is True:
             self.learned_colors[self.rect_color][-1] -= 1
-            print("EXECUTOU O DESCARREGAMENTO DA COR")
+            # print("EXECUTOU O DESCARREGAMENTO DA COR")
             print(self.learned_colors)
-
-
-        if self.nao_pode:
-            return
 
         self.nao_pode = True
         if self.reverse_path:

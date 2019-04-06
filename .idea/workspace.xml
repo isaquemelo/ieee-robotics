@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/assets/classes/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/classes/robot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rescue.py" beforeDir="false" afterPath="$PROJECT_DIR$/rescue.py" afterDir="false" />
@@ -17,11 +18,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="340" column="56" lean-forward="true" selection-start-line="335" selection-start-column="14" selection-end-line="340" selection-end-column="56" />
+            <state relative-caret-position="385">
+              <caret line="115" column="47" lean-forward="true" selection-start-line="115" selection-start-column="47" selection-end-line="115" selection-end-column="47" />
               <folding>
                 <element signature="e#19#43#0" expanded="true" />
               </folding>
@@ -29,11 +30,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="101" column="22" selection-start-line="101" selection-start-column="22" selection-end-line="101" selection-end-column="22" />
+            <state relative-caret-position="-405">
+              <caret line="42" column="58" lean-forward="true" selection-start-line="42" selection-start-column="58" selection-end-line="42" selection-end-column="58" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -44,11 +45,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rescue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="199" column="14" selection-start-line="199" selection-start-column="14" selection-end-line="199" selection-end-column="14" />
+            <state relative-caret-position="210">
+              <caret line="18" column="52" lean-forward="true" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="52" />
               <folding>
-                <element signature="e#211#7552#0" />
                 <element signature="e#7602#7845#0" />
+                <element signature="e#7898#10297#0" />
               </folding>
             </state>
           </provider>
@@ -65,29 +66,9 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>AQUI B</find>
-      <find>move_ti</find>
-      <find>run_ti</find>
-      <find>doll</find>
-      <find>has_doll</find>
-      <find>print(robot.</find>
-      <find>robot.his</find>
-      <find>ção</find>
-      <find>undefined_de</find>
-      <find>color_re</find>
-      <find>mode</find>
-      <find>boun</find>
-      <find>bounding_box</find>
-      <find>robot.update()</find>
-      <find>move_tim</find>
-      <find>bounding</find>
-      <find>has</find>
-      <find>print(</find>
       <find>rotate</find>
       <find>undef</find>
-      <find>print</find>
       <find>run_ac</find>
-      <find>run_action</find>
       <find>run_acti</find>
       <find>learned_colors</find>
       <find>format(self.rect_color,self.learned_colors[{}][-1])</find>
@@ -95,6 +76,26 @@
       <find>ESSEEEE EH O CASO!</find>
       <find>return_last</find>
       <find>return_last_color</find>
+      <find>self.nao_pode</find>
+      <find>self.</find>
+      <find>rescue</find>
+      <find>ESSEEEE EH O CASO FIM!</find>
+      <find>&gt;= 10</find>
+      <find>ESSE</find>
+      <find>learned_colors_is_empity</find>
+      <find>robot.reverse_path = None</find>
+      <find>robot.reverse_path</find>
+      <find>robot.reverse_path = False</find>
+      <find>REVEERSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE_PATH</find>
+      <find>robot.reverse_path =</find>
+      <find>0.5</find>
+      <find>color_realigment</find>
+      <find>color_re</find>
+      <find>TA NO</find>
+      <find>run</find>
+      <find>TA</find>
+      <find>print</find>
+      <find>run_action</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -108,8 +109,8 @@
         <option value="$PROJECT_DIR$/teste.py" />
         <option value="$PROJECT_DIR$/assets/testing time.py" />
         <option value="$PROJECT_DIR$/rescue.py" />
-        <option value="$PROJECT_DIR$/assets/classes/robot.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/assets/classes/robot.py" />
       </list>
     </option>
   </component>
@@ -249,12 +250,13 @@
       <workItem from="1553876770890" duration="8687000" />
       <workItem from="1554126456067" duration="17730000" />
       <workItem from="1554223597495" duration="98000" />
-      <workItem from="1554399512464" duration="14776000" />
+      <workItem from="1554399512464" duration="15165000" />
+      <workItem from="1554488348280" duration="22038000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115587000" />
+    <option name="totallyTimeSpent" value="138014000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -267,9 +269,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1372" height="738" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13636364" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.13863637" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -279,7 +280,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3284553" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.8455285" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" visible="true" weight="0.9512195" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32792208" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32792208" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
@@ -345,31 +346,31 @@
     <entry file="file://$PROJECT_DIR$/assets/testing time.py" />
     <entry file="file://$PROJECT_DIR$/rescue.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="199" column="14" selection-start-line="199" selection-start-column="14" selection-end-line="199" selection-end-column="14" />
+        <state relative-caret-position="210">
+          <caret line="18" column="52" lean-forward="true" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="52" />
           <folding>
-            <element signature="e#211#7552#0" />
             <element signature="e#7602#7845#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="101" column="22" selection-start-line="101" selection-start-column="22" selection-end-line="101" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#7898#10297#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="340" column="56" lean-forward="true" selection-start-line="335" selection-start-column="14" selection-end-line="340" selection-end-column="56" />
+        <state relative-caret-position="385">
+          <caret line="115" column="47" lean-forward="true" selection-start-line="115" selection-start-column="47" selection-end-line="115" selection-end-column="47" />
           <folding>
             <element signature="e#19#43#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-405">
+          <caret line="42" column="58" lean-forward="true" selection-start-line="42" selection-start-column="58" selection-end-line="42" selection-end-column="58" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -178,25 +178,26 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    robot.voltou = False
     # recarrega todos as cores pelas quais vai passar voltando;
     if robot.primeiro_bounding_box is True:
         robot.primeiro_bounding_box = False
-        print("PRIMEIRA CARGA")
+        # print("PRIMEIRA CARGA")
         keys = robot.learned_colors.keys()
         for k in keys:
             robot.learned_colors[k].append(2)
             print(robot.learned_colors)
     else:
-        print("CARGA 1 + N")
+        # print("CARGA 1 + N")
         for k in sorted(robot.learned_colors.keys()):
             robot.learned_colors[k][-1] = 2
-            print(robot.learned_colors)
+            # print(robot.learned_colors)
 
     if not robot.has_doll:
         robot.reverse_path = True
         robot.bounding_box = False
         robot.move_timed(how_long=1, direction="back", speed=1000)
-        robot.rotate(180)
+        robot.rotate(170)
         return
 
     kp = 20
@@ -214,7 +215,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
     pid.output_limits = (-400, 400)
     while True:
-        print("Bouding box loop..")
+        # print("Bouding box loop..")
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" and search[1] == "Black":
             black_counter += 1
