@@ -27,8 +27,8 @@ class Robot:
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
         self.motors.alternative.run_forever(speed_sp=-1000)
         # self.handler = ev3.LargeMotor('outC')
-        # self.learned_colors = {}
-        self.learned_colors = {'Blue': ['left'], 'Red': ['forward'], 'Green': ['right']}
+        self.learned_colors = {}
+        # self.learned_colors = {'Blue': ['left'], 'Red': ['forward'], 'Green': ['right']}
         self.primeiro_bounding_box = True
         # define status
         self.historic = [""]
