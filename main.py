@@ -33,7 +33,7 @@ pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     deu_re = False
-    limiar = 12 # 15
+    limiar = 15 # 15
     li = 5
     limiar_time = 1
     limiar_speed = speed
@@ -365,6 +365,7 @@ def main():
                 search = robot.sensor_data("ColorSensor")
                 if search[1] == "Undefined" or search[0] == "Undefined":
                     robot.stop_motors()
+                    robot.voltou_inicio_pista()
                     robot.move_timed(how_long=1, direction="back")
                     robot.rotate(180)
                     robot.ta_no_final_da_pista = False

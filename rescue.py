@@ -7,6 +7,15 @@ import time
 DEFAULT_SPEED = 400
 
 
+def deal_ret(robot):
+    if robot.reverse_path is False:
+        robot.rotate(90, speed=300)
+    elif robot.reverse_path in [True, None]:
+        robot.rotate(-90, speed=300)
+    robot.has_doll = True
+    robot.reverse_path = False
+    return
+
 def rescue(robot, speed=DEFAULT_SPEED):
     robot.stop_motors()
     robot.rotate(-90, speed=300)
@@ -50,7 +59,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     search = robot.sensor_data("ColorSensor")
                     robot.motors.right.run_forever(speed_sp=-speed)
                 robot.stop_motors()
-                robot.move_timed(how_long=1, direction="back", speed=speed)
+                robot.move_timed(how_long=1.5, direction="back", speed=speed)
                 robot.rotate(180, speed=1000)
 
                 while True:
@@ -58,15 +67,22 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     if "Undefined" in search:
                         robot.stop_motors()
                         robot.move_timed(how_long=0.3, direction="back", speed=speed)
-                        if not robot.done_learning:
-                            robot.rotate(-90, speed=300)
-                        robot.has_doll = True
-
-                        if robot.done_learning:
-                            robot.rotate(90, speed=500)
-                            robot.reverse_path = None
-
-                        robot.motors.alternative.run_forever(speed_sp=1000)
+                        # if not robot.done_learning:
+                        #     robot.rotate(-90, speed=300)
+                        # if robot.reverse_path is False:
+                        #     robot.rotate(-90, speed=300)
+                        #     robot.reverse_path = True
+                        # # robot.has_doll = True
+                        #
+                        # # if robot.done_learning:
+                        # #     robot.rotate(90, speed=500)
+                        # #     robot.reverse_path = None
+                        # else:
+                        #     robot.rotate(90, speed=500)
+                        #     robot.reverse_path = False
+                        # robot.motors.alternative.run_forever(speed_sp=1000)
+                        # robot.has_doll = True
+                        deal_ret(robot)
                         return
                     else:
                         robot.motors.right.run_forever(speed_sp=speed)
@@ -108,14 +124,23 @@ def rescue(robot, speed=DEFAULT_SPEED):
                         if "Undefined" in search:
                             robot.stop_motors()
                             robot.move_timed(how_long=0.3, direction="back", speed=speed)
-                            if not robot.done_learning:
-                                robot.rotate(-90, speed=300)
-                            robot.has_doll = True
+                            # if not robot.done_learning:
+                            #     robot.rotate(-90, speed=300)
+                            # robot.has_doll = True
+                            #
+                            # if robot.done_learning:
+                            #     robot.rotate(90, speed=500)
+                            #     robot.reverse_path = None
+                            # if robot.reverse_path is False:
+                            #     robot.rotate(90, speed=300)
+                            #     robot.reverse_path = True
+                            #
+                            # else:
+                            #     robot.rotate(-90, speed=500)
+                            #     robot.reverse_path = False
 
-                            if robot.done_learning:
-                                robot.rotate(90, speed=500)
-                                robot.reverse_path = None
-
+                            # robot.has_doll = True
+                            deal_ret(robot)
                             return
 
                         else:
@@ -152,14 +177,24 @@ def rescue(robot, speed=DEFAULT_SPEED):
                         if "Undefined" in search:
                             robot.stop_motors()
                             robot.move_timed(how_long=0.3, direction="back", speed=speed)
-                            if not robot.done_learning:
-                                robot.rotate(-90, speed=300)
-                            robot.has_doll = True
+                            # if not robot.done_learning:
+                            #     robot.rotate(-90, speed=300)
+                            # robot.has_doll = True
+                            #
+                            # if robot.done_learning:
+                            #     robot.rotate(90, speed=500)
+                            #     robot.reverse_path = None
 
-                            if robot.done_learning:
-                                robot.rotate(90, speed=500)
-                                robot.reverse_path = None
+                            # if robot.reverse_path is False:
+                            #     robot.rotate(90, speed=300)
+                            #     robot.reverse_path = True
+                            #
+                            # else:
+                            #     robot.rotate(-90, speed=500)
+                            #     robot.reverse_path = False
 
+                            # robot.has_doll = True
+                            deal_ret(robot)
                             return
 
                         else:
@@ -224,7 +259,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             # move back with pid
             robot.move_timed(how_long=1.1, direction="back", speed=1000)
             robot.rotate(180)
-            pid = PID(kp, ki, kd, setpoint=82.1)
+            pid = PID(kp, ki, kd, setpoint=80.4)
             black_counter = 0
             can_break = True
 

@@ -65,6 +65,38 @@ class Robot:
         self.kon_const = 25
         self.kon = self.kon_const + 1
 
+    def voltou_inicio_pista(self):
+        search = self.sensor_data("ColorSensor")
+
+        if search[0] == "Undefined" and search[1] != "Undefined":  # so o da esquerda  ta fora da pista
+            while True:
+                search = self.sensor_data("ColorSensor")
+                if search[0] == "White":
+                    self.stop_motors()
+                    break
+                else:
+                    self.motors.left.run_forever(speed_sp=-500)
+        elif search[1] == "Undefined" and search[0] != "Undefined":  # so o da direita ta fora da pista
+            while True:
+                search = self.sensor_data("ColorSensor")
+                if search[1] == "White":
+                    self.stop_motors()
+                    break
+                else:
+                    self.motors.right.run_forever(speed_sp=-500)
+        elif search[1] == "Undefined" and search[0] == "Undefined":   # os dois estao fora da pista ao mesmo tempo
+            while True:
+                search = self.sensor_data("ColorSensor")
+                if search[1] == "White" and search[0] == "White":
+                    self.stop_motors()
+                    break
+                else:
+                    self.motors.right.run_forever(speed_sp=-500)
+                    self.motors.left.run_forever(speed_sp=-500)
+        self.move_timed(how_long=0.2, direction="back")
+        return
+
+
     def update_no_status_de_registro_de_fim_do_percursso(self):
         # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
         # pra o lado esquerdo
