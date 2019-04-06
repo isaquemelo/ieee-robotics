@@ -34,8 +34,8 @@ pid = PID(15.6, 0, 4.8, setpoint=-4)
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     deu_re = False
     limiar = 15 # 15
-    li = 5
-    limiar_time = 1
+    li = 7
+    limiar_time = 0.6
     limiar_speed = speed
     robot.update()
     global last_same_color, color, rect_check
@@ -314,7 +314,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.90.185", 1883, 60)
+client.connect("169.254.107.44", 1883, 60)
 
 
 def on_message(client, userdata, message):

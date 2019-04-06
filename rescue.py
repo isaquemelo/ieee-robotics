@@ -9,9 +9,9 @@ DEFAULT_SPEED = 400
 
 def deal_ret(robot):
     if robot.reverse_path is False:
-        robot.rotate(90, speed=300)
-    elif robot.reverse_path in [True, None]:
         robot.rotate(-90, speed=300)
+    elif robot.reverse_path in [True, None]:
+        robot.rotate(90, speed=300)
     robot.has_doll = True
     robot.reverse_path = False
     return
@@ -243,7 +243,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     can_break = False
     #contador_para_re = 40
     # limits
-    pid = PID(kp, ki, kd, setpoint=77.4)
+    pid = PID(kp, ki, kd, setpoint=75.6)
 
     # 83.3 indo
     # 75 voltando
@@ -259,7 +259,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             # move back with pid
             robot.move_timed(how_long=1.1, direction="back", speed=1000)
             robot.rotate(180)
-            pid = PID(kp, ki, kd, setpoint=80.4)
+            pid = PID(kp, ki, kd, setpoint=80.2)
             black_counter = 0
             can_break = True
 
