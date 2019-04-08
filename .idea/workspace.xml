@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="" />
+    <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/assets/classes/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/classes/robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2">
-              <caret line="510" column="102" lean-forward="true" selection-start-line="510" selection-start-column="102" selection-end-line="510" selection-end-column="102" />
+            <state relative-caret-position="300">
+              <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
               <folding>
                 <element signature="e#24#48#0" expanded="true" />
               </folding>
@@ -28,8 +31,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="975">
-              <caret line="69" column="36" lean-forward="true" selection-start-line="69" selection-start-column="36" selection-end-line="69" selection-end-column="36" />
+            <state relative-caret-position="180">
+              <caret line="28" column="70" selection-start-line="28" selection-start-column="70" selection-end-line="28" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -66,9 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.</find>
-      <find>rescue</find>
-      <find>ESSEEEE EH O CASO FIM!</find>
       <find>&gt;= 10</find>
       <find>ESSE</find>
       <find>learned_colors_is_empity</find>
@@ -94,8 +94,11 @@
       <find>robot.learned_colors</find>
       <find>done_learning</find>
       <find>test</find>
-      <find>test.json</find>
       <find>robot.learned</find>
+      <find>colo</find>
+      <find>unde</find>
+      <find>on_message</find>
+      <find>test.json</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -110,9 +113,9 @@
         <option value="$PROJECT_DIR$/assets/classes/duo.py" />
         <option value="$PROJECT_DIR$/assets/classes/__init__.py" />
         <option value="$PROJECT_DIR$/comunication.py" />
+        <option value="$PROJECT_DIR$/rescue.py" />
         <option value="$PROJECT_DIR$/assets/classes/robot.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/rescue.py" />
       </list>
     </option>
   </component>
@@ -255,12 +258,12 @@
       <workItem from="1554399512464" duration="15165000" />
       <workItem from="1554488348280" duration="25151000" />
       <workItem from="1554521766349" duration="3628000" />
-      <workItem from="1554745336733" duration="2452000" />
+      <workItem from="1554745336733" duration="7681000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="152253000" />
+    <option name="totallyTimeSpent" value="157482000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -273,6 +276,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1372" height="738" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14090909" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -284,7 +288,7 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3284553" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.49772727" visible="true" weight="0.9154472" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49772727" weight="0.9154472" />
       <window_info anchor="bottom" id="Python Console" order="8" weight="0.32682925" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32792208" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5022727" side_tool="true" weight="0.40813008" />
@@ -367,15 +371,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="975">
-          <caret line="69" column="36" lean-forward="true" selection-start-line="69" selection-start-column="36" selection-end-line="69" selection-end-column="36" />
+        <state relative-caret-position="180">
+          <caret line="28" column="70" selection-start-line="28" selection-start-column="70" selection-end-line="28" selection-end-column="70" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2">
-          <caret line="510" column="102" lean-forward="true" selection-start-line="510" selection-start-column="102" selection-end-line="510" selection-end-column="102" />
+        <state relative-caret-position="300">
+          <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
           <folding>
             <element signature="e#24#48#0" expanded="true" />
           </folding>

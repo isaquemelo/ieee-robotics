@@ -13,15 +13,73 @@ import json
 
 DEFAULT_SPEED = 350
 
+# def deal_with_rotation_from_undefined_dealing(robot, left_out=False, right_out=False):
+#     limiar_fora_da_pista = 12 # se for maior que isso é porque ta fora da pista
+#     speed = 100
+#     ant = robot.infrared_sensors[0]
+#     if left_out is True:
+#         while abs(robot.infrared_sensors[0] - ant) >= 4:
+#             robot.motors.right.run_forever(speed_sp=-speed)
+#             ant = robot.infrared_sensors
+#         robot.stop_motors()
+#     elif right_out is True:
+#         return
+
 def undefined_dealing(color_sensor):
+    limiar = 12
     sensor_color = color_sensor
+    speed = 400
     if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":
         if sensor_color[0] == "Undefined":
-            robot.move_timed(how_long=0.6, direction="back")
-            robot.rotate(30, axis="diferente")
+            #robot.move_timed(how_long=0.6, direction="back")
+            # SUBSTITUI O MOVETIMED DE CIMA
+            while True:
+                search = robot.sensor_data("ColorSensor")
+                if "Undefined" not in search:
+                    robot.stop_motors()
+                    break
+                else:
+                    robot.motors.left.run_forever(speed_sp=-speed)
+                    robot.motors.right.run_forever(speed_sp=-speed)
+            # SUBSTITUI O MOVETIMED DE CIMA
+            # robot.rotate(30, axis="diferente")
+            # SUBSTITUI A ROTATE DE CIMA
+            robot.gyroscope_sensor.mode = 'GYRO-RATE'
+            robot.gyroscope_sensor.mode = 'GYRO-ANG'
+            while True:
+                if robot.sensor_data('GyroSensor') >= limiar:
+                    robot.stop_motors()
+                    break
+                else:
+                    robot.motors.right.run_forever(speed_sp=-speed)
+            #time.sleep(5)
+            # deal_with_rotation_from_undefined_dealing(robot, left_out=True)
+            # SUBSTITUI A ROTATE DE CIMA
         elif sensor_color[1] == "Undefined":
-            robot.move_timed(how_long=0.6, direction="back")
-            robot.rotate(-30, axis="diferente")
+            #robot.move_timed(how_long=0.6, direction="back")
+            # SUBSTITUI O MOVETIMED DE CIMA
+            while True:
+                search = robot.sensor_data("ColorSensor")
+                if "Undefined" not in search:
+                    robot.stop_motors()
+                    break
+                else:
+                    robot.motors.left.run_forever(speed_sp=-speed)
+                    robot.motors.right.run_forever(speed_sp=-speed)
+            # SUBSTITUI O MOVETIMED DE CIMA
+            # robot.rotate(-30, axis="diferente")
+            robot.gyroscope_sensor.mode = 'GYRO-RATE'
+            robot.gyroscope_sensor.mode = 'GYRO-ANG'
+            while True:
+                if robot.sensor_data('GyroSensor') <= -limiar:
+                    robot.stop_motors()
+                    break
+                else:
+                    robot.motors.left.run_forever(speed_sp=-speed)
+            # time.sleep(5)
+            # SUBSTITUI A ROTATE DE CIMA
+            # deal_with_rotation_from_undefined_dealing(robot, right_out=True)
+            # SUBSTITUI A ROTATE DE CIMA
 
 
 last_same_color = [None, ""]
@@ -34,7 +92,7 @@ pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     deu_re = False
-    limiar = 15 # 15
+    limiar = 20 # 15
     li = 7
     limiar_time = 0.6
     limiar_speed = speed
@@ -67,6 +125,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if control < -60:
             control = -60
 
+    search = robot.sensor_data("ColorSensor")
     if search[0] == search[1]:
         # print("[0] == [1]")
         if robot.sensor_data("ColorSensor")[0] != "White" and robot.sensor_data("ColorSensor")[1] != "White":
@@ -137,18 +196,24 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 print("RETORNOU ON SQUARE COM  RECT = {}".format(robot.rect_color))
                 return "On square"
 
-    elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
-        if last_same_color == ["White", "White"]:
-            print("Running undefined dealing...")
-            undefined_dealing(search)
-        else:
-            print("Undefine Dealing counting..")
-            robot.undefined_counter += 1
 
-        if robot.undefined_counter > 5:
-            print("Undefined Dealing executed..")
-            robot.undefined_counter = 0
-            undefined_dealing(search)
+    elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
+        # if last_same_color == ["White", "White"]:
+        #     print("Running undefined dealing...")
+        #     undefined_dealing(search)
+
+        # else:
+        #     print("Undefine Dealing counting..")
+        #     robot.undefined_counter += 1
+
+        # if robot.undefined_counter > 5:
+        #     print("Undefined Dealing executed..")
+        #     robot.undefined_counter = 0
+        #     undefined_dealing(search)
+
+        # SUBSTITUI TUDO ACIMA
+        print("Running undefined dealing...")
+        undefined_dealing(search)
 
     elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"]:
         #print("[0] == White [1] != White")
@@ -544,15 +609,15 @@ def main():
                     white_counter = 0
 
 
-            if search[0] == "Undefined" and search[1] == "Undefined":
-                undefined_counter += 1
-
-                if undefined_counter > 30:
-                    undefined_counter = 0
-                    #print("Both sensors are undefined!")
-                    robot.move_timed(how_long=0.5, direction="back")
-                    robot.motors.left.stop()
-                    robot.motors.right .stop()
+            # if search[0] == "Undefined" and search[1] == "Undefined":
+            #     undefined_counter += 1
+            #
+            #     if undefined_counter > 30:
+            #         undefined_counter = 0
+            #         #print("Both sensors are undefined!")
+            #         robot.move_timed(how_long=0.5, direction="back")
+            #         robot.motors.left.stop()
+            #         robot.motors.right .stop()
 
     except:
         ev3.Sound.speak("Done!").wait()
