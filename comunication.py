@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import paho.mqtt.client as mqtt
 import ev3dev.ev3 as ev3
 from struct import *

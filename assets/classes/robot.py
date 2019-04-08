@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 from .duo import Duo
 import ev3dev.ev3 as ev3
 import math
 from datetime import datetime, timedelta
+import json
 
 DEFAULT_SPEED = 400
 
@@ -27,7 +29,7 @@ class Robot:
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outB'), ev3.LargeMotor('outC'))
         self.motors.alternative.run_forever(speed_sp=-1000)
         # self.handler = ev3.LargeMotor('outC')
-        self.learned_colors = {}
+        # self.learned_colors = {}
         # self.learned_colors = {'Blue': ['left'], 'Red': ['forward'], 'Green': ['right']}
         self.primeiro_bounding_box = True
         # define status
@@ -64,6 +66,20 @@ class Robot:
         # contador de tempo para o identificar de fim de pista
         self.kon_const = 25
         self.kon = self.kon_const + 1
+
+        self.file_name = "test.json"
+        try:
+            with open(self.file_name) as json_file:
+                process = json.load(json_file)
+                if process[1]:
+                    self.learned_colors = process[0]
+                else:
+                    self.learned_colors = {}
+
+        except FileNotFoundError:
+            self.learned_colors = {}
+
+
 
     def voltou_inicio_pista(self):
         search = self.sensor_data("ColorSensor")

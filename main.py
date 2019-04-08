@@ -1,4 +1,4 @@
-#!usr/bin/python3
+#!/usr/bin/env python3
 
 import ev3dev.ev3 as ev3
 import math
@@ -9,6 +9,7 @@ from struct import *
 from simple_pid import PID
 from assets.classes.robot import Robot
 from rescue import rescue, bounding_box
+import json
 
 DEFAULT_SPEED = 350
 
@@ -314,7 +315,7 @@ def return_last_color(robot, square_color, last_choice):
 robot = Robot()
 
 client = mqtt.Client()
-client.connect("169.254.107.44", 1883, 60)
+client.connect("10.42.0.43", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -374,6 +375,7 @@ def main():
 
             if robot.bounding_box:
                 robot.done_learning = True
+
                 #print("ENTRANDO no bounding box..")
                 #print("valoes na fila de igentificassao de fim de pista: {}".format(robot.fila_para_registro_do_fim))
                 ev3.Sound.beep()
@@ -507,6 +509,9 @@ def main():
                                     color_sensor[0] == being_learned and white_counter >= 5):
 
                                 robot.learned_colors[being_learned] = [learning_dic[being_learned][0]]
+                                if not robot.done_learning:
+                                    with open(robot.file_name, 'w') as outfile:
+                                        json.dump([robot.learned_colors, False], outfile)
 
                                 # adds action to historic
                                 if robot.reverse_path == None and not robot.nao_pode:
@@ -547,9 +552,10 @@ def main():
                     #print("Both sensors are undefined!")
                     robot.move_timed(how_long=0.5, direction="back")
                     robot.motors.left.stop()
-                    robot.motors.right.stop()
+                    robot.motors.right .stop()
 
-    except KeyboardInterrupt:
+    except:
+        ev3.Sound.speak("Done!").wait()
         robot.motors.right.stop()
         robot.motors.left.stop()
         robot.motors.alternative.stop()

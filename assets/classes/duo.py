@@ -1,3 +1,4 @@
+#!usr/bin/python3
 class Duo:
     def __init__(self, sensor_left, sensor_right, sensor_back=None):
         self.left = sensor_left

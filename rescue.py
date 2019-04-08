@@ -1,8 +1,10 @@
+#!/usr/bin/env python3
 import ev3dev.ev3 as ev3
 from assets.classes.robot import Robot
 from simple_pid import PID
 from datetime import datetime, timedelta
 import time
+import json
 
 DEFAULT_SPEED = 400
 
@@ -216,6 +218,10 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     robot.voltou = False
     # recarrega todos as cores pelas quais vai passar voltando;
     if robot.primeiro_bounding_box is True:
+        with open(robot.file_name, 'w') as outfile:
+            json.dump([robot.learned_colors, True], outfile)
+
+
         robot.primeiro_bounding_box = False
         # print("PRIMEIRA CARGA")
         keys = robot.learned_colors.keys()
