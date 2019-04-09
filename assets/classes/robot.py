@@ -290,16 +290,27 @@ class Robot:
             ev3.Sound.beep()
             ev3.Sound.beep()
             self.move_timed(how_long=0.2, direction="back")
-            return
+            # return
 
         else:
             print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
-            self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=3)
+            self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
 
         if self.reverse_path is True:
             self.learned_colors[self.rect_color][-1] -= 1
             # print("EXECUTOU O DESCARREGAMENTO DA COR")
             print(self.learned_colors)
+            self.stop_motors()
+            # if self.ta_no_final_da_pista is True:
+            #     self.ta_no_final_da_pista = False
+            #     self.rotate(180)
+
+            if self.primeiro_bounding_box is False:
+                if self.voltou is False:
+                    if self.learned_colors_is_empity() is True:
+                        self.ta_no_final_da_pista = True
+                        self.rotate(180)
+                        self.reverse_path = False
 
         self.nao_pode = True
         if self.reverse_path:
@@ -312,7 +323,7 @@ class Robot:
                     self.rotate(-90, axis="own")
             else:
                 self.rotate(-90, axis="own")
-            return None
+            # return None
 
         else:
             if not still_learning:
@@ -324,7 +335,7 @@ class Robot:
                     self.rotate(90, axis="own")
             else:
                 self.rotate(90, axis="own")
-            return None
+            # return None
 
     def stop_motors(self):
         self.motors.left.stop()

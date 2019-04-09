@@ -417,26 +417,27 @@ def main():
             #print(robot.historic)
             robot.update()
             # chegou ao final da pista
-            if robot.primeiro_bounding_box is False:
-                if robot.voltou is False:
-                    if robot.learned_colors_is_empity() is True:
-                        robot.ta_no_final_da_pista = True
-                        for i in range(4):
-                            print("TA NO FINAL DA PISTA")
-                            ev3.Sound.beep()
+            # if robot.primeiro_bounding_box is False:
+            #     if robot.voltou is False:
+            #         if robot.learned_colors_is_empity() is True:
+            #             robot.stop_motors()
+            #             robot.ta_no_final_da_pista = True
+                        # for i in range(4):
+                        #     print("TA NO FINAL DA PISTA")
+                        #     ev3.Sound.beep()
 
             # volta do final da pista
-            if robot.ta_no_final_da_pista is True:
+            # if robot.ta_no_final_da_pista is True:
                 # print("ta no final da pista")
-                search = robot.sensor_data("ColorSensor")
-                if search[1] == "Undefined" or search[0] == "Undefined":
-                    robot.stop_motors()
-                    robot.voltou_inicio_pista()
-                    robot.move_timed(how_long=1, direction="back")
-                    robot.rotate(180)
-                    robot.ta_no_final_da_pista = False
-                    robot.reverse_path = False
-                    robot.voltou = True
+                # search = robot.sensor_data("ColorSensor")
+                # if search[1] == "Undefined" or search[0] == "Undefined":
+                #     robot.stop_motors()
+                #     robot.voltou_inicio_pista()
+                #     robot.move_timed(how_long=1, direction="back")
+                #     robot.rotate(180)
+                #     robot.ta_no_final_da_pista = False
+                #     robot.reverse_path = False
+                #     robot.voltou = True
 
             if robot.bounding_box:
                 robot.done_learning = True
