@@ -544,6 +544,7 @@ def main():
                                 time.sleep(0.5)
 
                         except:
+                            # LEANNING_DIC VERIFICA
                             #print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
                             being_learned = robot.rect_color
                             learning_dic[being_learned] = ["right", "forward", "left"]
@@ -584,7 +585,7 @@ def main():
 
                                 im_learning = False
                                 being_learned = "Undefined"
-                                learning_dic = {}
+                                #learning_dic = {}
 
                                 #print("Aprendi uma nova cor, segue o dicionario:", robot.learned_colors)
 

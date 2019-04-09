@@ -190,7 +190,7 @@ class Robot:
                 1: 'Black',
                 2: 'Blue',
                 3: 'Green',
-                4: 'Red', # era Yellow, para evitar cores que não exitem e acabar chamando o bounding box quando não deve
+                4: 'Undefined', # era Yellow, para evitar cores que não exitem e acabar chamando o bounding box quando não deve
                 5: 'Red',
                 6: 'White',
                 7: 'Brown'

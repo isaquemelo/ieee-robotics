@@ -215,6 +215,9 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    for i in range(5):
+        ev3.Sound.beep()
+        print(robot.fila_para_registro_do_fim)
     robot.voltou = False
     # recarrega todos as cores pelas quais vai passar voltando;
     if robot.primeiro_bounding_box is True:
