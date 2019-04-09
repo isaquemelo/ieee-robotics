@@ -502,7 +502,10 @@ def main():
             if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
                 robot.stop_motors()
                 rescue(robot)
-                time.sleep(1)
+                # for i in range(5):
+                #     print('IDENTIFICOU O BONECO')
+                #     ev3.Sound.beep()
+                # time.sleep(2)
 
             white_counter = 0
             #print(robot.historic)
@@ -571,7 +574,7 @@ def main():
                 elif im_learning:
                     robot.run_action(learning_dic[being_learned][0], im_learning)
                     while True:
-                        if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
+                        if robot.sensor_data("Ultrasonic") < 15 and not robot.has_doll:
                             robot.stop_motors()
                             rescue(robot)
                             time.sleep(1)
