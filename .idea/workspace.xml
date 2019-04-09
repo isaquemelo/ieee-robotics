@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rescue.py" beforeDir="false" afterPath="$PROJECT_DIR$/rescue.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="503" column="16" lean-forward="true" selection-start-line="503" selection-start-column="16" selection-end-line="503" selection-end-column="16" />
+            <state relative-caret-position="365">
+              <caret line="428" column="38" lean-forward="true" selection-start-line="428" selection-start-column="38" selection-end-line="428" selection-end-column="38" />
               <folding>
                 <element signature="e#24#48#0" expanded="true" />
                 <element signature="e#15359#15435#0" />
@@ -31,20 +31,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="true" current-in-tab="false">
-        <entry file="remoteDeploymentFS://&lt;cd16bf5b-8702-4aed-b5b8-ccb8b5f2ed2b&gt;/learning_dic.json">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="940">
-              <caret line="367" column="43" selection-start-line="367" selection-start-column="43" selection-end-line="367" selection-end-column="43" />
+            <state relative-caret-position="179">
+              <caret line="40" column="29" lean-forward="true" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
               <folding>
                 <element signature="e#10887#10906#0" />
                 <element signature="e#11066#11247#0" />
-                <element signature="e#11275#11404#0" />
                 <element signature="e#11362#11995#0" />
                 <element signature="e#11547#11586#0" />
                 <element signature="e#11759#11995#0" />
@@ -57,8 +51,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rescue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="275" lean-forward="true" selection-start-line="275" selection-end-line="275" />
+            <state relative-caret-position="159">
+              <caret line="312" column="57" lean-forward="true" selection-start-line="312" selection-start-column="57" selection-end-line="312" selection-end-column="57" />
               <folding>
                 <element signature="e#23#47#0" expanded="true" />
                 <element signature="e#490#9310#0" />
@@ -78,13 +72,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>robot.reverse_path =</find>
-      <find>0.5</find>
-      <find>color_realigment</find>
-      <find>color_re</find>
-      <find>TA NO</find>
-      <find>TA</find>
-      <find>lembra</find>
       <find>print</find>
       <find>has</find>
       <find>escue</find>
@@ -106,8 +93,15 @@
       <find>with</find>
       <find>run</find>
       <find>run_action</find>
-      <find>drop</find>
       <find>rescue(</find>
+      <find>color_re</find>
+      <find>drop</find>
+      <find>except</find>
+      <find>move</find>
+      <find>bounding_box</find>
+      <find>rescue</find>
+      <find>pid</find>
+      <find>has_doll</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,8 +116,8 @@
         <option value="$PROJECT_DIR$/assets/classes/duo.py" />
         <option value="$PROJECT_DIR$/assets/classes/__init__.py" />
         <option value="$PROJECT_DIR$/comunication.py" />
-        <option value="$PROJECT_DIR$/rescue.py" />
         <option value="$PROJECT_DIR$/assets/classes/robot.py" />
+        <option value="$PROJECT_DIR$/rescue.py" />
         <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
@@ -273,12 +267,12 @@
       <workItem from="1554488348280" duration="25151000" />
       <workItem from="1554521766349" duration="3628000" />
       <workItem from="1554745336733" duration="9884000" />
-      <workItem from="1554818582267" duration="14476000" />
+      <workItem from="1554818582267" duration="25598000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="174161000" />
+    <option name="totallyTimeSpent" value="185283000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -292,7 +286,7 @@
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1372" height="738" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14318182" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.14318182" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -302,13 +296,13 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3284553" />
-      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49772727" visible="true" weight="0.37560976" />
-      <window_info anchor="bottom" id="Python Console" order="8" weight="0.32520324" />
-      <window_info anchor="bottom" id="Version Control" order="9" weight="0.32792208" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5022727" side_tool="true" weight="0.40813008" />
-      <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" order="12" />
-      <window_info anchor="bottom" id="File Transfer" order="13" weight="0.32520324" />
+      <window_info anchor="bottom" id="Python Console" order="7" sideWeight="0.5007576" weight="0.32520324" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32682925" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5022727" side_tool="true" weight="0.40813008" />
+      <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="11" />
+      <window_info anchor="bottom" id="File Transfer" order="12" weight="0.32520324" />
+      <window_info anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" side_tool="true" weight="0.8292683" />
       <window_info active="true" anchor="right" id="Remote Host" visible="true" weight="0.2" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -321,13 +315,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharm2018.3/system/python_stubs/-1247971763/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="3598" column="8" selection-start-line="3598" selection-start-column="8" selection-end-line="3598" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/testing time.py" />
     <entry file="file://$PROJECT_DIR$/assets/classes/duo.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -374,10 +361,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2018.3/system/python_stubs/-1247971763/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="892" column="6" selection-start-line="892" selection-start-column="6" selection-end-line="892" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rescue.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="275" lean-forward="true" selection-start-line="275" selection-end-line="275" />
+        <state relative-caret-position="159">
+          <caret line="312" column="57" lean-forward="true" selection-start-line="312" selection-start-column="57" selection-end-line="312" selection-end-column="57" />
           <folding>
             <element signature="e#23#47#0" expanded="true" />
             <element signature="e#490#9310#0" />
@@ -387,12 +381,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="940">
-          <caret line="367" column="43" selection-start-line="367" selection-start-column="43" selection-end-line="367" selection-end-column="43" />
+        <state relative-caret-position="179">
+          <caret line="40" column="29" lean-forward="true" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
           <folding>
             <element signature="e#10887#10906#0" />
             <element signature="e#11066#11247#0" />
-            <element signature="e#11275#11404#0" />
             <element signature="e#11362#11995#0" />
             <element signature="e#11547#11586#0" />
             <element signature="e#11759#11995#0" />
@@ -403,8 +396,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="503" column="16" lean-forward="true" selection-start-line="503" selection-start-column="16" selection-end-line="503" selection-end-column="16" />
+        <state relative-caret-position="365">
+          <caret line="428" column="38" lean-forward="true" selection-start-line="428" selection-start-column="38" selection-end-line="428" selection-end-column="38" />
           <folding>
             <element signature="e#24#48#0" expanded="true" />
             <element signature="e#15359#15435#0" />

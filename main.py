@@ -13,6 +13,8 @@ import json
 
 DEFAULT_SPEED = 350
 
+
+
 # def deal_with_rotation_from_undefined_dealing(robot, left_out=False, right_out=False):
 #     limiar_fora_da_pista = 12 # se for maior que isso é porque ta fora da pista
 #     speed = 100
@@ -160,31 +162,31 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
                 #robot.move_timed(how_long=0.4, direction="back")
                 # SUBSTITUIÇÃO DO MOVE TIMED ACIMA
-                if search[0] in ["White", "Undefined"] and search[1] not in ["White", "Undefined"]:  # so o da esquerda ta fora da cor
-                    while True:
-                        search = robot.sensor_data("ColorSensor")
-                        if search[0] in ["Blue", "Green", "Red"]:
-                            robot.stop_motors()
-                            break
-                        else:
-                            robot.motors.left.run_forever(speed_sp=-500)
-                elif search[1] in ["White", "Undefined"] and search[0] not in ["White", "Undefined"]:  # so o da direita ta fora da cor
-                    while True:
-                        search = robot.sensor_data("ColorSensor")
-                        if search[1] in ["Blue", "Green", "Red"]:
-                            robot.stop_motors()
-                            break
-                        else:
-                            robot.motors.right.run_forever(speed_sp=-500)
-                else:  # os dois estao fora da dor ao mesmo tempo
-                    while True:
-                        search = robot.sensor_data("ColorSensor")
-                        if search[1] in ["Blue", "Green", "Red"] and search[0] in ["Blue", "Green", "Red"]:
-                            robot.stop_motors()
-                            break
-                        else:
-                            robot.motors.right.run_forever(speed_sp=-500)
-                            robot.motors.left.run_forever(speed_sp=-500)
+                # if search[0] in ["White", "Undefined"] and search[1] not in ["White", "Undefined"]:  # so o da esquerda ta fora da cor
+                while True:
+                    search = robot.sensor_data("ColorSensor")
+                    if search[0] in ["Blue", "Green", "Red"]:
+                        robot.stop_motors()
+                        break
+                    else:
+                        robot.motors.left.run_forever(speed_sp=-500)
+                # elif search[1] in ["White", "Undefined"] and search[0] not in ["White", "Undefined"]:  # so o da direita ta fora da cor
+                while True:
+                    search = robot.sensor_data("ColorSensor")
+                    if search[1] in ["Blue", "Green", "Red"]:
+                        robot.stop_motors()
+                        break
+                    else:
+                        robot.motors.right.run_forever(speed_sp=-500)
+                # else:  # os dois estao fora da dor ao mesmo tempo
+                #     while True:
+                #         search = robot.sensor_data("ColorSensor")
+                #         if search[1] in ["Blue", "Green", "Red"] and search[0] in ["Blue", "Green", "Red"]:
+                #             robot.stop_motors()
+                #             break
+                #         else:
+                #             robot.motors.right.run_forever(speed_sp=-500)
+                #             robot.motors.left.run_forever(speed_sp=-500)
                 robot.move_timed(how_long=0.2, direction="back")
                 # SUBSTITUIÇÃO DO MOVE TIMED ACIMA
 
@@ -469,7 +471,7 @@ def main():
                 robot.stop_motors()
                 counter = 0
                 while counter < 10:
-                    search = search = robot.sensor_data("ColorSensor")
+                    search = robot.sensor_data("ColorSensor")
                     if search[0] == search[1] == "Black":
                         counter += 1
                     else:
@@ -557,6 +559,7 @@ def main():
                                 time.sleep(0.5)
 
                         except:
+
 
                             being_learned = robot.rect_color
 
@@ -667,12 +670,14 @@ def main():
         client.loop_stop()
         client.disconnect()
 
-try:
-    if __name__ == '__main__':
-        main()
-except KeyboardInterrupt:
-    robot.motors.right.stop()
-    robot.motors.left.stop()
-    robot.motors.alternative.stop()
-    client.loop_stop()
-    client.disconnect()
+# try:
+#     if __name__ == '__main__':
+#         robot.has_doll = True
+#         bounding_box(robot)
+#         main()
+# except KeyboardInterrupt:
+#     robot.motors.right.stop()
+#     robot.motors.left.stop()
+#     robot.motors.alternative.stop()
+#     client.loop_stop()
+#     client.disconnect()
