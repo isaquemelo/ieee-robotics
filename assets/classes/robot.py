@@ -70,10 +70,7 @@ class Robot:
         try:
             with open(self.file_name) as json_file:
                 process = json.load(json_file)
-                if process[1]:
-                    self.learned_colors = process[0]
-                else:
-                    self.learned_colors = {}
+                self.learned_colors = process[0]
 
         except FileNotFoundError:
             self.learned_colors = {}

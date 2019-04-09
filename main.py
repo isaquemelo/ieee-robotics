@@ -574,14 +574,13 @@ def main():
                                     color_sensor[0] == being_learned and white_counter >= 5):
 
                                 robot.learned_colors[being_learned] = [learning_dic[being_learned][0]]
-                                if not robot.done_learning:
-                                    with open(robot.file_name, 'w') as outfile:
-                                        json.dump([robot.learned_colors, False], outfile)
+                                with open(robot.file_name, 'w') as outfile:
+                                    json.dump([robot.learned_colors, True], outfile)
 
                                 # adds action to historic
-                                if robot.reverse_path == None and not robot.nao_pode:
-                                    #print("BBBBBBBBB")
-                                    robot.historic.append(being_learned)
+                                # if robot.reverse_path == None and not robot.nao_pode:
+                                #     #print("BBBBBBBBB")
+                                #     robot.historic.append(being_learned)
 
                                 im_learning = False
                                 being_learned = "Undefined"
@@ -619,7 +618,7 @@ def main():
             #         robot.motors.left.stop()
             #         robot.motors.right .stop()
 
-    except:
+    except KeyboardInterrupt:
         ev3.Sound.speak("Done!").wait()
         robot.motors.right.stop()
         robot.motors.left.stop()
@@ -627,6 +626,13 @@ def main():
         client.loop_stop()
         client.disconnect()
 
-
-if __name__ == '__main__':
-    main()
+try:
+    if __name__ == '__main__':
+        main()
+except KeyboardInterrupt:
+    ev3.Sound.speak("Done!").wait()
+    robot.motors.right.stop()
+    robot.motors.left.stop()
+    robot.motors.alternative.stop()
+    client.loop_stop()
+    client.disconnect()
