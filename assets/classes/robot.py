@@ -38,10 +38,11 @@ class Robot:
         self.rect_color = "Undefined"
         self.reverse_path = None
         self.dor_open = True
-        self.has_doll = True # OBS: LEMBRAR DE SETAR PRA FALSE
+        self.has_doll = False    # OBS: LEMBRAR DE SETAR PRA FALSE
         self.done_learning = False
         self.voltou = False
         self.tempo_para_chamar_run_action = datetime.now()
+        self.has_came_from_json = False
 
         self.bounding_box = False
 
@@ -66,7 +67,9 @@ class Robot:
         self.kon_const = 25
         self.kon = self.kon_const + 1
 
-        self.file_name = "test.json"
+        self.file_name = "learned_colors.json"
+        self.fixed_file_name = "learning_dic.json"
+        # tenta abrir arquivo json com cores aprendidas
         try:
             with open(self.file_name) as json_file:
                 process = json.load(json_file)
@@ -74,6 +77,15 @@ class Robot:
 
         except FileNotFoundError:
             self.learned_colors = {}
+
+        # tenta abrir achar arquivo de aprendizado individual, se nao existir cria:
+        try:
+            with open(self.fixed_file_name) as json_file:
+                process = json.load(json_file)
+
+        except FileNotFoundError:
+            with open(self.fixed_file_name, 'w') as outfile:
+                json.dump({}, outfile)
 
 
 
@@ -255,11 +267,9 @@ class Robot:
 
         # print("Starting time!")
         while datetime.now() < end_time:
-            self.motors.left.run_forever(speed_sp=vel)
-            self.motors.right.run_forever(speed_sp=vel)
+            self.motors.left.run_forever(speed_sp=vel), self.motors.right.run_forever(speed_sp=vel)
         # print("Time is over!")
-        self.motors.left.stop()
-        self.motors.right.stop()
+        self.motors.left.stop(), self.motors.right.stop()
 
     def learned_colors_is_empity(self):
         # print("CHAMOU A FUNÇÃO")
@@ -277,23 +287,21 @@ class Robot:
         return True
 
     def run_action(self, direction, still_learning=True):
-        # for i in range(5):
-            # print("REVEERSEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE_PATH = {}".format(self.reverse_path))
-        print("CHAMOU O RUN_ACTION COM O REVERSE_PATH = {}".format(self.reverse_path))
+        print("Run action chamada com os seguintes paramentros:", "direction:", direction, "still_learning:", still_learning)
+        # print("CHAMOU O RUN_ACTION COM O REVERSE_PATH = {}".format(self.reverse_path))
         self.realigment_counter = 0
         # if self.nao_pode:
         #     self.move_timed(how_long=0.2, direction="back")
         #     return
 
         if datetime.now() < self.tempo_para_chamar_run_action:
-            print("CHAMOU A RUN_ACTION NO TEMPO ERRADO")
+            # print("CHAMOU A RUN_ACTION NO TEMPO ERRADO")
             ev3.Sound.beep()
             ev3.Sound.beep()
             self.move_timed(how_long=0.2, direction="back")
             # return
-
         else:
-            print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
+            # print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
             self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
 
         if self.reverse_path is True:
@@ -313,29 +321,60 @@ class Robot:
                         self.reverse_path = False
 
         self.nao_pode = True
-        if self.reverse_path:
-            if not still_learning:
-                if direction == "forward":
-                    pass
-                elif direction == "left":
-                    self.rotate(90, axis="own")
-                elif direction == "right":
-                    self.rotate(-90, axis="own")
-            else:
-                self.rotate(-90, axis="own")
-            # return None
 
+        # if self.reverse_path:
+        #     if not still_learning:
+        #         if direction == "forward":
+        #             pass
+        #         elif direction == "left":
+        #             self.rotate(90, axis="own")
+        #         elif direction == "right":
+        #             self.rotate(-90, axis="own")
+        #     else:
+        #         self.rotate(-90, axis="own")
+        #     # return None
+        #
+        # else:
+        #     if not still_learning:
+        #         if direction == "forward":
+        #             pass
+        #         elif direction == "left":
+        #             self.rotate(-90, axis="own")
+        #         elif direction == "right":
+        #             self.rotate(90, axis="own")
+        #     else:
+        #         if :
+        #             self.rotate(90, axis="own")
+        #         else:
+        #             self.rotate(90, axis="own")
+        #     # return None
+
+        if not still_learning:
+            if direction == "forward":
+                pass
+            elif direction == "left":
+                self.rotate(90 if self.reverse_path else -90, axis="own")
+            elif direction == "right":
+                self.rotate(-90 if self.reverse_path else 90, axis="own")
         else:
-            if not still_learning:
+            if self.has_came_from_json:
                 if direction == "forward":
                     pass
                 elif direction == "left":
                     self.rotate(-90, axis="own")
                 elif direction == "right":
                     self.rotate(90, axis="own")
+
+                self.has_came_from_json = False
+
             else:
                 self.rotate(90, axis="own")
-            # return None
+
+
+
+        # return None
+
+
 
     def stop_motors(self):
         self.motors.left.stop()

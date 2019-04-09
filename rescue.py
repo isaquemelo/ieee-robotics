@@ -10,10 +10,10 @@ DEFAULT_SPEED = 400
 
 
 def deal_ret(robot):
-    if robot.reverse_path is False:
-        robot.rotate(-90, speed=300)
-    elif robot.reverse_path in [True, None]:
+    if robot.reverse_path is True:
         robot.rotate(90, speed=300)
+    elif robot.reverse_path in [False, None]:
+        robot.rotate(-90, speed=300)
     robot.has_doll = True
     robot.reverse_path = False
     return
@@ -210,6 +210,7 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
         ev3.Sound.beep()
         robot.motors.alternative.stop()
         robot.motors.alternative.run_timed(time_sp=2000, speed_sp=-1000)
+        robot.stop_motors()
         robot.dor_open = False
         robot.has_doll = False
 
@@ -271,6 +272,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             pid = PID(kp, ki, kd, setpoint=80.2)
             black_counter = 0
             can_break = True
+            robot.stop_motors()
 
         #control = pid(robot.sensor_data("Ultrasonic"))
         ultrasonico = robot.sensor_data("Ultrasonic")
@@ -292,6 +294,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
         if can_break and robot.verifica_para_saida_do_bound_box() is True:
             robot.move_timed(how_long=1, direction="forward", speed=n_speed)
+            robot.stop_motors()
             break
     ev3.Sound.beep()
     return

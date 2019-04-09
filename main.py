@@ -143,8 +143,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if color > 13:
             for i in range(1):
                 ev3.Sound.beep()
-                print("COLOR = {}".format(color))
-            print("SEARCH = {}".format(search))
+                # print("COLOR = {}".format(color))
+            # print("SEARCH = {}".format(search))
             search = robot.sensor_data("ColorSensor")
             if search[0] in ["White", "Undefined"] or search[1] in ["White", "Undefined"]:
                 color = 0
@@ -190,10 +190,11 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 #print("I'm on a square", robot.rect_color)
                 rect_check = True
                 if robot.rect_color not in ["Green", "Blue", "Red"]:
-                    print("RETORNOU ON SQUARE COM  RECT = {}".format(robot.rect_color))
-                    print("DA RÉ E CHAMA A FUNÇÃO DNV")
+                    # print("RETORNOU ON SQUARE COM  RECT = {}".format(robot.rect_color))
+                    # print("DA RÉ E CHAMA A FUNÇÃO DNV")
+                    pass
 
-                print("RETORNOU ON SQUARE COM  RECT = {}".format(robot.rect_color))
+                # print("RETORNOU ON SQUARE COM  RECT = {}".format(robot.rect_color))
                 return "On square"
 
 
@@ -493,7 +494,8 @@ def main():
                     # print("REVERSE_PATH = {}".format(robot.reverse_path))
                     # print("ESSEEEE EH O CASO FIM!")
                 else:
-                    print('ELE TENTOU ENTRAR NO CASO DO BLACK QUANDO NÃO DEVIA')
+                    # print('ELE TENTOU ENTRAR NO CASO DO BLACK QUANDO NÃO DEVIA')
+                    pass
 
 
             # lembrar de descomentar
@@ -545,10 +547,25 @@ def main():
                                 time.sleep(0.5)
 
                         except:
-                            # LEANNING_DIC VERIFICA
-                            #print("Acao para a cor:", robot.rect_color, "nao existe ou falhou!")
+
                             being_learned = robot.rect_color
-                            learning_dic[being_learned] = ["right", "forward", "left"]
+
+                            # abre arquivo de learning dic e verifica se o arquivo possui a key em questão
+                            with open(robot.fixed_file_name) as json_file:
+                                temp_learning_dic = json.load(json_file)
+                                print("Abre arquivo de learning dic e verifica se o"
+                                      " arquivo possui a key em questão, em arquivo:", temp_learning_dic)
+
+                            if being_learned in temp_learning_dic.keys():
+                                print("Possui key em questão salva no json!")
+                                robot.has_came_from_json = True
+                                learning_dic[being_learned] = temp_learning_dic[being_learned]
+                                print("learning_dic:", learning_dic)
+                            else:
+                                # print("Ação para a cor:", robot.rect_color, "nao existe ou falhou!")
+                                print("Não possui key em questão no json!")
+                                learning_dic[being_learned] = ["right", "forward", "left"]
+
                             im_learning = True
 
                 elif im_learning:
@@ -562,7 +579,7 @@ def main():
                         robot.update()
                         search = robot.sensor_data("ColorSensor")
                         result = color_realignment(robot, search, robot.infrared_sensors)
-                        print("COLOR_REALIGMENT = {}".format(result))
+                        # print("COLOR_REALIGMENT = {}".format(result))
 
                         if robot.sensor_data("ColorSensor")[0] == robot.sensor_data("ColorSensor")[1] and \
                                 robot.sensor_data("ColorSensor")[1] == "White":
@@ -576,6 +593,8 @@ def main():
                                     color_sensor[0] == being_learned and white_counter >= 5):
 
                                 robot.learned_colors[being_learned] = [learning_dic[being_learned][0]]
+
+                                # salva aprendizado finalizado em arquivo json
                                 with open(robot.file_name, 'w') as outfile:
                                     json.dump([robot.learned_colors, True], outfile)
 
@@ -586,21 +605,32 @@ def main():
 
                                 im_learning = False
                                 being_learned = "Undefined"
-                                #learning_dic = {}
+                                learning_dic = {}
 
                                 #print("Aprendi uma nova cor, segue o dicionario:", robot.learned_colors)
 
                                 break
 
                         if robot.sensor_data("ColorSensor")[0] == "Black" and robot.sensor_data("ColorSensor")[1] == "Black":
-                            #print("Wrong path")
+                            # print("Wrong path")
                             robot.motors.left.stop()
                             robot.motors.right.stop()
                             time.sleep(0.2)
                             robot.realigment_counter = 0
 
+                            # abre json e salva informações já armazenadas
+                            with open(robot.fixed_file_name) as json_file:
+                                json_learning_dic = json.load(json_file)
+
                             last_choise = learning_dic[being_learned][0]
                             del learning_dic[being_learned][0]
+
+                            # salva arquivo json com as opções que não foram eliminadas
+                            json_learning_dic[being_learned] = learning_dic[being_learned]
+                            with open(robot.fixed_file_name, 'w') as outfile:
+                                print("Salvando JSON novamente! Geratriz:", json_learning_dic)
+                                json.dump(json_learning_dic, outfile)
+
 
                             return_last_color(robot, being_learned, last_choise)
 
@@ -621,7 +651,6 @@ def main():
             #         robot.motors.right .stop()
 
     except KeyboardInterrupt:
-        ev3.Sound.speak("Done!").wait()
         robot.motors.right.stop()
         robot.motors.left.stop()
         robot.motors.alternative.stop()
@@ -632,7 +661,6 @@ try:
     if __name__ == '__main__':
         main()
 except KeyboardInterrupt:
-    ev3.Sound.speak("Done!").wait()
     robot.motors.right.stop()
     robot.motors.left.stop()
     robot.motors.alternative.stop()
