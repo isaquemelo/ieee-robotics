@@ -111,19 +111,26 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.in_rect = False
             return None
 
-    if robot.reverse_path is None or robot.has_doll:
-        n_speed = 600
-        if control > 400:
-            control = 400
-        if control < -400:
-            control = -400
-    else:
-        n_speed = 280
 
-        if control > 60:
-            control = 60
-        if control < -60:
-            control = -60
+    n_speed = 600
+    if control > 400:
+        control = 400
+    if control < -400:
+        control = -400
+    #
+    # if robot.reverse_path is None or robot.has_doll:
+    #     n_speed = 600
+    #     if control > 400:
+    #         control = 400
+    #     if control < -400:
+    #         control = -400
+    # else:
+    #     n_speed = 280
+    #
+    #     if control > 60:
+    #         control = 60
+    #     if control < -60:
+    #         control = -60
 
     search = robot.sensor_data("ColorSensor")
     if search[0] == search[1]:
