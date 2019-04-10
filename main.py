@@ -670,14 +670,14 @@ def main():
         client.loop_stop()
         client.disconnect()
 
-# try:
-#     if __name__ == '__main__':
-#         robot.has_doll = True
-#         bounding_box(robot)
-#         main()
-# except KeyboardInterrupt:
-#     robot.motors.right.stop()
-#     robot.motors.left.stop()
-#     robot.motors.alternative.stop()
-#     client.loop_stop()
-#     client.disconnect()
+try:
+    if __name__ == '__main__':
+        robot.has_doll = True
+        #bounding_box(robot)
+        main()
+except KeyboardInterrupt:
+    robot.motors.right.stop()
+    robot.motors.left.stop()
+    robot.motors.alternative.stop()
+    client.loop_stop()
+    client.disconnect()

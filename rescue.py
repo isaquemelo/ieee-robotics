@@ -216,9 +216,14 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    print("sel.kon = {}".format(robot.kon))
+    robot.kon = 0
+
+    #print("CHAMADO")
     for i in range(5):
         ev3.Sound.beep()
-        print(robot.fila_para_registro_do_fim)
+        #print(robot.fila_para_registro_do_fim)
+
     robot.voltou = False
     # recarrega todos as cores pelas quais vai passar voltando;
     if robot.primeiro_bounding_box is True:
@@ -242,7 +247,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         robot.reverse_path = True
         robot.bounding_box = False
         robot.move_timed(how_long=1, direction="back", speed=1000)
-        robot.rotate(170)
+        robot.rotate(180)
         return
 
     kp = 40
@@ -261,10 +266,10 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
     pid.output_limits = (-400, 400)
     while True:
-        print("Bouding box loop..")
+        #print("Bouding box loop..")
         control = pid(robot.sensor_data("Ultrasonic"))
 
-        print(robot.infrared_sensors[0])
+        # print(robot.infrared_sensors[0])
 
         if control > 500:
             control = 500
@@ -290,8 +295,9 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             robot.move_timed(how_long=7, speed=450)
             robot.move_timed(how_long=0.3, direction="back", speed=800)
             robot.rotate(90)
-            robot.move_timed(how_long=0.3, direction="back", speed=800)
+            # robot.move_timed(how_long=0.3, direction="back", speed=800)
             robot.move_timed(how_long=5, direction="forward", speed=450)
+            robot.move_timed(how_long=0.3, direction="back", speed=800)
             robot.rotate(90)
 
             # coisas para verificação de sainda pelo angulorobot
@@ -300,7 +306,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             # coisas para verificação de sainda pelo angulorobot
 
             # end_time = datetime.now() + timedelta(seconds=7)
-            pid = PID(kp, ki, kd, setpoint=2)
+            pid = PID(kp, ki, kd, setpoint=1.3)
             # while datetime.now() < end_time:
             while True:
                 #print("DENTRO DO LOOP MAIS INTERNO")
@@ -314,17 +320,21 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                     robot.stop_motors()
                     print("VOLTOU PELA COR = {}".format(search[1]))
                     ev3.Sound.beep().wait()
+                    robot.bounding_box = False
                     return
 
                 # verifica para sair basiado no angulo
                 if robot.sensor_data('GyroSensor') <= -90:
                     robot.stop_motors()
                     print("VOLTOU PELO ANGULO = {}".format(robot.sensor_data('GyroSensor')))
+                    robot.move_timed(how_long=1.2, speed=300)
+                    robot.reverse_path = True
                     ev3.Sound.beep().wait()
+                    robot.bounding_box = False
                     return
 
                 control = pid(robot.infrared_sensors[0])
-                print(robot.infrared_sensors[0])
+                #print(robot.infrared_sensors[0])
                 if control > 600:
                     control = 600
                 if control < -600:
