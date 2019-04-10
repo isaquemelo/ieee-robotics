@@ -216,7 +216,7 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
-    print("sel.kon = {}".format(robot.kon))
+    # print("sel.kon = {}".format(robot.kon))
     robot.kon = 0
 
     #print("CHAMADO")
@@ -297,7 +297,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             robot.rotate(90)
             # robot.move_timed(how_long=0.3, direction="back", speed=800)
             robot.move_timed(how_long=5, direction="forward", speed=450)
-            robot.move_timed(how_long=0.3, direction="back", speed=800)
+            robot.move_timed(how_long=0.2, direction="back", speed=800)
             robot.rotate(90)
 
             # coisas para verificação de sainda pelo angulorobot
