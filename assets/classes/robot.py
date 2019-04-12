@@ -25,6 +25,8 @@ class Robot:
         self.ultrasonic_sensor = ev3.UltrasonicSensor('in4')
         self.ta_no_final_da_pista = False
 
+        self.time_desabilita_o_realinhamento_da_cor = datetime.now()
+
         # define motors
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outD'), ev3.LargeMotor('outC'))
         # self.handler = ev3.LargeMotor('outC')
@@ -38,7 +40,7 @@ class Robot:
         self.rect_color = "Undefined"
         self.reverse_path = None
         self.dor_open = True
-        self.has_doll = False    # OBS: LEMBRAR DE SETAR PRA FALSE
+        self.has_doll = True    # OBS: LEMBRAR DE SETAR PRA FALSE
         self.done_learning = False
         self.voltou = False
         self.tempo_para_chamar_run_action = datetime.now()

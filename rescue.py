@@ -18,6 +18,7 @@ def deal_ret(robot):
     robot.reverse_path = False
     return
 
+
 def rescue(robot, speed=DEFAULT_SPEED):
     robot.stop_motors()
     robot.rotate(-90, speed=300)
@@ -64,7 +65,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                 robot.move_timed(how_long=1.5, direction="back", speed=speed)
                 robot.rotate(180, speed=1000)
 
-                while True:
+                while True:  # resgate seguro
                     search = robot.sensor_data("ColorSensor")
                     if "Undefined" in search:
                         robot.stop_motors()
@@ -106,7 +107,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     robot.move_timed(how_long=0.1, direction="forward", speed=speed)
                     robot.rotate(9)
                     #time.sleep(3)
-                    robot.rotate(-9)
+                    # robot.rotate(-9) # OBS: descomentar se for necessario
                     #time.sleep(3)
                     #time.sleep(2)
                     #robot.rotate(9, speed=1000)
@@ -121,7 +122,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     #robot.rotate(9, speed=1000)
                     #robot.move_timed(how_long=0.7, direction="back", speed=speed)
                     robot.rotate(180, speed=1000)
-                    while True:
+                    while True:  # resgate ariscado pelo lado esquerdo
                         search = robot.sensor_data("ColorSensor")
                         if "Undefined" in search:
                             robot.stop_motors()
@@ -161,7 +162,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     robot.motors.alternative.run_forever(speed_sp=1000)
                     robot.move_timed(how_long=0.1, direction="forward", speed=speed)
                     robot.rotate(-9)
-                    robot.rotate(9)
+                    # robot.rotate(9) # OBS: descomentar se for necessario
                     # time.sleep(2)
                     # robot.rotate(9, speed=1000)
                     # time.sleep(2)
@@ -174,7 +175,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                         robot.motors.left.run_forever(speed_sp=-speed)
                     robot.stop_motors()
                     robot.rotate(180, speed=1000)
-                    while True:
+                    while True:  # resgate ariscado pelo lado direito
                         search = robot.sensor_data("ColorSensor")
                         if "Undefined" in search:
                             robot.stop_motors()
@@ -205,6 +206,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
 
 
 def drop_doll(robot, speed=DEFAULT_SPEED):
+    robot.stop_motors()
     if robot.has_doll:
         ev3.Sound.beep()
         ev3.Sound.beep()
@@ -220,7 +222,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     robot.kon = 0
 
     #print("CHAMADO")
-    for i in range(5):
+    for i in range(3):
         ev3.Sound.beep()
         #print(robot.fila_para_registro_do_fim)
 
@@ -257,27 +259,32 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     can_break = False
     #contador_para_re = 40
     # limits
-
-    pid = PID(kp, ki, kd, setpoint=75.6)
+    li = 76.6
+    pid = PID(kp, ki, kd, setpoint=li)
     n_speed = 350
 
     # 83.3 indo
     # 75 voltando
 
+
     pid.output_limits = (-400, 400)
     while True:
         #print("Bouding box loop..")
-        control = pid(robot.sensor_data("Ultrasonic"))
+        ultrasonico = robot.sensor_data("Ultrasonic")
 
         # print(robot.infrared_sensors[0])
+        if 50 <= ultrasonico <= 100:
+            control = pid(robot.sensor_data("Ultrasonic"))
+            if control > 500:
+                control = 500
+            if control < -500:
+                control = -500
 
-        if control > 500:
-            control = 500
-        if control < -500:
-            control = -500
-
-        robot.motors.left.run_forever(speed_sp=n_speed + control)
-        robot.motors.right.run_forever(speed_sp=n_speed - control)
+            robot.motors.left.run_forever(speed_sp=n_speed + control)
+            robot.motors.right.run_forever(speed_sp=n_speed - control)
+        else:
+            robot.motors.left.run_forever(speed_sp=n_speed+50)  # coloquei mais 50 para o robo nao engachar o lado esquerdo na hora de entrar na bounding box
+            robot.motors.right.run_forever(speed_sp=n_speed)
 
         search = robot.sensor_data("ColorSensor")
         if search[0] == "Black" and search[1] == "Black":
@@ -319,7 +326,10 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                 if search[1] in ["Green", "Red", "Blue"]:
                     robot.stop_motors()
                     print("VOLTOU PELA COR = {}".format(search[1]))
+                    robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5) # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
+                    # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
                     ev3.Sound.beep().wait()
+                    robot.reverse_path = True
                     robot.bounding_box = False
                     return
 
@@ -327,7 +337,9 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                 if robot.sensor_data('GyroSensor') <= -90:
                     robot.stop_motors()
                     print("VOLTOU PELO ANGULO = {}".format(robot.sensor_data('GyroSensor')))
-                    robot.move_timed(how_long=1.2, speed=300)
+                    #robot.move_timed(how_long=1.2, speed=300)
+                    robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5)  # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
+                    # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
                     robot.reverse_path = True
                     ev3.Sound.beep().wait()
                     robot.bounding_box = False

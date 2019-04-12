@@ -93,6 +93,9 @@ pid = PID(15.6, 0, 4.8, setpoint=-4)
 
 
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
+    # if datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor:
+    #     print("AGORA O REALIGMENT DA COR TA ATIVADO NOVAMENTE")
+    #     ev3.Sound.beep()
     deu_re = False
     limiar = 20 # 15
     li = 7
@@ -235,7 +238,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         print("Running undefined dealing...")
         undefined_dealing(search)
 
-    elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"]:
+    # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAID DA BOUNDING BOX
+    elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor:
         #print("[0] == White [1] != White")
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
@@ -305,7 +309,8 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         else:
             robot.motors.right.stop()
 
-    elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"]:
+    # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAID DA BOUNDING BOX
+    elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor:
         #print("[0] != White and [1] == White")
 
         if last_same_color[0] == "White" and last_same_color[1] == "White":
@@ -683,8 +688,8 @@ def main():
 
 try:
     if __name__ == '__main__':
-        #robot.has_doll = True
-        #bounding_box(robot)
+        # robot.has_doll = True
+        # bounding_box(robot)
         main()
 except KeyboardInterrupt:
     robot.motors.right.stop()
