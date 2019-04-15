@@ -583,16 +583,16 @@ def main():
                             with open(robot.fixed_file_name) as json_file:
                                 temp_learning_dic = json.load(json_file)
                                 print("Abre arquivo de learning dic e verifica se o"
-                                      " arquivo possui a key em questão, em arquivo:", temp_learning_dic)
+                                      " arquivo possui a key em questao, em arquivo:", temp_learning_dic)
 
                             if being_learned in temp_learning_dic.keys():
-                                print("Possui key em questão salva no json!")
+                                print("Possui key em questao salva no json!")
                                 robot.has_came_from_json = True
                                 learning_dic[being_learned] = temp_learning_dic[being_learned]
                                 print("learning_dic:", learning_dic)
                             else:
                                 # print("Ação para a cor:", robot.rect_color, "nao existe ou falhou!")
-                                print("Não possui key em questão no json!")
+                                print("Nao possui key em questao no json!")
                                 learning_dic[being_learned] = ["right", "forward", "left"]
 
                             im_learning = True
