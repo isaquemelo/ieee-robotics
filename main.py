@@ -178,7 +178,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
     elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
         if last_same_color == ["White", "White"]:
             print("Running undefined dealing...")
-            undefined_dealing(search)
+            undefined_dealing(robot, search)
 
         else:
             print("Undefine Dealing counting..")
@@ -187,7 +187,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if robot.undefined_counter > 5:
             print("Undefined Dealing executed..")
             robot.undefined_counter = 0
-            undefined_dealing(search)
+            undefined_dealing(robot, search)
 
 
     # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAID DA BOUNDING BOX
