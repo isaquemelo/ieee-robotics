@@ -89,8 +89,6 @@ class Robot:
             with open(self.fixed_file_name, 'w') as outfile:
                 json.dump({}, outfile)
 
-
-
     def voltou_inicio_pista(self):
         search = self.sensor_data("ColorSensor")
 
@@ -121,7 +119,6 @@ class Robot:
                     self.motors.left.run_forever(speed_sp=-500)
         self.move_timed(how_long=0.2, direction="back")
         return
-
 
     def update_no_status_de_registro_de_fim_do_percursso(self):
         # adiciona e deleta elemento da fila que registara entrada e sainda do robo da plataforma (if 1.0)
@@ -295,6 +292,13 @@ class Robot:
         # if self.nao_pode:
         #     self.move_timed(how_long=0.2, direction="back")
         #     return
+        # print("self.primeiro_bounding_box = {}".format(self.primeiro_bounding_box))
+        # print("self.learned_colors_is_empity() = {}".format(self.learned_colors_is_empity()))
+        # if self.primeiro_bounding_box is False and self.learned_colors_is_empity():
+        #     print("TAVA NO INICIO DA PISTA")
+        #     self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
+        #     return
+
 
         if datetime.now() < self.tempo_para_chamar_run_action:
             # print("CHAMOU A RUN_ACTION NO TEMPO ERRADO")
@@ -306,71 +310,75 @@ class Robot:
             # print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
             self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
 
-        if self.reverse_path is True:
-            self.learned_colors[self.rect_color][-1] -= 1
-            # print("EXECUTOU O DESCARREGAMENTO DA COR")
-            print(self.learned_colors)
-            self.stop_motors()
-            # if self.ta_no_final_da_pista is True:
-            #     self.ta_no_final_da_pista = False
-            #     self.rotate(180)
+            if self.reverse_path is True:
+                self.learned_colors[self.rect_color][-1] -= 1
+                # print("EXECUTOU O DESCARREGAMENTO DA COR")
+                print(self.learned_colors)
+                self.stop_motors()
+                # if self.ta_no_final_da_pista is True:
+                #     self.ta_no_final_da_pista = False
+                #     self.rotate(180)
 
-            if self.primeiro_bounding_box is False:
-                if self.voltou is False:
-                    if self.learned_colors_is_empity() is True:
-                        self.ta_no_final_da_pista = True
-                        self.rotate(180)
-                        self.reverse_path = Falseg
+                if self.primeiro_bounding_box is False:
+                    if self.voltou is False:
+                        if self.learned_colors_is_empity() is True:
+                            for i in range(5):
+                                ev3.Sound.beep()
+                            self.ta_no_final_da_pista = True
+                            self.rotate(180)
+                            self.reverse_path = False
+                            self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
+                            return
 
-        self.nao_pode = True
+            self.nao_pode = True
 
-        # if self.reverse_path:
-        #     if not still_learning:
-        #         if direction == "forward":
-        #             pass
-        #         elif direction == "left":
-        #             self.rotate(90, axis="own")
-        #         elif direction == "right":
-        #             self.rotate(-90, axis="own")
-        #     else:
-        #         self.rotate(-90, axis="own")
-        #     # return None
-        #
-        # else:
-        #     if not still_learning:
-        #         if direction == "forward":
-        #             pass
-        #         elif direction == "left":
-        #             self.rotate(-90, axis="own")
-        #         elif direction == "right":
-        #             self.rotate(90, axis="own")
-        #     else:
-        #         if :
-        #             self.rotate(90, axis="own")
-        #         else:
-        #             self.rotate(90, axis="own")
-        #     # return None
+            # if self.reverse_path:
+            #     if not still_learning:
+            #         if direction == "forward":
+            #             pass
+            #         elif direction == "left":
+            #             self.rotate(90, axis="own")
+            #         elif direction == "right":
+            #             self.rotate(-90, axis="own")
+            #     else:
+            #         self.rotate(-90, axis="own")
+            #     # return None
+            #
+            # else:
+            #     if not still_learning:
+            #         if direction == "forward":
+            #             pass
+            #         elif direction == "left":
+            #             self.rotate(-90, axis="own")
+            #         elif direction == "right":
+            #             self.rotate(90, axis="own")
+            #     else:
+            #         if :
+            #             self.rotate(90, axis="own")
+            #         else:
+            #             self.rotate(90, axis="own")
+            #     # return None
 
-        if not still_learning:
-            if direction == "forward":
-                pass
-            elif direction == "left":
-                self.rotate(90 if self.reverse_path else -90, axis="own")
-            elif direction == "right":
-                self.rotate(-90 if self.reverse_path else 90, axis="own")
-        else:
-            if self.has_came_from_json:
+            if not still_learning:
                 if direction == "forward":
                     pass
                 elif direction == "left":
-                    self.rotate(-90, axis="own")
+                    self.rotate(90 if self.reverse_path else -90, axis="own")
                 elif direction == "right":
-                    self.rotate(90, axis="own")
-
-                self.has_came_from_json = False
-
+                    self.rotate(-90 if self.reverse_path else 90, axis="own")
             else:
-                self.rotate(90, axis="own")
+                if self.has_came_from_json:
+                    if direction == "forward":
+                        pass
+                    elif direction == "left":
+                        self.rotate(-90, axis="own")
+                    elif direction == "right":
+                        self.rotate(90, axis="own")
+
+                    self.has_came_from_json = False
+
+                else:
+                    self.rotate(90, axis="own")
 
 
 
