@@ -173,33 +173,43 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
                 #robot.move_timed(how_long=0.4, direction="back")
                 # SUBSTITUIÇÃO DO MOVE TIMED ACIMA
-                if search[0] in ["White", "Undefined"] and search[1] not in ["White",
-                                                                             "Undefined"]:  # so o da esquerda ta fora da cor
-                    while True:
-                        search = robot.sensor_data("ColorSensor")
-                        if search[0] in ["Blue", "Green", "Red"]:
-                            robot.stop_motors()
-                            break
-                        else:
-                            robot.motors.left.run_forever(speed_sp=-500)
-                elif search[1] in ["White", "Undefined"] and search[0] not in ["White",
-                                                                               "Undefined"]:  # so o da direita ta fora da cor
-                    while True:
-                        search = robot.sensor_data("ColorSensor")
-                        if search[1] in ["Blue", "Green", "Red"]:
-                            robot.stop_motors()
-                            break
-                        else:
-                            robot.motors.right.run_forever(speed_sp=-500)
-                else:  # os dois estao fora da dor ao mesmo tempo
-                    while True:
-                        search = robot.sensor_data("ColorSensor")
-                        if search[1] in ["Blue", "Green", "Red"] and search[0] in ["Blue", "Green", "Red"]:
-                            robot.stop_motors()
-                            break
-                        else:
-                            robot.motors.right.run_forever(speed_sp=-500)
-                            robot.motors.left.run_forever(speed_sp=-500)
+                # os dois estao fora da dor ao mesmo tempo
+                while True:
+                    search = robot.sensor_data("ColorSensor")
+                    if search[1] in ["Blue", "Green", "Red"] or search[0] in ["Blue", "Green", "Red"]:
+                        robot.stop_motors()
+                        break
+                    else:
+                        robot.motors.right.run_forever(speed_sp=-500)
+                        robot.motors.left.run_forever(speed_sp=-500)
+
+                # if search[0] in ["White", "Undefined"] and search[1] not in ["White",
+                #                                                              "Undefined"]:  # so o da esquerda ta fora da cor
+                while True:
+                    search = robot.sensor_data("ColorSensor")
+                    if search[0] in ["Blue", "Green", "Red"]:
+                        robot.stop_motors()
+                        break
+                    else:
+                        robot.motors.left.run_forever(speed_sp=-500)
+                # elif search[1] in ["White", "Undefined"] and search[0] not in ["White",
+                #                                                                "Undefined"]:  # so o da direita ta fora da cor
+                while True:
+                    search = robot.sensor_data("ColorSensor")
+                    if search[1] in ["Blue", "Green", "Red"]:
+                        robot.stop_motors()
+                        break
+                    else:
+                        robot.motors.right.run_forever(speed_sp=-500)
+                # if search[1] not in ["Blue", "Green", "Red"] and search[0] not in ["Blue", "Green", "Red"]:  # os dois estao fora da dor ao mesmo tempo
+                #     while True:
+                #         search = robot.sensor_data("ColorSensor")
+                #         if search[1] in ["Blue", "Green", "Red"] and search[0] in ["Blue", "Green", "Red"]:
+                #             robot.stop_motors()
+                #             break
+                #         else:
+                #             robot.motors.right.run_forever(speed_sp=-500)
+                #             robot.motors.left.run_forever(speed_sp=-500)
                 robot.move_timed(how_long=0.2, direction="back")
                 # SUBSTITUIÇÃO DO MOVE TIMED ACIMA
 
@@ -524,7 +534,7 @@ def main():
 
             # lembrar de descomentar
             if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
-                robot.stop_motors()
+                # robot.stop_motors()
                 rescue(robot)
                 # for i in range(2):
                 #     print('IDENTIFICOU O BONECO')

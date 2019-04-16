@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="" />
+    <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rescue.py" beforeDir="false" afterPath="$PROJECT_DIR$/rescue.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +20,15 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1155">
-              <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+            <state relative-caret-position="134">
+              <caret line="524" column="36" lean-forward="true" selection-start-line="524" selection-start-column="36" selection-end-line="524" selection-end-column="36" />
+              <folding>
+                <element signature="e#24#48#0" expanded="true" />
+                <element signature="e#16926#16997#0" />
+                <element signature="e#17125#17151#0" />
+                <element signature="e#26367#26392#0" />
+                <element signature="e#28329#28388#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -25,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="383" lean-forward="true" selection-start-line="7" selection-end-line="383" />
+            <state relative-caret-position="60">
+              <caret line="25" column="41" lean-forward="true" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
               <folding>
                 <element signature="e#23#43#0" expanded="true" />
               </folding>
@@ -37,8 +48,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rescue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="317" column="23" lean-forward="true" selection-end-line="373" />
+            <state relative-caret-position="169">
+              <caret line="26" column="23" lean-forward="true" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
               <folding>
                 <element signature="e#23#47#0" expanded="true" />
               </folding>
@@ -80,13 +91,13 @@
       <find>print</find>
       <find>bounding</find>
       <find>robot.reverse_path = True</find>
-      <find>rescue</find>
       <find>self.kon</find>
       <find>has_doll</find>
       <find>necessa</find>
       <find>VOLTOU</find>
       <find>end_time</find>
       <find>color_re</find>
+      <find>rescue</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -157,7 +168,29 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.robot">
+  <component name="RunManager" selected="Python.rescue">
+    <configuration name="rescue" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="ieee-robotics" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/rescue.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="robot" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="ieee-robotics" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -204,6 +237,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.rescue" />
         <item itemvalue="Python.testing time" />
         <item itemvalue="Python.robot" />
       </list>
@@ -244,11 +278,12 @@
       <workItem from="1554818582267" duration="26217000" />
       <workItem from="1554905421234" duration="16622000" />
       <workItem from="1555077147729" duration="13468000" />
+      <workItem from="1555431431954" duration="2714000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216080000" />
+    <option name="totallyTimeSpent" value="218794000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -260,31 +295,32 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-3" y="0" width="1372" height="738" extended-state="6" />
+    <frame x="0" y="-1" width="1366" height="740" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14545454" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.14772727" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3284553" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32792208" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.48181817" weight="0.3284553" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32520324" />
-      <window_info anchor="bottom" id="Version Control" order="8" weight="0.32682925" />
+      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32467532" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.47651514" weight="0.3262987" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5022727" side_tool="true" weight="0.40813008" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="File Transfer" order="12" sideWeight="0.4530303" weight="0.32520324" />
-      <window_info active="true" anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" sideWeight="0.5469697" side_tool="true" visible="true" weight="0.42276424" />
+      <window_info anchor="bottom" id="File Transfer" order="12" sideWeight="0.4522727" weight="0.32467532" />
+      <window_info anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" sideWeight="0.5234848" side_tool="true" visible="true" weight="0.3262987" />
+      <window_info anchor="right" id="Coverage" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Remote Host" order="5" weight="0.2" />
+      <window_info active="true" anchor="right" id="Remote Host" order="5" visible="true" weight="0.2" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -344,30 +380,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rescue.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="317" column="23" lean-forward="true" selection-end-line="373" />
-          <folding>
-            <element signature="e#23#47#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="383" lean-forward="true" selection-start-line="7" selection-end-line="383" />
+        <state relative-caret-position="60">
+          <caret line="25" column="41" lean-forward="true" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
           <folding>
             <element signature="e#23#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/rescue.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="26" column="23" lean-forward="true" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
+          <folding>
+            <element signature="e#23#47#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1155">
-          <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+        <state relative-caret-position="134">
+          <caret line="524" column="36" lean-forward="true" selection-start-line="524" selection-start-column="36" selection-end-line="524" selection-end-column="36" />
+          <folding>
+            <element signature="e#24#48#0" expanded="true" />
+            <element signature="e#16926#16997#0" />
+            <element signature="e#17125#17151#0" />
+            <element signature="e#26367#26392#0" />
+            <element signature="e#28329#28388#0" />
+          </folding>
         </state>
       </provider>
     </entry>

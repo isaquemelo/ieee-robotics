@@ -20,6 +20,10 @@ def deal_ret(robot):
 
 
 def rescue(robot, speed=DEFAULT_SPEED):
+    if robot.time_desabilita_o_realinhamento_da_cor > datetime.now():  # garanti que o robo nao tente resgata na saida da bounding box
+        print("TENTOU RESGATAR QUANDO TAVA SAINDO DA BOUNDING BOX")
+        return
+
     robot.stop_motors()
     robot.rotate(-90, speed=300)
     res_dang = True
@@ -218,6 +222,9 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    for i in range(3):
+        ev3.Sound.beep()
+        print("cores que chamaram a bounding box = {}".format(robot.fila_para_registro_do_fim))
     # print("sel.kon = {}".format(robot.kon))
     robot.kon = 0
 
