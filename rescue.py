@@ -24,6 +24,19 @@ def rescue(robot, speed=DEFAULT_SPEED):
         print("TENTOU RESGATAR QUANDO TAVA SAINDO DA BOUNDING BOX")
         return
 
+    # garanti que o robo nao tente resgatar na situassao da foto 1,2
+    search = robot.sensor_data("ColorSensor")
+    if search[0] in ["Blue", "Red", "Green"] or search[1] in ["Blue", "Red", "Green"] \
+            or robot.infrared_sensors[0] > 20:
+        print("PREVINIU UM RESGATE DO LADO ERRADO DA PLATAFORMA")
+        return
+    """
+    FOI PARA O TESTE DO ERRO DA FOTO 1,2
+    else:
+        print("ERRO")
+        ev3.Sound.beep()
+        return
+    """
     robot.stop_motors()
     robot.rotate(-90, speed=300)
     res_dang = True

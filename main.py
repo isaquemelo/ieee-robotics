@@ -108,14 +108,14 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 color = 0
 
                 robot.stop_motors()
-                # while True:
-                #     search = robot.sensor_data("ColorSensor")
-                #     if search[0] in ["White", "Undefined"] and search[1] in ["White", "Undefined"]:
-                #         robot.motors.left.run_forever(speed_sp=-500)
-                #         robot.motors.right.run_forever(speed_sp=-500)
-                #     else:
-                #         robot.stop_motors()
-                #         break
+                while True:
+                    search = robot.sensor_data("ColorSensor")
+                    if search[0] in ["White", "Undefined"] and search[1] in ["White", "Undefined"]:
+                        robot.motors.left.run_forever(speed_sp=-500)
+                        robot.motors.right.run_forever(speed_sp=-500)
+                    else:
+                        robot.stop_motors()
+                        break
 
                 #robot.move_timed(how_long=0.4, direction="back")
                 # SUBSTITUIÇÃO DO MOVE TIMED ACIMA
@@ -475,7 +475,7 @@ def main():
 
 
             # lembrar de descomentar
-            if robot.sensor_data("Ultrasonic") < 20 and not robot.has_doll:
+            if robot.sensor_data("Ultrasonic") < 15 and not robot.has_doll:
                 # robot.stop_motors()
                 rescue(robot)
                 # for i in range(2):
@@ -596,7 +596,7 @@ def main():
                             # print("Wrong path")
                             robot.motors.left.stop()
                             robot.motors.right.stop()
-                            time.sleep(0.2)
+                            time.sleep(0.1)
                             robot.realigment_counter = 0
 
                             # abre json e salva informações já armazenadas
@@ -646,6 +646,14 @@ try:
         # robot.has_doll = True
         # bounding_box(robot)
         main()
+        """
+        FOI PARA O TESTE DO ERRO DA FOTO 1,2
+        while True:
+            if robot.sensor_data("Ultrasonic") < 15 and not robot.has_doll:
+                rescue(robot)
+            else:
+                print("CORRETO")
+        """
 except KeyboardInterrupt:
     robot.motors.right.stop()
     robot.motors.left.stop()
