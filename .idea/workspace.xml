@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="" />
+    <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/classes/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/classes/robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,23 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1155">
-              <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="383" lean-forward="true" selection-start-line="7" selection-end-line="383" />
-              <folding>
-                <element signature="e#23#43#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="113">
+              <caret line="549" column="40" selection-start-line="549" selection-start-column="40" selection-end-line="549" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -37,10 +29,91 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rescue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="317" column="23" lean-forward="true" selection-end-line="373" />
+            <state relative-caret-position="180">
+              <caret line="213" column="24" lean-forward="true" selection-end-line="373" />
               <folding>
-                <element signature="e#23#47#0" expanded="true" />
+                <element signature="e#227#444#0" />
+                <element signature="e#491#9484#0" />
+                <element signature="e#10101#16083#0" />
+                <element signature="e#9996#10060#0" />
+                <element signature="e#10203#10539#0" />
+                <element signature="e#10466#10539#0" />
+                <element signature="e#10558#10720#0" />
+                <element signature="e#10647#10720#0" />
+                <element signature="e#10757#10925#0" />
+                <element signature="e#11013#11035#0" />
+                <element signature="e#11125#11136#0" />
+                <element signature="e#11217#15471#0" />
+                <element signature="e#11393#11703#0" />
+                <element signature="e#11730#11936#0" />
+                <element signature="e#12123#15359#0" />
+                <element signature="e#12952#13004#0" />
+                <element signature="e#13204#15306#0" />
+                <element signature="e#13288#13325#0" />
+                <element signature="e#13569#14127#0" />
+                <element signature="e#14263#14910#0" />
+                <element signature="e#15369#15416#0" />
+                <element signature="e#15479#15551#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="15" column="38" lean-forward="true" selection-end-line="391" />
+              <folding>
+                <element signature="e#210#278#0" />
+                <element signature="e#367#3054#0" />
+                <element signature="e#963#1002#0" />
+                <element signature="e#1661#1739#0" />
+                <element signature="e#2509#2644#0" />
+                <element signature="e#2565#2644#0" />
+                <element signature="e#2827#2919#0" />
+                <element signature="e#2967#3054#0" />
+                <element signature="e#3101#4446#0" />
+                <element signature="e#3259#3519#0" />
+                <element signature="e#3287#3519#0" />
+                <element signature="e#3389#3433#0" />
+                <element signature="e#3636#3897#0" />
+                <element signature="e#3664#3897#0" />
+                <element signature="e#3766#3810#0" />
+                <element signature="e#4025#4375#0" />
+                <element signature="e#4053#4375#0" />
+                <element signature="e#4180#4224#0" />
+                <element signature="e#4267#4375#0" />
+                <element signature="e#4521#6185#0" />
+                <element signature="e#4521#4619#0" />
+                <element signature="e#4929#5154#0" />
+                <element signature="e#5344#5572#0" />
+                <element signature="e#5711#6117#0" />
+                <element signature="e#5770#6117#0" />
+                <element signature="e#6234#6385#0" />
+                <element signature="e#6287#6365#0" />
+                <element signature="e#6443#6810#0" />
+                <element signature="e#6497#6575#0" />
+                <element signature="e#6618#6647#0" />
+                <element signature="e#6842#7255#0" />
+                <element signature="e#7031#7127#0" />
+                <element signature="e#7136#7152#0" />
+                <element signature="e#7305#8290#0" />
+                <element signature="e#7715#8290#0" />
+                <element signature="e#7729#8069#0" />
+                <element signature="e#8363#9877#0" />
+                <element signature="e#8508#8553#0" />
+                <element signature="e#8909#9652#0" />
+                <element signature="e#9020#9322#0" />
+                <element signature="e#9058#9169#0" />
+                <element signature="e#9357#9652#0" />
+                <element signature="e#9395#9506#0" />
+                <element signature="e#9969#10373#0" />
+                <element signature="e#10423#10985#0" />
+                <element signature="e#10600#10932#0" />
+                <element signature="e#10600#10645#0" />
+                <element signature="e#10878#10932#0" />
+                <element signature="e#11304#11323#0" />
               </folding>
             </state>
           </provider>
@@ -57,18 +130,8 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>robot.learned</find>
-      <find>colo</find>
-      <find>unde</find>
-      <find>test.json</find>
-      <find>rotate</find>
-      <find>on_message</find>
-      <find>json</find>
-      <find>vol</find>
-      <find>self.tempo_para_chamar_run_action</find>
       <find>with</find>
       <find>run</find>
-      <find>run_action</find>
       <find>rescue(</find>
       <find>drop</find>
       <find>except</find>
@@ -87,6 +150,16 @@
       <find>VOLTOU</find>
       <find>end_time</find>
       <find>color_re</find>
+      <find>ç</find>
+      <find>color_rea</find>
+      <find>run_action</find>
+      <find>robot.primeiro_bounding_box</find>
+      <find>rotate</find>
+      <find>run_actio</find>
+      <find>robot.pri</find>
+      <find>empity</find>
+      <find>robot.learned_colors_is_empity</find>
+      <find>self.voltou</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -101,9 +174,9 @@
         <option value="$PROJECT_DIR$/assets/classes/duo.py" />
         <option value="$PROJECT_DIR$/assets/classes/__init__.py" />
         <option value="$PROJECT_DIR$/comunication.py" />
-        <option value="$PROJECT_DIR$/assets/classes/robot.py" />
         <option value="$PROJECT_DIR$/rescue.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/assets/classes/robot.py" />
       </list>
     </option>
   </component>
@@ -248,7 +321,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216080000" />
+    <option name="totallyTimeSpent" value="223639000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -261,8 +334,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-3" y="0" width="1372" height="738" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14545454" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.14545454" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -277,14 +351,14 @@
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5022727" side_tool="true" weight="0.40813008" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="File Transfer" order="12" sideWeight="0.4530303" weight="0.32520324" />
-      <window_info active="true" anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" sideWeight="0.5469697" side_tool="true" visible="true" weight="0.42276424" />
+      <window_info anchor="bottom" id="File Transfer" order="12" sideWeight="0.45151514" visible="true" weight="0.32520324" />
+      <window_info anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" sideWeight="0.54848486" side_tool="true" weight="0.32520324" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info anchor="right" id="Remote Host" order="5" weight="0.2" />
+      <window_info active="true" anchor="right" id="Remote Host" order="5" visible="true" weight="0.2621212" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -306,30 +380,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/comunication2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="13" selection-start-line="3" selection-start-column="5" selection-end-line="3" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/teste.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/client.py" />
+    <entry file="file://$PROJECT_DIR$/comunication2.py" />
+    <entry file="file://$PROJECT_DIR$/teste.py" />
     <entry file="file://$PROJECT_DIR$/comunication.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-258">
@@ -344,30 +397,99 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="549" column="40" selection-start-line="549" selection-start-column="40" selection-end-line="549" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/rescue.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="317" column="23" lean-forward="true" selection-end-line="373" />
+        <state relative-caret-position="180">
+          <caret line="213" column="24" lean-forward="true" selection-end-line="373" />
           <folding>
-            <element signature="e#23#47#0" expanded="true" />
+            <element signature="e#227#444#0" />
+            <element signature="e#491#9484#0" />
+            <element signature="e#10101#16083#0" />
+            <element signature="e#9996#10060#0" />
+            <element signature="e#10203#10539#0" />
+            <element signature="e#10466#10539#0" />
+            <element signature="e#10558#10720#0" />
+            <element signature="e#10647#10720#0" />
+            <element signature="e#10757#10925#0" />
+            <element signature="e#11013#11035#0" />
+            <element signature="e#11125#11136#0" />
+            <element signature="e#11217#15471#0" />
+            <element signature="e#11393#11703#0" />
+            <element signature="e#11730#11936#0" />
+            <element signature="e#12123#15359#0" />
+            <element signature="e#12952#13004#0" />
+            <element signature="e#13204#15306#0" />
+            <element signature="e#13288#13325#0" />
+            <element signature="e#13569#14127#0" />
+            <element signature="e#14263#14910#0" />
+            <element signature="e#15369#15416#0" />
+            <element signature="e#15479#15551#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="383" lean-forward="true" selection-start-line="7" selection-end-line="383" />
+        <state relative-caret-position="150">
+          <caret line="15" column="38" lean-forward="true" selection-end-line="391" />
           <folding>
-            <element signature="e#23#43#0" expanded="true" />
+            <element signature="e#210#278#0" />
+            <element signature="e#367#3054#0" />
+            <element signature="e#963#1002#0" />
+            <element signature="e#1661#1739#0" />
+            <element signature="e#2509#2644#0" />
+            <element signature="e#2565#2644#0" />
+            <element signature="e#2827#2919#0" />
+            <element signature="e#2967#3054#0" />
+            <element signature="e#3101#4446#0" />
+            <element signature="e#3259#3519#0" />
+            <element signature="e#3287#3519#0" />
+            <element signature="e#3389#3433#0" />
+            <element signature="e#3636#3897#0" />
+            <element signature="e#3664#3897#0" />
+            <element signature="e#3766#3810#0" />
+            <element signature="e#4025#4375#0" />
+            <element signature="e#4053#4375#0" />
+            <element signature="e#4180#4224#0" />
+            <element signature="e#4267#4375#0" />
+            <element signature="e#4521#6185#0" />
+            <element signature="e#4521#4619#0" />
+            <element signature="e#4929#5154#0" />
+            <element signature="e#5344#5572#0" />
+            <element signature="e#5711#6117#0" />
+            <element signature="e#5770#6117#0" />
+            <element signature="e#6234#6385#0" />
+            <element signature="e#6287#6365#0" />
+            <element signature="e#6443#6810#0" />
+            <element signature="e#6497#6575#0" />
+            <element signature="e#6618#6647#0" />
+            <element signature="e#6842#7255#0" />
+            <element signature="e#7031#7127#0" />
+            <element signature="e#7136#7152#0" />
+            <element signature="e#7305#8290#0" />
+            <element signature="e#7715#8290#0" />
+            <element signature="e#7729#8069#0" />
+            <element signature="e#8363#9877#0" />
+            <element signature="e#8508#8553#0" />
+            <element signature="e#8909#9652#0" />
+            <element signature="e#9020#9322#0" />
+            <element signature="e#9058#9169#0" />
+            <element signature="e#9357#9652#0" />
+            <element signature="e#9395#9506#0" />
+            <element signature="e#9969#10373#0" />
+            <element signature="e#10423#10985#0" />
+            <element signature="e#10600#10932#0" />
+            <element signature="e#10600#10645#0" />
+            <element signature="e#10878#10932#0" />
+            <element signature="e#11304#11323#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1155">
-          <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
         </state>
       </provider>
     </entry>
