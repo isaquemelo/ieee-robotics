@@ -40,7 +40,7 @@ class Robot:
         self.rect_color = "Undefined"
         self.reverse_path = None
         self.dor_open = True
-        self.has_doll = False    # OBS: LEMBRAR DE SETAR PRA FALSE
+        self.has_doll = False  # OBS: LEMBRAR DE SETAR PRA FALSE
         self.done_learning = False
         self.voltou = False
         self.tempo_para_chamar_run_action = datetime.now()
@@ -49,9 +49,9 @@ class Robot:
         self.bounding_box = False
 
         # self.historic = ['', 'left', 'forward', 'right', 'right', 'forward', 'left']
-        #self.reverse_path = True
+        # self.reverse_path = True
         # self.dor_open = True
-        #self.has_doll = True
+        # self.has_doll = True
         # self.done_learning = True
 
         self.nao_pode = False
@@ -108,7 +108,7 @@ class Robot:
                     break
                 else:
                     self.motors.right.run_forever(speed_sp=-500)
-        elif search[1] == "Undefined" and search[0] == "Undefined":   # os dois estao fora da pista ao mesmo tempo
+        elif search[1] == "Undefined" and search[0] == "Undefined":  # os dois estao fora da pista ao mesmo tempo
             while True:
                 search = self.sensor_data("ColorSensor")
                 if search[1] == "White" and search[0] == "White":
@@ -163,8 +163,8 @@ class Robot:
             if i in ["Black", "White", "Undefined", "Brown"]:
                 return False
         self.bounding_box = False
-        #print("SAINDO do bound box")
-        #print("valoes na fila de igentificassao de fim de pista: {}".format(self.fila_para_registro_do_fim))
+        # print("SAINDO do bound box")
+        # print("valoes na fila de igentificassao de fim de pista: {}".format(self.fila_para_registro_do_fim))
         self.reverse_path = True
         return True
 
@@ -192,7 +192,7 @@ class Robot:
             return self.gyroscope_sensor.angle
 
         elif sensor_name == "Ultrasonic":
-            return self.ultrasonic_sensor.value()/10
+            return self.ultrasonic_sensor.value() / 10
 
         elif sensor_name == "ColorSensor":
             dict_colors = {
@@ -201,7 +201,8 @@ class Robot:
                 1: 'Black',
                 2: 'Blue',
                 3: 'Green',
-                4: 'Undefined', # era Yellow, para evitar cores que não exitem e acabar chamando o bounding box quando não deve
+                4: 'Undefined',
+                # era Yellow, para evitar cores que não exitem e acabar chamando o bounding box quando não deve
                 5: 'Red',
                 6: 'White',
                 7: 'Brown'
@@ -286,7 +287,8 @@ class Robot:
         return True
 
     def run_action(self, direction, still_learning=True):
-        print("Run action chamada com os seguintes paramentros:", "direction:", direction, "still_learning:", still_learning)
+        print("Run action chamada com os seguintes paramentros:", "direction:", direction, "still_learning:",
+              still_learning)
         # print("CHAMOU O RUN_ACTION COM O REVERSE_PATH = {}".format(self.reverse_path))
         self.realigment_counter = 0
         # if self.nao_pode:
@@ -298,7 +300,6 @@ class Robot:
         #     print("TAVA NO INICIO DA PISTA")
         #     self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
         #     return
-
 
         if datetime.now() < self.tempo_para_chamar_run_action:
             # print("CHAMOU A RUN_ACTION NO TEMPO ERRADO")
@@ -380,11 +381,7 @@ class Robot:
                 else:
                     self.rotate(90, axis="own")
 
-
-
         # return None
-
-
 
     def stop_motors(self):
         self.motors.left.stop()
