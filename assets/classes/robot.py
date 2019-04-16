@@ -320,7 +320,7 @@ class Robot:
                     if self.learned_colors_is_empity() is True:
                         self.ta_no_final_da_pista = True
                         self.rotate(180)
-                        self.reverse_path = False
+                        self.reverse_path = Falseg
 
         self.nao_pode = True
 

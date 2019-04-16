@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="42a41f3e-18c7-43dc-8a0a-f03e2f82aa70" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/webServers.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/webServers.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/handlers/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/classes/robot.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets/classes/robot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rescue.py" beforeDir="false" afterPath="$PROJECT_DIR$/rescue.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,27 +18,137 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="524" column="36" lean-forward="true" selection-start-line="524" selection-start-column="36" selection-end-line="524" selection-end-column="36" />
+            <state relative-caret-position="113">
+              <caret line="555" column="30" lean-forward="true" selection-start-line="555" selection-start-column="30" selection-end-line="555" selection-end-column="30" />
               <folding>
                 <element signature="e#24#48#0" expanded="true" />
+                <element signature="e#309#397#0" />
+                <element signature="e#3465#3533#0" />
+                <element signature="e#4043#4214#0" />
+                <element signature="e#4126#4214#0" />
+                <element signature="e#4329#4330#0" />
+                <element signature="e#4906#5010#0" />
+                <element signature="e#5365#5433#0" />
+                <element signature="e#5645#9330#0" />
+                <element signature="e#5740#6120#0" />
+                <element signature="e#5906#6020#0" />
+                <element signature="e#6071#6120#0" />
+                <element signature="e#6138#6187#0" />
+                <element signature="e#6304#6688#0" />
+                <element signature="e#6457#6506#0" />
+                <element signature="e#6574#6688#0" />
+                <element signature="e#6705#6776#0" />
+                <element signature="e#6507#6799#0" />
+                <element signature="e#6643#6696#0" />
+                <element signature="e#7242#7315#0" />
+                <element signature="e#7071#7364#0" />
+                <element signature="e#7207#7260#0" />
+                <element signature="e#7381#7518#0" />
+                <element signature="e#8558#8710#0" />
+                <element signature="e#8558#8627#0" />
+                <element signature="e#8964#9007#0" />
+                <element signature="e#10211#11847#0" />
+                <element signature="e#10675#11139#0" />
+                <element signature="e#10867#11010#0" />
+                <element signature="e#11216#11679#0" />
+                <element signature="e#11408#11550#0" />
+                <element signature="e#12055#12089#0" />
+                <element signature="e#13178#15748#0" />
+                <element signature="e#12991#14723#0" />
+                <element signature="e#13029#13159#0" />
+                <element signature="e#13282#14607#0" />
+                <element signature="e#13467#13967#0" />
+                <element signature="e#13679#13830#0" />
+                <element signature="e#14052#14551#0" />
+                <element signature="e#14264#14414#0" />
+                <element signature="e#14976#15140#0" />
+                <element signature="e#15729#16065#0" />
+                <element signature="e#15772#16033#0" />
+                <element signature="e#15995#16033#0" />
+                <element signature="e#14383#14407#0" />
+                <element signature="e#16196#16348#0" />
+                <element signature="e#16400#16498#0" />
+                <element signature="e#16639#16715#0" />
                 <element signature="e#16926#16997#0" />
                 <element signature="e#17125#17151#0" />
+                <element signature="e#18252#18578#0" />
+                <element signature="e#18296#18332#0" />
+                <element signature="e#18987#20680#0" />
+                <element signature="e#19091#19283#0" />
+                <element signature="e#19338#20550#0" />
+                <element signature="e#19338#19367#0" />
+                <element signature="e#19723#20007#0" />
+                <element signature="e#19851#19904#0" />
+                <element signature="e#20064#20349#0" />
+                <element signature="e#20192#20245#0" />
+                <element signature="e#20441#20496#0" />
+                <element signature="e#20593#20680#0" />
+                <element signature="e#20812#21028#0" />
+                <element signature="e#20878#20898#0" />
+                <element signature="e#21245#24713#0" />
+                <element signature="e#21329#24713#0" />
+                <element signature="e#21362#23437#0" />
+                <element signature="e#21362#21424#0" />
+                <element signature="e#21622#21871#0" />
+                <element signature="e#21905#23437#0" />
+                <element signature="e#22387#23282#0" />
+                <element signature="e#22387#22438#0" />
+                <element signature="e#22688#23282#0" />
+                <element signature="e#22885#22929#0" />
+                <element signature="e#23501#24713#0" />
+                <element signature="e#23749#23980#0" />
+                <element signature="e#23828#23960#0" />
+                <element signature="e#24088#24361#0" />
+                <element signature="e#24428#24665#0" />
+                <element signature="e#24887#28275#0" />
+                <element signature="e#24979#25082#0" />
+                <element signature="e#25854#26922#0" />
+                <element signature="e#26022#26922#0" />
                 <element signature="e#26367#26392#0" />
+                <element signature="e#27078#28275#0" />
+                <element signature="e#27959#28091#0" />
                 <element signature="e#28329#28388#0" />
+                <element signature="e#29000#29023#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/handlers/undefined_dealing.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret selection-end-line="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/handlers/server_config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/assets/handlers/button.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="15">
+              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="25" column="41" lean-forward="true" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+            <state relative-caret-position="197">
+              <caret line="304" column="13" lean-forward="true" selection-start-line="304" selection-start-column="13" selection-end-line="304" selection-end-column="13" />
               <folding>
                 <element signature="e#23#43#0" expanded="true" />
               </folding>
@@ -48,7 +159,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/rescue.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
+            <state relative-caret-position="-686">
               <caret line="26" column="23" lean-forward="true" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
               <folding>
                 <element signature="e#23#47#0" expanded="true" />
@@ -68,8 +179,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>robot.learned</find>
-      <find>colo</find>
       <find>unde</find>
       <find>test.json</find>
       <find>rotate</find>
@@ -79,7 +188,6 @@
       <find>self.tempo_para_chamar_run_action</find>
       <find>with</find>
       <find>run</find>
-      <find>run_action</find>
       <find>rescue(</find>
       <find>drop</find>
       <find>except</find>
@@ -98,6 +206,9 @@
       <find>end_time</find>
       <find>color_re</find>
       <find>rescue</find>
+      <find>On s</find>
+      <find>undefined_dealing</find>
+      <find>run_action</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -112,16 +223,21 @@
         <option value="$PROJECT_DIR$/assets/classes/duo.py" />
         <option value="$PROJECT_DIR$/assets/classes/__init__.py" />
         <option value="$PROJECT_DIR$/comunication.py" />
-        <option value="$PROJECT_DIR$/assets/classes/robot.py" />
         <option value="$PROJECT_DIR$/rescue.py" />
+        <option value="$PROJECT_DIR$/assets/handlers/__init__.py" />
+        <option value="$PROJECT_DIR$/assets/handlers/undefined_dealing.py" />
+        <option value="$PROJECT_DIR$/assets/handlers/button.py" />
+        <option value="$PROJECT_DIR$/assets/handlers/return_last_color.py" />
+        <option value="$PROJECT_DIR$/assets/handlers/server_config.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/assets/classes/robot.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="-1" />
-    <option name="width" value="1366" />
-    <option name="height" value="370" />
+    <option name="x" value="51" />
+    <option name="width" value="1356" />
+    <option name="height" value="368" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -135,6 +251,17 @@
             <path>
               <item name="ieee-robotics" type="b2602c69:ProjectViewProjectNode" />
               <item name="ieee-robotics" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ieee-robotics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ieee-robotics" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ieee-robotics" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ieee-robotics" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
+              <item name="handlers" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ieee-robotics" type="b2602c69:ProjectViewProjectNode" />
@@ -278,12 +405,12 @@
       <workItem from="1554818582267" duration="26217000" />
       <workItem from="1554905421234" duration="16622000" />
       <workItem from="1555077147729" duration="13468000" />
-      <workItem from="1555431431954" duration="2714000" />
+      <workItem from="1555431431954" duration="7965000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="218794000" />
+    <option name="totallyTimeSpent" value="224045000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -297,11 +424,11 @@
   <component name="ToolWindowManager">
     <frame x="0" y="-1" width="1366" height="740" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.14772727" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14696969" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49924242" weight="0.32954547" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32792208" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -312,15 +439,15 @@
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5022727" side_tool="true" weight="0.40813008" />
       <window_info anchor="bottom" id="Docker" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="11" />
-      <window_info anchor="bottom" id="File Transfer" order="12" sideWeight="0.4522727" weight="0.32467532" />
-      <window_info anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" sideWeight="0.5234848" side_tool="true" visible="true" weight="0.3262987" />
+      <window_info anchor="bottom" id="File Transfer" order="12" sideWeight="0.45151514" visible="true" weight="0.32467532" />
+      <window_info active="true" anchor="bottom" x="48" y="281" width="1318" height="471" id="Terminal" order="13" sideWeight="0.54848486" side_tool="true" visible="true" weight="0.32467532" />
       <window_info anchor="right" id="Coverage" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
       <window_info anchor="right" id="Database" order="4" />
-      <window_info active="true" anchor="right" id="Remote Host" order="5" visible="true" weight="0.2" />
+      <window_info anchor="right" id="Remote Host" order="5" visible="true" weight="0.2" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -380,19 +507,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="25" column="41" lean-forward="true" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
-          <folding>
-            <element signature="e#23#43#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rescue.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
+        <state relative-caret-position="-686">
           <caret line="26" column="23" lean-forward="true" selection-start-line="26" selection-start-column="23" selection-end-line="26" selection-end-column="23" />
           <folding>
             <element signature="e#23#47#0" expanded="true" />
@@ -400,16 +517,145 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/exit">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-360" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/handlers/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/handlers/return_last_color.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/handlers/button.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/handlers/server_config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="31" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/handlers/undefined_dealing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="524" column="36" lean-forward="true" selection-start-line="524" selection-start-column="36" selection-end-line="524" selection-end-column="36" />
+        <state relative-caret-position="113">
+          <caret line="555" column="30" lean-forward="true" selection-start-line="555" selection-start-column="30" selection-end-line="555" selection-end-column="30" />
           <folding>
             <element signature="e#24#48#0" expanded="true" />
+            <element signature="e#309#397#0" />
+            <element signature="e#3465#3533#0" />
+            <element signature="e#4043#4214#0" />
+            <element signature="e#4126#4214#0" />
+            <element signature="e#4329#4330#0" />
+            <element signature="e#4906#5010#0" />
+            <element signature="e#5365#5433#0" />
+            <element signature="e#5645#9330#0" />
+            <element signature="e#5740#6120#0" />
+            <element signature="e#5906#6020#0" />
+            <element signature="e#6071#6120#0" />
+            <element signature="e#6138#6187#0" />
+            <element signature="e#6304#6688#0" />
+            <element signature="e#6457#6506#0" />
+            <element signature="e#6574#6688#0" />
+            <element signature="e#6705#6776#0" />
+            <element signature="e#6507#6799#0" />
+            <element signature="e#6643#6696#0" />
+            <element signature="e#7242#7315#0" />
+            <element signature="e#7071#7364#0" />
+            <element signature="e#7207#7260#0" />
+            <element signature="e#7381#7518#0" />
+            <element signature="e#8558#8710#0" />
+            <element signature="e#8558#8627#0" />
+            <element signature="e#8964#9007#0" />
+            <element signature="e#10211#11847#0" />
+            <element signature="e#10675#11139#0" />
+            <element signature="e#10867#11010#0" />
+            <element signature="e#11216#11679#0" />
+            <element signature="e#11408#11550#0" />
+            <element signature="e#12055#12089#0" />
+            <element signature="e#13178#15748#0" />
+            <element signature="e#12991#14723#0" />
+            <element signature="e#13029#13159#0" />
+            <element signature="e#13282#14607#0" />
+            <element signature="e#13467#13967#0" />
+            <element signature="e#13679#13830#0" />
+            <element signature="e#14052#14551#0" />
+            <element signature="e#14264#14414#0" />
+            <element signature="e#14976#15140#0" />
+            <element signature="e#15729#16065#0" />
+            <element signature="e#15772#16033#0" />
+            <element signature="e#15995#16033#0" />
+            <element signature="e#14383#14407#0" />
+            <element signature="e#16196#16348#0" />
+            <element signature="e#16400#16498#0" />
+            <element signature="e#16639#16715#0" />
             <element signature="e#16926#16997#0" />
             <element signature="e#17125#17151#0" />
+            <element signature="e#18252#18578#0" />
+            <element signature="e#18296#18332#0" />
+            <element signature="e#18987#20680#0" />
+            <element signature="e#19091#19283#0" />
+            <element signature="e#19338#20550#0" />
+            <element signature="e#19338#19367#0" />
+            <element signature="e#19723#20007#0" />
+            <element signature="e#19851#19904#0" />
+            <element signature="e#20064#20349#0" />
+            <element signature="e#20192#20245#0" />
+            <element signature="e#20441#20496#0" />
+            <element signature="e#20593#20680#0" />
+            <element signature="e#20812#21028#0" />
+            <element signature="e#20878#20898#0" />
+            <element signature="e#21245#24713#0" />
+            <element signature="e#21329#24713#0" />
+            <element signature="e#21362#23437#0" />
+            <element signature="e#21362#21424#0" />
+            <element signature="e#21622#21871#0" />
+            <element signature="e#21905#23437#0" />
+            <element signature="e#22387#23282#0" />
+            <element signature="e#22387#22438#0" />
+            <element signature="e#22688#23282#0" />
+            <element signature="e#22885#22929#0" />
+            <element signature="e#23501#24713#0" />
+            <element signature="e#23749#23980#0" />
+            <element signature="e#23828#23960#0" />
+            <element signature="e#24088#24361#0" />
+            <element signature="e#24428#24665#0" />
+            <element signature="e#24887#28275#0" />
+            <element signature="e#24979#25082#0" />
+            <element signature="e#25854#26922#0" />
+            <element signature="e#26022#26922#0" />
             <element signature="e#26367#26392#0" />
+            <element signature="e#27078#28275#0" />
+            <element signature="e#27959#28091#0" />
             <element signature="e#28329#28388#0" />
+            <element signature="e#29000#29023#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/classes/robot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="304" column="13" lean-forward="true" selection-start-line="304" selection-start-column="13" selection-end-line="304" selection-end-column="13" />
+          <folding>
+            <element signature="e#23#43#0" expanded="true" />
           </folding>
         </state>
       </provider>

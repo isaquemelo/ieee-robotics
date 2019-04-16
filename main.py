@@ -98,7 +98,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if search[1] not in ["White", "Undefined", "Brown", "Black"]:
             color += 1
 
-        if color > 9:
+        if color > 13:
             for i in range(1):
                 ev3.Sound.beep()
                 # print("COLOR = {}".format(color))
