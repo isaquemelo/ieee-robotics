@@ -301,7 +301,7 @@ class Robot:
             ev3.Sound.beep()
             ev3.Sound.beep()
             self.move_timed(how_long=0.2, direction="back")
-            # return
+            return
         else:
             # print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
             self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)

@@ -10,6 +10,9 @@ from simple_pid import PID
 from assets.classes.robot import Robot
 from rescue import rescue, bounding_box
 import json
+from assets.handlers.button import ButtonApproach
+from assets.handlers.undefined_dealing import undefined_dealing
+from assets.handlers.server_config import Server
 
 DEFAULT_SPEED = 350
 
@@ -26,62 +29,6 @@ DEFAULT_SPEED = 350
 #         robot.stop_motors()
 #     elif right_out is True:
 #         return
-
-def undefined_dealing(color_sensor):
-    limiar = 12
-    sensor_color = color_sensor
-    speed = 400
-    if sensor_color[0] == "Undefined" or sensor_color[1] == "Undefined":
-        if sensor_color[0] == "Undefined":
-            #robot.move_timed(how_long=0.6, direction="back")
-            # SUBSTITUI O MOVETIMED DE CIMA
-            while True:
-                search = robot.sensor_data("ColorSensor")
-                if "Undefined" not in search:
-                    robot.stop_motors()
-                    break
-                else:
-                    robot.motors.left.run_forever(speed_sp=-speed)
-                    robot.motors.right.run_forever(speed_sp=-speed)
-            # SUBSTITUI O MOVETIMED DE CIMA
-            # robot.rotate(30, axis="diferente")
-            # SUBSTITUI A ROTATE DE CIMA
-            robot.gyroscope_sensor.mode = 'GYRO-RATE'
-            robot.gyroscope_sensor.mode = 'GYRO-ANG'
-            while True:
-                if robot.sensor_data('GyroSensor') >= limiar:
-                    robot.stop_motors()
-                    break
-                else:
-                    robot.motors.right.run_forever(speed_sp=-speed)
-            #time.sleep(5)
-            # deal_with_rotation_from_undefined_dealing(robot, left_out=True)
-            # SUBSTITUI A ROTATE DE CIMA
-        elif sensor_color[1] == "Undefined":
-            #robot.move_timed(how_long=0.6, direction="back")
-            # SUBSTITUI O MOVETIMED DE CIMA
-            while True:
-                search = robot.sensor_data("ColorSensor")
-                if "Undefined" not in search:
-                    robot.stop_motors()
-                    break
-                else:
-                    robot.motors.left.run_forever(speed_sp=-speed)
-                    robot.motors.right.run_forever(speed_sp=-speed)
-            # SUBSTITUI O MOVETIMED DE CIMA
-            # robot.rotate(-30, axis="diferente")
-            robot.gyroscope_sensor.mode = 'GYRO-RATE'
-            robot.gyroscope_sensor.mode = 'GYRO-ANG'
-            while True:
-                if robot.sensor_data('GyroSensor') <= -limiar:
-                    robot.stop_motors()
-                    break
-                else:
-                    robot.motors.left.run_forever(speed_sp=-speed)
-            # time.sleep(5)
-            # SUBSTITUI A ROTATE DE CIMA
-            # deal_with_rotation_from_undefined_dealing(robot, right_out=True)
-            # SUBSTITUI A ROTATE DE CIMA
 
 
 last_same_color = [None, ""]
@@ -106,7 +53,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
     reverse = False
 
     search = color_sensor_data
-    #print("SEARCH = ({}, {})".format(search[0], search[1]))
+    # print("SEARCH = ({}, {})".format(search[0], search[1]))
     pid.output_limits = (-600, 600)
     control = pid(robot.infrared_sensors[1] - robot.infrared_sensors[0])
 
@@ -115,7 +62,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.rect_color = "Undefined"
             robot.in_rect = False
             return None
-
 
     n_speed = 600
     if control > 400:
@@ -152,7 +98,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         if search[1] not in ["White", "Undefined", "Brown", "Black"]:
             color += 1
 
-        if color > 13:
+        if color > 9:
             for i in range(1):
                 ev3.Sound.beep()
                 # print("COLOR = {}".format(color))
@@ -229,7 +175,6 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 # print("RETORNOU ON SQUARE COM  RECT = {}".format(robot.rect_color))
                 return "On square"
 
-
     elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
         # if last_same_color == ["White", "White"]:
         #     print("Running undefined dealing...")
@@ -246,11 +191,11 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
         # SUBSTITUI TUDO ACIMA
         print("Running undefined dealing...")
-        undefined_dealing(search)
+        undefined_dealing(robot, search)
 
     # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAID DA BOUNDING BOX
     elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor:
-        #print("[0] == White [1] != White")
+        # print("[0] == White [1] != White")
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
         else:
@@ -306,7 +251,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
         time.sleep(0.15)
         if deu_re is False:
             robot.move_timed(direction="back")
-        #ev3.Sound.speak("Robot is moving back...").wait()
+        # ev3.Sound.speak("Robot is moving back...").wait()
         robot.realigment_counter += 1
 
         # if robot.realigment_counter > 7:
@@ -413,9 +358,10 @@ def return_last_color(robot, square_color, last_choice):
 
 
 robot = Robot()
+server = Server()
 
-client = mqtt.Client()
-client.connect("10.42.0.43", 1883, 60)
+# client = mqtt.Client()
+# client.connect("10.42.0.43", 1883, 60)
 
 
 def on_message(client, userdata, message):
@@ -429,10 +375,9 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("topic/sensors")
 
 
-client.on_connect = on_connect
-client.on_message = on_message
-
-client.loop_start()
+server.client.on_connect = on_connect
+server.client.on_message = on_message
+server.client.loop_start()
 
 last_same_color2 = None
 
@@ -693,8 +638,8 @@ def main():
         robot.motors.right.stop()
         robot.motors.left.stop()
         robot.motors.alternative.stop()
-        client.loop_stop()
-        client.disconnect()
+        server.client.loop_stop()
+        server.client.disconnect()
 
 try:
     if __name__ == '__main__':
@@ -705,5 +650,5 @@ except KeyboardInterrupt:
     robot.motors.right.stop()
     robot.motors.left.stop()
     robot.motors.alternative.stop()
-    client.loop_stop()
-    client.disconnect()
+    server.client.loop_stop()
+    server.client.disconnect()
