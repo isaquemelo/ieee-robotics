@@ -25,11 +25,11 @@ def rescue(robot, speed=DEFAULT_SPEED):
         return
 
     # garanti que o robo nao tente resgatar na situassao da foto 1,2
-    search = robot.sensor_data("ColorSensor")
-    if search[0] in ["Blue", "Red", "Green"] or search[1] in ["Blue", "Red", "Green"] \
-            or robot.infrared_sensors[0] > 20:
-        print("PREVINIU UM RESGATE DO LADO ERRADO DA PLATAFORMA")
-        return
+    # search = robot.sensor_data("ColorSensor")
+    # if search[0] in ["Blue", "Red", "Green"] or search[1] in ["Blue", "Red", "Green"] \
+    #         or robot.infrared_sensors[0] > 20:
+    #     print("PREVINIU UM RESGATE DO LADO ERRADO DA PLATAFORMA")
+    #     return
     """
     FOI PARA O TESTE DO ERRO DA FOTO 1,2
     else:
@@ -269,7 +269,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         robot.reverse_path = True
         robot.bounding_box = False
         robot.move_timed(how_long=1, direction="back", speed=1000)
-        robot.rotate(180)
+        robot.rotate(180, speed=1000, axis = "own")
         return
 
     kp = 40
@@ -318,14 +318,14 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             black_counter = 0
             can_break = True
             robot.stop_motors()
-            robot.rotate(90)
+            robot.rotate(90, axis = "own", speed=1000)
             robot.move_timed(how_long=7, speed=450)
             robot.move_timed(how_long=0.3, direction="back", speed=800)
-            robot.rotate(90)
+            robot.rotate(90, axis = "own", speed=1000)
             # robot.move_timed(how_long=0.3, direction="back", speed=800)
             robot.move_timed(how_long=5, direction="forward", speed=450)
             robot.move_timed(how_long=0.2, direction="back", speed=800)
-            robot.rotate(90)
+            robot.rotate(90, axis = "own", speed=1000)
 
             # coisas para verificação de sainda pelo angulorobot
             robot.gyroscope_sensor.mode = 'GYRO-RATE'
