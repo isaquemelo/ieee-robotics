@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#usr/bin/env python3
 import ev3dev.ev3 as ev3
 from assets.classes.robot import Robot
 from simple_pid import PID
@@ -235,6 +235,15 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
 
 
 def bounding_box(robot, speed=DEFAULT_SPEED):
+    robot.stop_motors()
+    he_pra_retornar = False
+    if not robot.has_doll:
+        robot.reverse_path = True
+        robot.bounding_box = False
+        robot.move_timed(how_long=1, direction="back", speed=1000)
+        robot.rotate(180, speed=1000, axis="own")
+        he_pra_retornar = True
+
     for i in range(3):
         ev3.Sound.beep()
         print("cores que chamaram a bounding box = {}".format(robot.fila_para_registro_do_fim))
@@ -265,129 +274,130 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             robot.learned_colors[k][-1] = 2
             # print(robot.learned_colors)
 
-    if not robot.has_doll:
-        robot.reverse_path = True
-        robot.bounding_box = False
-        robot.move_timed(how_long=1, direction="back", speed=1000)
-        robot.rotate(180, speed=1000, axis = "own")
-        return
+    # if not robot.has_doll:
+    #     robot.reverse_path = True
+    #     robot.bounding_box = False
+    #     robot.move_timed(how_long=1, direction="back", speed=1000)
+    #     robot.rotate(180, speed=1000, axis="own")
+    #     return
+    if he_pra_retornar is False:
+        kp = 40
+        ki = 0
+        kd = 60.04
+        black_counter = 0
+        can_break = False
+        #contador_para_re = 40
+        # limits
+        li = 76.6
+        pid = PID(kp, ki, kd, setpoint=li)
+        n_speed = 350
 
-    kp = 40
-    ki = 0
-    kd = 60.04
-    black_counter = 0
-    can_break = False
-    #contador_para_re = 40
-    # limits
-    li = 76.6
-    pid = PID(kp, ki, kd, setpoint=li)
-    n_speed = 350
-
-    # 83.3 indo
-    # 75 voltando
+        # 83.3 indo
+        # 75 voltando
 
 
-    pid.output_limits = (-400, 400)
-    while True:
-        #print("Bouding box loop..")
-        ultrasonico = robot.sensor_data("Ultrasonic")
+        pid.output_limits = (-400, 400)
+        while True:
+            #print("Bouding box loop..")
+            ultrasonico = robot.sensor_data("Ultrasonic")
 
-        # print(robot.infrared_sensors[0])
-        if 50 <= ultrasonico <= 100:
-            control = pid(robot.sensor_data("Ultrasonic"))
-            if control > 500:
-                control = 500
-            if control < -500:
-                control = -500
-
-            robot.motors.left.run_forever(speed_sp=n_speed + control)
-            robot.motors.right.run_forever(speed_sp=n_speed - control)
-        else:
-            robot.motors.left.run_forever(speed_sp=n_speed+50)  # coloquei mais 50 para o robo nao engachar o lado esquerdo na hora de entrar na bounding box
-            robot.motors.right.run_forever(speed_sp=n_speed)
-
-        search = robot.sensor_data("ColorSensor")
-        if search[0] == "Black" and search[1] == "Black":
-            black_counter += 1
-
-        if black_counter >= 60:
-
-            drop_doll(robot)
-            # move back with pid
-            robot.move_timed(how_long=1.1, direction="back", speed=1000)
-            black_counter = 0
-            can_break = True
-            robot.stop_motors()
-            robot.rotate(90, axis = "own", speed=1000)
-            robot.move_timed(how_long=7, speed=450)
-            robot.move_timed(how_long=0.3, direction="back", speed=800)
-            robot.rotate(90, axis = "own", speed=1000)
-            # robot.move_timed(how_long=0.3, direction="back", speed=800)
-            robot.move_timed(how_long=5, direction="forward", speed=450)
-            robot.move_timed(how_long=0.2, direction="back", speed=800)
-            robot.rotate(90, axis = "own", speed=1000)
-
-            # coisas para verificação de sainda pelo angulorobot
-            robot.gyroscope_sensor.mode = 'GYRO-RATE'
-            robot.gyroscope_sensor.mode = 'GYRO-ANG'
-            # coisas para verificação de sainda pelo angulorobot
-
-            # end_time = datetime.now() + timedelta(seconds=7)
-            pid = PID(kp, ki, kd, setpoint=1.3)
-            # while datetime.now() < end_time:
-            while True:
-                #print("DENTRO DO LOOP MAIS INTERNO")
-                n_speed = 350
-                # print("ULTRASONICO: ", ultrasonico)
-
-                # verifica para sair basiado na cor
-                search = robot.sensor_data("ColorSensor")
-                # print("SEARCH = {}".format(search))
-                if search[1] in ["Green", "Red", "Blue"]:
-                    robot.stop_motors()
-                    print("VOLTOU PELA COR = {}".format(search[1]))
-                    robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5) # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
-                    # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
-                    ev3.Sound.beep().wait()
-                    robot.reverse_path = True
-                    robot.bounding_box = False
-                    return
-
-                # verifica para sair basiado no angulo
-                if robot.sensor_data('GyroSensor') <= -90:
-                    robot.stop_motors()
-                    print("VOLTOU PELO ANGULO = {}".format(robot.sensor_data('GyroSensor')))
-                    #robot.move_timed(how_long=1.2, speed=300)
-                    robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5)  # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
-                    # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
-                    robot.reverse_path = True
-                    ev3.Sound.beep().wait()
-                    robot.bounding_box = False
-                    return
-
-                control = pid(robot.infrared_sensors[0])
-                #print(robot.infrared_sensors[0])
-                if control > 600:
-                    control = 600
-                if control < -600:
-                    control = -600
+            # print(robot.infrared_sensors[0])
+            if 50 <= ultrasonico <= 100:
+                control = pid(robot.sensor_data("Ultrasonic"))
+                if control > 500:
+                    control = 500
+                if control < -500:
+                    control = -500
 
                 robot.motors.left.run_forever(speed_sp=n_speed + control)
                 robot.motors.right.run_forever(speed_sp=n_speed - control)
+            else:
+                robot.motors.left.run_forever(speed_sp=n_speed+50)  # coloquei mais 50 para o robo nao engachar o lado esquerdo na hora de entrar na bounding box
+                robot.motors.right.run_forever(speed_sp=n_speed)
 
-            robot.rotate(90)
+            search = robot.sensor_data("ColorSensor")
+            if search[0] == "Black" and search[1] == "Black":
+                black_counter += 1
+
+            if black_counter >= 60:
+
+                drop_doll(robot)
+                # move back with pid
+                robot.move_timed(how_long=1.1, direction="back", speed=1000)
+                black_counter = 0
+                can_break = True
+                robot.stop_motors()
+                robot.rotate(90, axis = "own", speed=1000)
+                robot.move_timed(how_long=7, speed=450)
+                robot.move_timed(how_long=0.3, direction="back", speed=800)
+                robot.rotate(90, axis = "own", speed=1000)
+                # robot.move_timed(how_long=0.3, direction="back", speed=800)
+                robot.move_timed(how_long=5, direction="forward", speed=450)
+                robot.move_timed(how_long=0.2, direction="back", speed=800)
+                robot.rotate(90, axis = "own", speed=1000)
+
+                # coisas para verificação de sainda pelo angulorobot
+                robot.gyroscope_sensor.mode = 'GYRO-RATE'
+                robot.gyroscope_sensor.mode = 'GYRO-ANG'
+                # coisas para verificação de sainda pelo angulorobot
+
+                # end_time = datetime.now() + timedelta(seconds=7)
+                pid = PID(kp, ki, kd, setpoint=1.3)
+                # while datetime.now() < end_time:
+                while True:
+                    #print("DENTRO DO LOOP MAIS INTERNO")
+                    n_speed = 350
+                    # print("ULTRASONICO: ", ultrasonico)
+
+                    # verifica para sair basiado na cor
+                    search = robot.sensor_data("ColorSensor")
+                    # print("SEARCH = {}".format(search))
+                    if search[1] in ["Green", "Red", "Blue"]:
+                        robot.stop_motors()
+                        print("VOLTOU PELA COR = {}".format(search[1]))
+                        robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5) # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
+                        # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
+                        ev3.Sound.beep().wait()
+                        robot.reverse_path = True
+                        robot.bounding_box = False
+                        return
+
+                    # verifica para sair basiado no angulo
+                    if robot.sensor_data('GyroSensor') <= -90:
+                        robot.stop_motors()
+                        print("VOLTOU PELO ANGULO = {}".format(robot.sensor_data('GyroSensor')))
+                        #robot.move_timed(how_long=1.2, speed=300)
+                        robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5)  # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
+                        # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
+                        robot.reverse_path = True
+                        ev3.Sound.beep().wait()
+                        robot.bounding_box = False
+                        return
+
+                    control = pid(robot.infrared_sensors[0])
+                    #print(robot.infrared_sensors[0])
+                    if control > 600:
+                        control = 600
+                    if control < -600:
+                        control = -600
+
+                    robot.motors.left.run_forever(speed_sp=n_speed + control)
+                    robot.motors.right.run_forever(speed_sp=n_speed - control)
+
+                robot.rotate(90)
 
 
-            # exit()
+                # exit()
 
-        #control = pid(robot.sensor_data("Ultrasonic"))
-        #ultrasonico = robot.sensor_data("Ultrasonic")
+            #control = pid(robot.sensor_data("Ultrasonic"))
+            #ultrasonico = robot.sensor_data("Ultrasonic")
 
 
 
-    #     if can_break and robot.verifica_para_saida_do_bound_box() is True:
-    #         robot.move_timed(how_long=1, direction="forward", speed=n_speed)
-    #         robot.stop_motors()
-    #         break
-    # ev3.Sound.beep()
-    # return
+        #     if can_break and robot.verifica_para_saida_do_bound_box() is True:
+        #         robot.move_timed(how_long=1, direction="forward", speed=n_speed)
+        #         robot.stop_motors()
+        #         break
+        # ev3.Sound.beep()
+        # return
+    return
