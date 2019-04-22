@@ -266,7 +266,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         # print("PRIMEIRA CARGA")
         keys = robot.learned_colors.keys()
         for k in keys:
-            robot.learned_colors[k].append(2)
+            robot.learned_colors[k][-1] = 2
             print(robot.learned_colors)
     else:
         # print("CARGA 1 + N")
@@ -360,6 +360,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                         ev3.Sound.beep().wait()
                         robot.reverse_path = True
                         robot.bounding_box = False
+                        robot.ta_na_ranpa = False
                         return
 
                     # verifica para sair basiado no angulo
@@ -372,6 +373,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                         robot.reverse_path = True
                         ev3.Sound.beep().wait()
                         robot.bounding_box = False
+                        robot.ta_na_ranpa = False
                         return
 
                     control = pid(robot.infrared_sensors[0])
@@ -400,4 +402,5 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         #         break
         # ev3.Sound.beep()
         # return
+    robot.ta_na_ranpa = False
     return

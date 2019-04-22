@@ -173,7 +173,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
 
     # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAIDA DA BOUNDING BOX
-    elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor:
+    elif search[0] == "White" and search[1] != "White" and search[1] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor and robot.ta_na_ranpa is False:
         # print("[0] == White [1] != White")
         if last_same_color[0] == "White" and last_same_color[1] == "White":
             reverse = True
@@ -244,7 +244,7 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
             robot.motors.right.stop()
 
     # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAID DA BOUNDING BOX
-    elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor:
+    elif search[0] != "White" and search[1] == "White" and search[0] not in ["Undefined", "Brown", "Black"] and datetime.now() >= robot.time_desabilita_o_realinhamento_da_cor and robot.ta_na_ranpa is False:
         # print("[0] != White and [1] == White")
 
         if last_same_color[0] == "White" and last_same_color[1] == "White":
@@ -372,6 +372,9 @@ def main():
         undefined_counter = 0
 
         while True:
+            print("robot.learned_colors = {}".format(robot.learned_colors))
+            print("ro.ta_na_rampa = {}". format(robot.ta_na_ranpa))
+
             robot.update()
             if robot.bounding_box:
                 robot.done_learning = True
@@ -523,7 +526,7 @@ def main():
                             if color_sensor[0] != being_learned or (
                                     color_sensor[0] == being_learned and white_counter >= 5):
 
-                                robot.learned_colors[being_learned] = [learning_dic[being_learned][0]]
+                                robot.learned_colors[being_learned] = [learning_dic[being_learned][0], 1]
 
                                 # salva aprendizado finalizado em arquivo json
                                 with open(robot.file_name, 'w') as outfile:

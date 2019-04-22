@@ -26,7 +26,7 @@ class Robot:
         self.ta_no_final_da_pista = False
 
         self.time_desabilita_o_realinhamento_da_cor = datetime.now()
-
+        self.ta_na_ranpa = False
         # define motors
         self.motors = Duo(ev3.LargeMotor('outA'), ev3.LargeMotor('outD'), ev3.LargeMotor('outC'))
         # self.handler = ev3.LargeMotor('outC')
@@ -84,6 +84,8 @@ class Robot:
         try:
             with open(self.fixed_file_name) as json_file:
                 process = json.load(json_file)
+                for k in sorted(self.learned_colors.keys()):
+                    self.learned_colors[k][-1] = 2
 
         except FileNotFoundError:
             with open(self.fixed_file_name, 'w') as outfile:
@@ -311,7 +313,7 @@ class Robot:
             # print("CHAMOU A RUN_ACTION NO TEMPO CERTO")
             self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
 
-            if self.reverse_path is True:
+            if self.rect_color in self.learned_colors.keys():
                 self.learned_colors[self.rect_color][-1] -= 1
                 # print("EXECUTOU O DESCARREGAMENTO DA COR")
                 print(self.learned_colors)
@@ -320,16 +322,26 @@ class Robot:
                 #     self.ta_no_final_da_pista = False
                 #     self.rotate(180)
 
-                if self.primeiro_bounding_box is False:
-                    if self.voltou is False:
-                        if self.learned_colors_is_empity() is True:
+                # if self.primeiro_bounding_box is False:
+                if self.voltou is False:
+                    if self.learned_colors_is_empity() is True:
+                        if self.reverse_path is True:
                             for i in range(5):
                                 ev3.Sound.beep()
                             self.ta_no_final_da_pista = True
                             self.rotate(180)
                             self.reverse_path = False
-                            self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
+                            for k in sorted(self.learned_colors.keys()):
+                                if k == self.rect_color:
+                                    self.learned_colors[k][-1] = 1
+                                else:
+                                    self.learned_colors[k][-1] = 2
+                            # self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
                             return
+                        else:
+                            self.ta_na_ranpa = True
+                            for i in range(7):
+                                print("TA NA RAMPA")
 
             self.nao_pode = True
 
