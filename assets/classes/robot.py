@@ -85,7 +85,7 @@ class Robot:
             with open(self.fixed_file_name) as json_file:
                 process = json.load(json_file)
                 for k in sorted(self.learned_colors.keys()):
-                    self.learned_colors[k][-1] = 2
+                    self.learned_colors[k][-1] = 0
 
         except FileNotFoundError:
             with open(self.fixed_file_name, 'w') as outfile:
@@ -288,6 +288,21 @@ class Robot:
         # print("Retornou True")
         return True
 
+    def learned_colors_is_full(self):
+        # print("CHAMOU A FUNÇÃO")
+        keys = list(self.learned_colors.keys())
+        # print("learned_colors = {}".format(self.learned_colors))
+        for k in keys:
+            # if type(self.learned_colors[k][-1]) != int:
+            #     print("Retornou String")
+            #     return "tentou chamar pra uma String"
+            # print("valor = {}".format(self.learned_colors[k][-1]))
+            if self.learned_colors[k][-1] != 2:
+                # print("Retornou False")
+                return False
+        # print("Retornou True")
+        return True
+
     def run_action(self, direction, still_learning=True):
         print("Run action chamada com os seguintes paramentros:", "direction:", direction, "still_learning:",
               still_learning)
@@ -314,7 +329,10 @@ class Robot:
             self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
 
             if self.rect_color in self.learned_colors.keys():
-                self.learned_colors[self.rect_color][-1] -= 1
+                if self.reverse_path is True:
+                    self.learned_colors[self.rect_color][-1] -= 1
+                else:
+                    self.learned_colors[self.rect_color][-1] += 1
                 # print("EXECUTOU O DESCARREGAMENTO DA COR")
                 print(self.learned_colors)
                 self.stop_motors()
@@ -323,25 +341,30 @@ class Robot:
                 #     self.rotate(180)
 
                 # if self.primeiro_bounding_box is False:
-                if self.voltou is False:
-                    if self.learned_colors_is_empity() is True:
-                        if self.reverse_path is True:
-                            for i in range(5):
-                                ev3.Sound.beep()
-                            self.ta_no_final_da_pista = True
-                            self.rotate(180)
-                            self.reverse_path = False
-                            for k in sorted(self.learned_colors.keys()):
-                                if k == self.rect_color:
-                                    self.learned_colors[k][-1] = 1
-                                else:
-                                    self.learned_colors[k][-1] = 2
-                            # self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
-                            return
-                        else:
-                            self.ta_na_ranpa = True
-                            for i in range(7):
-                                print("TA NA RAMPA")
+                # if self.voltou is False:
+                if self.learned_colors_is_empity() is True:
+                    if self.reverse_path is True:
+                        for i in range(5):
+                            ev3.Sound.beep()
+                        self.ta_no_final_da_pista = True
+                        self.rotate(180)
+                        self.reverse_path = False
+                        for k in sorted(self.learned_colors.keys()):
+                            if k == self.rect_color:
+                                self.learned_colors[k][-1] = 1
+                            else:
+                                self.learned_colors[k][-1] = 0
+                        # self.tempo_para_chamar_run_action = datetime.now() + timedelta(seconds=5)
+                        return
+                    # else:
+                    #     self.ta_na_ranpa = True
+                    #     for i in range(7):
+                    #         print("TA NA RAMPA")
+                if self.learned_colors_is_full() is True:
+                    self.ta_na_ranpa = True
+                    for i in range(7):
+                        print("TA NA RAMPA")
+
 
             self.nao_pode = True
 
