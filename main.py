@@ -37,7 +37,7 @@ rect_check = False
 
 # 15.6 0 4.8
 pid = PID(15.6, 0, 4.8, setpoint=-4)
-
+ok = True
 
 def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=True, speed=DEFAULT_SPEED):
     deu_re = False
@@ -372,6 +372,16 @@ def main():
         undefined_counter = 0
 
         while True:
+
+            # coloquei aqui pra ver se ajudava a identificar o boneco mais rapido
+            if robot.sensor_data("Ultrasonic") < 17 and not robot.has_doll:
+                # robot.stop_motors()
+                rescue(robot)
+                # for i in range(2):
+                #     print('IDENTIFICOU O BONECO')
+                #     ev3.Sound.beep().wait()
+                # time.sleep(2)
+
             print("robot.learned_colors = {}".format(robot.learned_colors))
             print("ro.ta_na_rampa = {}". format(robot.ta_na_ranpa))
 
@@ -430,14 +440,14 @@ def main():
                     # print('ELE TENTOU ENTRAR NO CASO DO BLACK QUANDO NÃO DEVIA')
                     pass
 
-            # lembrar de descomentar
-            if robot.sensor_data("Ultrasonic") < 17 and not robot.has_doll:
-                # robot.stop_motors()
-                rescue(robot)
-                # for i in range(2):
-                #     print('IDENTIFICOU O BONECO')
-                #     ev3.Sound.beep().wait()
-                # time.sleep(2)
+            # coloquei no inicio do while
+            # if robot.sensor_data("Ultrasonic") < 17 and not robot.has_doll:
+            #     # robot.stop_motors()
+            #     rescue(robot)
+            #     # for i in range(2):
+            #     #     print('IDENTIFICOU O BONECO')
+            #     #     ev3.Sound.beep().wait()
+            #     # time.sleep(2)
 
             white_counter = 0
             # print(robot.historic)

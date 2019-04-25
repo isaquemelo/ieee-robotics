@@ -6,8 +6,8 @@ from datetime import datetime, timedelta
 import time
 import json
 
-DEFAULT_SPEED = 400
 
+DEFAULT_SPEED = 400
 
 def deal_ret(robot):
     if robot.reverse_path is True:
@@ -234,6 +234,25 @@ def drop_doll(robot, speed=DEFAULT_SPEED):
         robot.has_doll = False
 
 
+def travou_na_entrada(robot):
+    angulo_do_erro = robot.sensor_data("GyroSensor")
+    speed_positiva = 300
+    speed_negativa = -500
+    limiar_do_angulo_de_retorno = int(abs(angulo_do_erro) * 25/100)
+    if angulo_do_erro < 0:
+        while robot.sensor_data("GyroSensor") <= limiar_do_angulo_de_retorno:
+            robot.motors.left.run_forever(speed_sp=speed_positiva)
+            robot.motors.right.run_forever(speed_sp=speed_negativa)
+        robot.stop_motors()
+    elif angulo_do_erro > 0:
+        while robot.sensor_data("GyroSensor") >= -limiar_do_angulo_de_retorno:
+            robot.motors.left.run_forever(speed_sp=speed_negativa)
+            robot.motors.right.run_forever(speed_sp=speed_positiva)
+        robot.stop_motors()
+    for i in range(5):
+        print("angulo depois da contra medida = {}".format(robot.sensor_data("GyroSensor")))
+
+
 def bounding_box(robot, speed=DEFAULT_SPEED):
     robot.stop_motors()
     he_pra_retornar = False
@@ -281,6 +300,15 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
     #     robot.rotate(180, speed=1000, axis="own")
     #     return
     if he_pra_retornar is False:
+        # resetando o giroscopo
+        robot.gyroscope_sensor.mode = 'GYRO-RATE'
+        robot.gyroscope_sensor.mode = 'GYRO-ANG'
+        for i in range(5):
+            print("angulo antes de identificar = {}".format(robot.sensor_data("GyroSensor")))
+        # setando vaiaveis das contra medidas
+        limiar_do_angulo = 15
+        limiar_do_infra = 10
+
         kp = 40
         ki = 0
         kd = 60.04
@@ -297,7 +325,23 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
 
         pid.output_limits = (-400, 400)
+        chamou_travou_na_entrada_counter = 0
+        lis_for_values = [x for x in range(limiar_do_angulo, 0, -2)]
+        print(lis_for_values)
+        print(len(lis_for_values))
         while True:
+            # limiar_do_angulo = lis_for_values[chamou_travou_na_entrada_counter]
+
+            if not (robot.infrared_sensors[0] < limiar_do_infra and robot.infrared_sensors[1] < limiar_do_infra) \
+                    and (robot.sensor_data("GyroSensor") > limiar_do_angulo or robot.sensor_data("GyroSensor") < -limiar_do_angulo):
+                robot.stop_motors()
+                for i in range(5):
+                    ev3.Sound.beep()
+                    print("limiar_utilizado = {}".format(limiar_do_angulo))
+                    print("angulo em que identificou = {}".format(robot.sensor_data("GyroSensor")))
+                chamou_travou_na_entrada_counter += 1
+                travou_na_entrada(robot)
+
             #print("Bouding box loop..")
             ultrasonico = robot.sensor_data("Ultrasonic")
 
@@ -312,7 +356,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                 robot.motors.left.run_forever(speed_sp=n_speed + control)
                 robot.motors.right.run_forever(speed_sp=n_speed - control)
             else:
-                robot.motors.left.run_forever(speed_sp=n_speed+50)  # coloquei mais 50 para o robo nao engachar o lado esquerdo na hora de entrar na bounding box
+                robot.motors.left.run_forever(speed_sp=n_speed + 20)  # coloquei mais 50 para o robo nao engachar o lado esquerdo na hora de entrar na bounding box
                 robot.motors.right.run_forever(speed_sp=n_speed)
 
             search = robot.sensor_data("ColorSensor")
