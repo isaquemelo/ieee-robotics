@@ -601,6 +601,8 @@ def main():
 
 try:
     if __name__ == '__main__':
+        robot.has_doll = True
+        robot.ta_na_ranpa = True
         # robot.reverse_path = True
         # robot.learned_colors = {'Red': ['left', 1], 'Green': ['forward', 0], 'Blue': ['right', 0]}
         # robot.primeiro_bounding_box = False

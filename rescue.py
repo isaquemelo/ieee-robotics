@@ -338,10 +338,12 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         max = len(lis_for_values) - 1
         print(lis_for_values)
         print(len(lis_for_values))
+        cant_use_any_more = False
         while True:
             limiar_do_angulo = lis_for_values[chamou_travou_na_entrada_counter]
 
-            if not (robot.infrared_sensors[0] < limiar_do_infra and robot.infrared_sensors[1] < limiar_do_infra) \
+            if (not cant_use_any_more) \
+                    and not (robot.infrared_sensors[0] < limiar_do_infra and robot.infrared_sensors[1] < limiar_do_infra) \
                     and (robot.sensor_data("GyroSensor") > limiar_do_angulo or robot.sensor_data("GyroSensor") < -limiar_do_angulo):
                 robot.stop_motors()
                 for i in range(5):
@@ -357,6 +359,11 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
 
             # print(robot.infrared_sensors[0])
             if 50 <= ultrasonico <= 100:
+                if cant_use_any_more is False:
+                    cant_use_any_more = True
+                    for i in range(5):
+                        print("nao vai mais chamar a travou na entrada")
+                        ev3.Sound.beep()
                 control = pid(robot.sensor_data("Ultrasonic"))
                 if control > 500:
                     control = 500
