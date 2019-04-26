@@ -624,4 +624,3 @@ except KeyboardInterrupt:
     robot.motors.alternative.stop()
     server.client.loop_stop()
     server.client.disconnect()
-
