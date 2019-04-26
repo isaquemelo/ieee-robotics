@@ -97,11 +97,12 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
 
         if search[1] not in ["White", "Undefined", "Brown", "Black"]:
             color += 1
+            print("COLOR = {}".format(color))
 
-        if color > 9:
+        if color > 8:
             ev3.Sound.beep()
 
-            # print("COLOR = {}".format(color))
+            # print("COLOR = {}".format(color)).
             # print("SEARCH = {}".format(search))
 
             search = robot.sensor_data("ColorSensor")
@@ -158,18 +159,20 @@ def color_realignment(robot, color_sensor_data, infrared_sensor, move_forward=Tr
                 return "On square"
 
     elif search[0] == "Undefined" and search[1] != "Undefined" or search[1] == "Undefined" and search[0] != "Undefined":
-        if last_same_color == ["White", "White"]:
-            print("Running undefined dealing...")
-            undefined_dealing(robot, search)
-
-        else:
-            print("Undefine Dealing counting..")
-            robot.undefined_counter += 1
-
-        if robot.undefined_counter > 5:
-            print("Undefined Dealing executed..")
-            robot.undefined_counter = 0
-            undefined_dealing(robot, search)
+        # if last_same_color == ["White", "White"]:
+        #     print("Running undefined dealing...")
+        #     undefined_dealing(robot, search)
+        #
+        # else:
+        #     print("Undefine Dealing counting..")
+        #     robot.undefined_counter += 1
+        #
+        # if robot.undefined_counter > 5:
+        #     print("Undefined Dealing executed..")
+        #     robot.undefined_counter = 0
+        #     undefined_dealing(robot, search)
+        robot.stop_motors()
+        undefined_dealing(robot, search)
 
 
     # A ULTIMA CONDICIONAL SERVE PARA EVITAR QUE O ROBO TENTE DAR COLOR REALIGMENT NA SAIDA DA BOUNDING BOX
@@ -601,8 +604,6 @@ def main():
 
 try:
     if __name__ == '__main__':
-        robot.has_doll = True
-        robot.ta_na_ranpa = True
         # robot.reverse_path = True
         # robot.learned_colors = {'Red': ['left', 1], 'Green': ['forward', 0], 'Blue': ['right', 0]}
         # robot.primeiro_bounding_box = False

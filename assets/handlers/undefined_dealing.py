@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 def undefined_dealing(robot, color_sensor):
+    print("chamou a undefined dealing")
     limiar = 12
     sensor_color = color_sensor
     speed = 400
@@ -55,3 +56,4 @@ def undefined_dealing(robot, color_sensor):
             # SUBSTITUI A ROTATE DE CIMA
             # deal_with_rotation_from_undefined_dealing(robot, right_out=True)
             # SUBSTITUI A ROTATE DE CIMA
+    print("retornou da undegined dealing")

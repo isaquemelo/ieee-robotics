@@ -61,7 +61,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
             robot.stop_motors()
 
             if not res_dang:
-                ev3.Sound.beep()
+                # ev3.Sound.beep()
                 print("RESGATE SEGURO")
                 robot.motors.alternative.run_forever(speed_sp=1000)
                 robot.stop_motors()
@@ -113,9 +113,9 @@ def rescue(robot, speed=DEFAULT_SPEED):
                 search = robot.sensor_data("ColorSensor")
                 # camada de protessao caso o robo tente entrar com uma das rodas fora da plataforma (o robo vai tentar resgatar o boneco)
                 if search[0] == "Undefined" and search[1] != "Undefined":
-                    ev3.Sound.beep()
-                    ev3.Sound.beep()
-                    ev3.Sound.beep()
+                    # ev3.Sound.beep()
+                    # ev3.Sound.beep()
+                    # ev3.Sound.beep()
                     # tentando pegar o doll antes de chegar a ponto de cair
                     robot.move_timed(how_long=0.7, direction="forward", speed=speed)
                     robot.stop_motors()
@@ -124,7 +124,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     robot.move_timed(how_long=0.1, direction="forward", speed=speed)
                     robot.rotate(9)
                     #time.sleep(3)
-                    # robot.rotate(-9) # OBS: descomentar se for necessario
+                    robot.rotate(-9) # OBS: descomentar se for necessario
                     #time.sleep(3)
                     #time.sleep(2)
                     #robot.rotate(9, speed=1000)
@@ -169,9 +169,9 @@ def rescue(robot, speed=DEFAULT_SPEED):
 
 
                 elif search[0] != "Undefined" and search[1] == "Undefined":
-                    ev3.Sound.beep()
-                    ev3.Sound.beep()
-                    ev3.Sound.beep()
+                    # ev3.Sound.beep()
+                    # ev3.Sound.beep()
+                    # ev3.Sound.beep()
                     # tentando pegar o doll antes de chegar a ponto de cair
                     robot.move_timed(how_long=0.7, direction="forward", speed=speed)
                     robot.stop_motors()
@@ -179,7 +179,7 @@ def rescue(robot, speed=DEFAULT_SPEED):
                     robot.motors.alternative.run_forever(speed_sp=1000)
                     robot.move_timed(how_long=0.1, direction="forward", speed=speed)
                     robot.rotate(-9)
-                    # robot.rotate(9) # OBS: descomentar se for necessario
+                    robot.rotate(9) # OBS: descomentar se for necessario
                     # time.sleep(2)
                     # robot.rotate(9, speed=1000)
                     # time.sleep(2)
@@ -225,8 +225,8 @@ def rescue(robot, speed=DEFAULT_SPEED):
 def drop_doll(robot, speed=DEFAULT_SPEED):
     robot.stop_motors()
     if robot.has_doll:
-        ev3.Sound.beep()
-        ev3.Sound.beep()
+        # ev3.Sound.beep()
+        # ev3.Sound.beep()
         robot.motors.alternative.stop()
         robot.motors.alternative.run_timed(time_sp=2000, speed_sp=-1000)
         robot.stop_motors()
@@ -238,10 +238,11 @@ def travou_na_entrada(robot, counter):
     angulo_do_erro = robot.sensor_data("GyroSensor")
     speed_positiva = 300
     speed_negativa = -500
-    acrescimo = counter * 7
+    lis = [6, 3, 0]
+    acrescimo = lis[counter]
     # limiar_do_angulo_de_retorno = int(abs(angulo_do_erro) * (25)/100)  # vai diminuindo
     # limiar_do_angulo_de_retorno = int(abs(angulo_do_erro) * (25 + acrescimo) / 100)  # alivia a diminuissao do angulo
-    limiar_do_angulo_de_retorno = 4  # eh sempre fixo
+    limiar_do_angulo_de_retorno = 4 + acrescimo # eh sempre fixo
     for i in range(5):
         print("limiar_do_angulo_de_retorno = {}".format(limiar_do_angulo_de_retorno))
     if angulo_do_erro < 0:
@@ -272,14 +273,14 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         he_pra_retornar = True
 
     for i in range(3):
-        ev3.Sound.beep()
+        # ev3.Sound.beep()
         print("cores que chamaram a bounding box = {}".format(robot.fila_para_registro_do_fim))
     # print("sel.kon = {}".format(robot.kon))
     robot.kon = 0
 
     #print("CHAMADO")
-    for i in range(3):
-        ev3.Sound.beep()
+    # for i in range(3):
+        # ev3.Sound.beep()
         #print(robot.fila_para_registro_do_fim)
 
     robot.voltou = False
@@ -315,8 +316,8 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             print("angulo antes de identificar = {}".format(robot.sensor_data("GyroSensor")))
         # setando vaiaveis das contra medidas
         limiar_do_angulo = 15
-        limiar_do_infra = 10
-
+        limiar_do_infra_floor = 10
+        limiar_do_infra_ceiling = 40
         kp = 40
         ki = 0
         kd = 60.04
@@ -339,18 +340,21 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
         print(lis_for_values)
         print(len(lis_for_values))
         cant_use_any_more = False
+        counter = 0
         while True:
             limiar_do_angulo = lis_for_values[chamou_travou_na_entrada_counter]
 
-            if (not cant_use_any_more) \
-                    and not (robot.infrared_sensors[0] < limiar_do_infra and robot.infrared_sensors[1] < limiar_do_infra) \
+            if not (cant_use_any_more) \
+                   and not ((robot.infrared_sensors[0] < limiar_do_infra_floor and robot.infrared_sensors[1] < limiar_do_infra_floor)
+                        or (robot.infrared_sensors[0] > limiar_do_infra_ceiling or robot.infrared_sensors[1]) > limiar_do_infra_ceiling) \
                     and (robot.sensor_data("GyroSensor") > limiar_do_angulo or robot.sensor_data("GyroSensor") < -limiar_do_angulo):
                 robot.stop_motors()
                 for i in range(5):
-                    ev3.Sound.beep()
+                    # ev3.Sound.beep()
                     print("limiar_utilizado = {}".format(limiar_do_angulo))
                     print("angulo em que identificou = {}".format(robot.sensor_data("GyroSensor")))
                 travou_na_entrada(robot, chamou_travou_na_entrada_counter)
+                counter = 0
                 if chamou_travou_na_entrada_counter < max:  # pra não dar fora do indice
                     chamou_travou_na_entrada_counter += 1
 
@@ -358,12 +362,17 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
             ultrasonico = robot.sensor_data("Ultrasonic")
 
             # print(robot.infrared_sensors[0])
-            if 50 <= ultrasonico <= 100:
-                if cant_use_any_more is False:
+            if 50 <= ultrasonico <= 100 or cant_use_any_more:
+                if counter < 30:
+                    counter += 1
+                if cant_use_any_more is False and counter >= 30:
                     cant_use_any_more = True
-                    for i in range(5):
-                        print("nao vai mais chamar a travou na entrada")
-                        ev3.Sound.beep()
+                    # robot.stop_motors()
+                    # time.sleep(2)
+                    # print("counter = {}".format(counter))
+                    # for i in range(5):
+                    #     print("nao vai mais chamar a travou na entrada")
+                    #     ev3.Sound.beep()
                 control = pid(robot.sensor_data("Ultrasonic"))
                 if control > 500:
                     control = 500
@@ -418,7 +427,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                         print("VOLTOU PELA COR = {}".format(search[1]))
                         robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5) # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
                         # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
-                        ev3.Sound.beep().wait()
+                        # ev3.Sound.beep().wait()
                         robot.reverse_path = True
                         robot.bounding_box = False
                         robot.ta_na_ranpa = False
@@ -432,7 +441,7 @@ def bounding_box(robot, speed=DEFAULT_SPEED):
                         robot.time_desabilita_o_realinhamento_da_cor = datetime.now() + timedelta(seconds=5)  # PARA EVITAR QUE O ROBO CHAME TENTE RALINHAR COR A COR NA SAIDA DA BOUNDING BOX
                         # print("TIME QUANDO SAI DA BOUNDING BOX = {}".format(robot.time_desabilita_o_realinhamento_da_cor))
                         robot.reverse_path = True
-                        ev3.Sound.beep().wait()
+                        # ev3.Sound.beep().wait()
                         robot.bounding_box = False
                         robot.ta_na_ranpa = False
                         return
